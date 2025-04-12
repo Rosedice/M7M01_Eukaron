@@ -20,7 +20,7 @@ SECTIONS
 	PROVIDE(begin = .);
 
 	.text : AT(__RME_X64_Mboot_Load_Addr) {
-	    *platform_x64_asm.o(.text .rela.text .stub .text.* .gnu.linkonce.t.*)
+	    *platform_x64_gcc.o(.multiboot_head .text .rela.text .stub .text.* .gnu.linkonce.t.*)
 		*(.text .rela.text .stub .text.* .gnu.linkonce.t.*)
 	}
 	
@@ -49,17 +49,13 @@ SECTIONS
 	. = ALIGN(0x1000);
 
 	PROVIDE(edata = .);
-	
+
     . = ALIGN(0x1000);
 
 	.bss : {
-		*rme_captbl.o(.bss)
         *rme_kernel.o(.bss)
-        *rme_pgtbl.o(.bss)
-        *rme_prcthd.o(.bss)
-        *rme_siginv.o(.bss)
         *rme_platform_x64.o(.bss)
-        *rme_platform_x64_asm.o(.bss)
+        *rme_platform_x64_gcc.o(.bss)
 		*(COMMON)
 	}
 
@@ -67,13 +63,9 @@ SECTIONS
 	
     /* This mapping starts from 16MB, and includes all the kernel memory
      * that should not be touched by grub. We init it when we run our kernel */
-	. = 0xFFFFFFFF81000000;
-    .noinit : {
-        *rme_kotbl.o(.bss)
-    }
 
 	/DISCARD/ : {
-		*(.eh_frame .rela.eh_frame .note.GNU-stack)
+		*(.eh_frame .rela.eh_frame .note.*)
 	}
 }
 

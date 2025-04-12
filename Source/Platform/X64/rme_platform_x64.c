@@ -62,6 +62,14 @@ int main(rme_ptr_t MBInfo)
 }
 /* End Function:main *********************************************************/
 
+
+/* Function: __RME_Kfn_Handler ************************************************/
+rme_ret_t __RME_Kfn_Handler(struct RME_Cap_Cpt* Cpt, struct RME_Reg_Struct* Reg,rme_ptr_t FuncID, rme_ptr_t SubID,rme_ptr_t Param1, rme_ptr_t Param2)
+{
+    return 0;
+}
+/* End Function: __RME_Kfn_Handler ********************************************/
+
 /* Function:__RME_Putchar *****************************************************
 Description : Output a character to console. In Cortex-M, under most circumstances, 
               we should use the ITM for such outputs.
@@ -71,12 +79,11 @@ Return      : rme_ptr_t - Always 0.
 ******************************************************************************/
 rme_ptr_t __RME_Putchar(char Char)
 {
-    if(RME_X64_UART_Exist==0)
-        return 0;
-
+    //if(RME_X64_UART_Exist==0)
+     //   return 0;
     /* Wait until we have transmitted */
-    while((__RME_X64_In(RME_X64_COM1+5)&0x20)==0);
 
+    while((__RME_X64_In(RME_X64_COM1+5)&0x20)==0);
     __RME_X64_Out(RME_X64_COM1, Char);
 
     return 0;
@@ -355,10 +362,10 @@ rme_ret_t __RME_X64_ACPI_Init(void)
 {
     rme_cnt_t Count;
     rme_cnt_t Table_Num;
-    struct RME_X64_ACPI_RDSP_Desc* RDSP;
-    struct RME_X64_ACPI_RSDT_Hdr* RSDT;
-    struct RME_X64_ACPI_MADT_Hdr* MADT;
-    struct RME_X64_ACPI_Desc_Hdr* Header;
+    struct RME_X64_ACPI_RDSP_Desc* RDSP=RME_NULL;
+    struct RME_X64_ACPI_RSDT_Hdr* RSDT=RME_NULL;
+    struct RME_X64_ACPI_MADT_Hdr* MADT=RME_NULL;
+    struct RME_X64_ACPI_Desc_Hdr* Header=RME_NULL;
 
     /* Try to find RDSP */
     RDSP=__RME_X64_RDSP_Find();
@@ -1069,13 +1076,13 @@ void __RME_X64_Timer_Init(void)
 }
 /* End Function:__RME_X64_Timer_Init *****************************************/
 
-/* Function:__RME_Low_Level_Init **********************************************
+/* Function:__RME_Lowlvl_Init **********************************************
 Description : Initialize the low-level hardware.
 Input       : None.
 Output      : None.
 Return      : rme_ptr_t - Always 0.
 ******************************************************************************/
-rme_ptr_t __RME_Low_Level_Init(void)
+rme_ptr_t __RME_Lowlvl_Init(void)
 {
     /* We are here now ! */
     __RME_X64_UART_Init();
@@ -1088,7 +1095,7 @@ rme_ptr_t __RME_Low_Level_Init(void)
 
     return 0;
 }
-/* End Function:__RME_Low_Level_Init *****************************************/
+/* End Function:__RME_Lowlvl_Init *****************************************/
 
 /* Function:__RME_Pgt_Kom_Init *********************************************
 Description : Initialize the kernel mapping tables, so it can be added to all the
@@ -1096,7 +1103,7 @@ Description : Initialize the kernel mapping tables, so it can be added to all th
               RAM, and is not NUMA-aware.
 Input       : None.
 Output      : None.
-Return      : rme_ptr_t - If successful, 0; else RME_ERR_PGT_OPFAIL.
+Return      : rme_ptr_t - If successful, 0; else RME_ERR_HAL_FAIL.
 ******************************************************************************/
 rme_ptr_t __RME_Pgt_Kom_Init(void)
 {
@@ -1350,12 +1357,12 @@ rme_ptr_t __RME_SMP_Low_Level_Init(void)
 
     /* The booting CPU must have created everything necessary for us. Let's
      * check to see if they are there. */
-    RME_ASSERT(CPU_Local->Cur_Thd!=0);
-    RME_ASSERT(CPU_Local->Tick_Sig!=0);
-    RME_ASSERT(CPU_Local->Vect_Sig!=0);
+    RME_ASSERT(CPU_Local->Thd_Cur!=0);
+    RME_ASSERT(CPU_Local->Sig_Tim!=0);
+    RME_ASSERT(CPU_Local->Sig_Vct!=0);
 
     /* Change page tables */
-    __RME_Pgt_Set(RME_CAP_GETOBJ((CPU_Local->Cur_Thd)->Sched.Prc->Pgt,rme_ptr_t));
+    __RME_Pgt_Set(RME_CAP_GETOBJ((CPU_Local->Thd_Cur)->Sched.Prc->Pgt,rme_ptr_t));
     /* Boot into the init thread - never returns */
     __RME_Enter_User_Mode(0, RME_X64_USTACK(CPU_Local->CPUID), CPU_Local->CPUID);
 
@@ -1398,7 +1405,7 @@ rme_ptr_t __RME_Boot(void)
      * pages at the start to load the init process */
     Cur_Addr=RME_X64_Layout.Kom1_Start[0]+16*RME_POW2(RME_PGT_SIZE_2M);
     RME_DBG_S("\r\nKot registration start offset: 0x");
-    RME_DBG_U(((Cur_Addr-RME_KOM_VA_START)>>RME_KOM_SLOT_ORDER)/8);
+    RME_DBG_U(((Cur_Addr-RME_KOM_VA_BASE)>>RME_KOM_SLOT_ORDER)/8);
 
     /* Create the capability table for the init process - always 16 */
     Cpt=(struct RME_Cap_Cpt*)Cur_Addr;
@@ -1479,7 +1486,7 @@ rme_ptr_t __RME_Boot(void)
                                   RME_BOOT_INIT_CPT, RME_CAPID(RME_BOOT_TBL_PGT,RME_BOOT_PML4))==0);
 
     /* Create the initial kernel function capability */
-    RME_ASSERT(_RME_Kern_Boot_Crt(RME_X64_CPT, RME_BOOT_INIT_CPT, RME_BOOT_INIT_KERN)==0);
+    RME_ASSERT(_RME_Kfn_Boot_Crt(RME_X64_CPT, RME_BOOT_INIT_CPT, RME_BOOT_INIT_KERN)==0);
 
     /* Create a capability table for initial kernel memory capabilities. We need a few for Kom1, and another one for Kom2 */
     RME_ASSERT(_RME_Cpt_Boot_Crt(RME_X64_CPT, RME_BOOT_INIT_CPT, RME_BOOT_TBL_KOM, Cur_Addr, RME_X64_KOM1_MAXSEGS+1)==0);
@@ -1506,7 +1513,7 @@ rme_ptr_t __RME_Boot(void)
     for(Count=0;Count<RME_X64_Num_CPU;Count++)
     {
     	CPU_Local=__RME_X64_CPU_Local_Get_By_CPUID(Count);
-    	CPU_Local->Tick_Sig=&(RME_CAP_GETOBJ(&(RME_X64_CPT[RME_BOOT_TBL_TIMER]), struct RME_Cap_Sig*)[Count]);
+    	CPU_Local->Sig_Tim=&(RME_CAP_GETOBJ(&(RME_X64_CPT[RME_BOOT_TBL_TIMER]), struct RME_Cap_Sig*)[Count]);
         RME_ASSERT(_RME_Sig_Boot_Crt(RME_X64_CPT, RME_BOOT_TBL_TIMER, Count)==0);
     }
 
@@ -1516,7 +1523,7 @@ rme_ptr_t __RME_Boot(void)
     for(Count=0;Count<RME_X64_Num_CPU;Count++)
     {
     	CPU_Local=__RME_X64_CPU_Local_Get_By_CPUID(Count);
-    	CPU_Local->Vect_Sig=&(RME_CAP_GETOBJ(&(RME_X64_CPT[RME_BOOT_TBL_INT]), struct RME_Cap_Sig*)[Count]);
+    	CPU_Local->Sig_Vct=&(RME_CAP_GETOBJ(&(RME_X64_CPT[RME_BOOT_TBL_INT]), struct RME_Cap_Sig*)[Count]);
         RME_ASSERT(_RME_Sig_Boot_Crt(RME_X64_CPT, RME_BOOT_TBL_INT, Count)==0);
     }
 
@@ -1527,11 +1534,11 @@ rme_ptr_t __RME_Boot(void)
     {
     	CPU_Local=__RME_X64_CPU_Local_Get_By_CPUID(Count);
         RME_ASSERT(_RME_Thd_Boot_Crt(RME_X64_CPT, RME_BOOT_TBL_THD, Count, RME_BOOT_INIT_PRC, Cur_Addr, 0, CPU_Local)>=0);
-        Cur_Addr+=RME_KOT_VA_BASE_ROUND(RME_THD_SIZE);
+        Cur_Addr+=RME_KOT_VA_BASE_ROUND(RME_THD_SIZE(Count));
     }
 
     RME_DBG_S("\r\nKot registration end offset: 0x");
-    RME_DBG_U(((Cur_Addr-RME_KOM_VA_START)>>RME_KOM_SLOT_ORDER)/8);
+    RME_DBG_U(((Cur_Addr-RME_KOM_VA_BASE)>>RME_KOM_SLOT_ORDER)/8);
     RME_DBG_S("\r\nKom1 frontier: 0x");
     RME_DBG_U(Cur_Addr);
 
@@ -1544,9 +1551,9 @@ rme_ptr_t __RME_Boot(void)
     /* Initialize the timer and start its interrupt routing */
     RME_DBG_S("\r\nTimer init\r\n");
     __RME_X64_Timer_Init();
-    //__RME_X64_IOAPIC_Int_Enable(2,0);
+    __RME_X64_IOAPIC_Int_Enable(2,0);
     /* Change page tables */
-    __RME_Pgt_Set(RME_CAP_GETOBJ((RME_CPU_LOCAL()->Cur_Thd)->Sched.Prc->Pgt,rme_ptr_t));
+    __RME_Pgt_Set(RME_CAP_GETOBJ((RME_CPU_LOCAL()->Thd_Cur)->Sched.Prc->Pgt,rme_ptr_t));
 
 
     /* Load the init process to address 0x00 - It should be smaller than 2MB */
@@ -1630,7 +1637,7 @@ Input       : rme_ptr_t Entry - The thread entry address.
 Output      : struct RME_Reg_Struct* Reg - The register set content generated.
 Return      : None.
 ******************************************************************************/
-void __RME_Thd_Reg_Init(rme_ptr_t Entry, rme_ptr_t Stack, rme_ptr_t Param, struct RME_Reg_Struct* Reg)
+void __RME_Thd_Reg_Init(rme_ptr_t Attr,rme_ptr_t Entry, rme_ptr_t Stack, rme_ptr_t Param, struct RME_Reg_Struct* Reg)
 {
     /* We use the SYSRET path on creation if possible */
     Reg->INT_NUM=0x10000;
@@ -1761,11 +1768,6 @@ void __RME_Set_Inv_Retval(struct RME_Reg_Struct* Reg, rme_ret_t Retval)
 }
 /* End Function:__RME_Set_Inv_Retval *****************************************/
 
-void NDBG(void)
-{
-    write_string( 0x07, "Here", 0);
-}
-
 /* Crap for test */
 void write_string( int colour, const char *string, rme_ptr_t pos)
 {
@@ -1775,6 +1777,11 @@ void write_string( int colour, const char *string, rme_ptr_t pos)
         *video++ = *string++;
         *video++ = colour;
     }
+}
+
+void NDBG(void)
+{
+    write_string( 0x07, "Here", 0);
 }
 
 /* Function:__RME_Kern_Func_Handler *******************************************
@@ -1922,27 +1929,27 @@ Input       : rme_ptr_t Base_Addr - The start mapping address.
               rme_ptr_t Num_Order - The number order of the page directory.
               rme_ptr_t Vaddr - The virtual address of the page directory.
 Output      : None.
-Return      : rme_ptr_t - If successful, 0; else RME_ERR_PGT_OPFAIL.
+Return      : rme_ptr_t - If successful, 0; else RME_ERR_HAL_FAIL.
 ******************************************************************************/
 rme_ptr_t __RME_Pgt_Check(rme_ptr_t Base_Addr, rme_ptr_t Is_Top,
                             rme_ptr_t Size_Order, rme_ptr_t Num_Order, rme_ptr_t Vaddr)
 {
     /* Is the table address aligned to 4kB? */
     if((Vaddr&0xFFF)!=0)
-        return RME_ERR_PGT_OPFAIL;
+        return RME_ERR_HAL_FAIL;
 
     /* Is the size order allowed? */
     if((Size_Order!=RME_PGT_SIZE_512G)&&(Size_Order!=RME_PGT_SIZE_1G)&&
        (Size_Order!=RME_PGT_SIZE_2M)&&(Size_Order!=RME_PGT_SIZE_4K))
-        return RME_ERR_PGT_OPFAIL;
+        return RME_ERR_HAL_FAIL;
 
     /* Is the top-level relationship correct? */
     if(((Size_Order==RME_PGT_SIZE_512G)^(Is_Top!=0))!=0)
-        return RME_ERR_PGT_OPFAIL;
+        return RME_ERR_HAL_FAIL;
 
     /* Is the number order allowed? */
     if(Num_Order!=RME_PGT_NUM_512)
-        return RME_ERR_PGT_OPFAIL;
+        return RME_ERR_HAL_FAIL;
 
     return 0;
 }
@@ -1952,7 +1959,7 @@ rme_ptr_t __RME_Pgt_Check(rme_ptr_t Base_Addr, rme_ptr_t Is_Top,
 Description : Initialize the page table data structure, according to the capability.
 Input       : struct RME_Cap_Pgt* - The capability to the page table to operate on.
 Output      : None.
-Return      : rme_ptr_t - If successful, 0; else RME_ERR_PGT_OPFAIL.
+Return      : rme_ptr_t - If successful, 0; else RME_ERR_HAL_FAIL.
 ******************************************************************************/
 rme_ptr_t __RME_Pgt_Init(struct RME_Cap_Pgt* Pgt_Op)
 {
@@ -1967,7 +1974,7 @@ rme_ptr_t __RME_Pgt_Init(struct RME_Cap_Pgt* Pgt_Op)
         Ptr[Count]=0;
 
     /* Hopefully the compiler optimize this to rep movs */
-    if((Pgt_Op->Base_Addr&RME_PGT_TOP)!=0)
+    if((Pgt_Op->Base&RME_PGT_TOP)!=0)
     {
         for(;Count<512;Count++)
             Ptr[Count]=RME_X64_Kpgt.PML4[Count-256];
@@ -1986,7 +1993,7 @@ rme_ptr_t __RME_Pgt_Init(struct RME_Cap_Pgt* Pgt_Op)
 Description : Check if the page table can be deleted.
 Input       : struct RME_Cap_Pgt Pgt_Op* - The capability to the page table to operate on.
 Output      : None.
-Return      : rme_ptr_t - If can be deleted, 0; else RME_ERR_PGT_OPFAIL.
+Return      : rme_ptr_t - If can be deleted, 0; else RME_ERR_HAL_FAIL.
 ******************************************************************************/
 rme_ptr_t __RME_Pgt_Del_Check(struct RME_Cap_Pgt* Pgt_Op)
 {
@@ -2004,7 +2011,7 @@ Input       : struct RME_Cap_Pgt* - The cap ability to the page table to operate
               rme_ptr_t Flags - The RME standard page attributes. Need to translate them into
                                 architecture specific page table's settings.
 Output      : None.
-Return      : rme_ptr_t - If successful, 0; else RME_ERR_PGT_OPFAIL.
+Return      : rme_ptr_t - If successful, 0; else RME_ERR_HAL_FAIL.
 ******************************************************************************/
 rme_ptr_t __RME_Pgt_Page_Map(struct RME_Cap_Pgt* Pgt_Op, rme_ptr_t Paddr, rme_ptr_t Pos, rme_ptr_t Flags)
 {
@@ -2013,24 +2020,24 @@ rme_ptr_t __RME_Pgt_Page_Map(struct RME_Cap_Pgt* Pgt_Op, rme_ptr_t Paddr, rme_pt
 
     /* It should at least be readable */
     if((Flags&RME_PGT_READ)==0)
-        return RME_ERR_PGT_OPFAIL;
+        return RME_ERR_HAL_FAIL;
 
     /* Are we trying to map into the kernel space on the top level? */
-    if(((Pgt_Op->Base_Addr&RME_PGT_TOP)!=0)&&(Pos>=256))
-        return RME_ERR_PGT_OPFAIL;
+    if(((Pgt_Op->Base&RME_PGT_TOP)!=0)&&(Pos>=256))
+        return RME_ERR_HAL_FAIL;
 
     /* Get the table */
     Table=RME_CAP_GETOBJ(Pgt_Op,rme_ptr_t*);
 
     /* Generate flags */
-    if(RME_PGT_SIZEORD(Pgt_Op->Size_Num_Order)==RME_PGT_SIZE_4K)
+    if(RME_PGT_SIZEORD(Pgt_Op->Order)==RME_PGT_SIZE_4K)
         X64_Flags=RME_X64_MMU_ADDR(Paddr)|RME_X64_PGFLG_RME2NAT(Flags)|RME_X64_MMU_US;
     else
         X64_Flags=RME_X64_MMU_ADDR(Paddr)|RME_X64_PGFLG_RME2NAT(Flags)|RME_X64_MMU_PDE_SUP|RME_X64_MMU_US;
 
     /* Try to map it in */
     if(RME_COMP_SWAP(&(Table[Pos]),0,X64_Flags)==0)
-        return RME_ERR_PGT_OPFAIL;
+        return RME_ERR_HAL_FAIL;
 
     return 0;
 }
@@ -2041,7 +2048,7 @@ Description : Unmap a page from the page table.
 Input       : struct RME_Cap_Pgt* - The capability to the page table to operate on.
               rme_ptr_t Pos - The position in the page table.
 Output      : None.
-Return      : rme_ptr_t - If successful, 0; else RME_ERR_PGT_OPFAIL.
+Return      : rme_ptr_t - If successful, 0; else RME_ERR_HAL_FAIL.
 ******************************************************************************/
 rme_ptr_t __RME_Pgt_Page_Unmap(struct RME_Cap_Pgt* Pgt_Op, rme_ptr_t Pos)
 {
@@ -2049,8 +2056,8 @@ rme_ptr_t __RME_Pgt_Page_Unmap(struct RME_Cap_Pgt* Pgt_Op, rme_ptr_t Pos)
     rme_ptr_t Temp;
 
     /* Are we trying to unmap the kernel space on the top level? */
-    if(((Pgt_Op->Base_Addr&RME_PGT_TOP)!=0)&&(Pos>=256))
-        return RME_ERR_PGT_OPFAIL;
+    if(((Pgt_Op->Base&RME_PGT_TOP)!=0)&&(Pos>=256))
+        return RME_ERR_HAL_FAIL;
 
     /* Get the table */
     Table=RME_CAP_GETOBJ(Pgt_Op,rme_ptr_t*);
@@ -2058,15 +2065,15 @@ rme_ptr_t __RME_Pgt_Page_Unmap(struct RME_Cap_Pgt* Pgt_Op, rme_ptr_t Pos)
     /* Make sure that there is something */
     Temp=Table[Pos];
     if(Temp==0)
-        return RME_ERR_PGT_OPFAIL;
+        return RME_ERR_HAL_FAIL;
 
     /* Is this a page directory? We cannot unmap page directories like this */
-    if((RME_PGT_SIZEORD(Pgt_Op->Size_Num_Order)!=RME_PGT_SIZE_4K)&&((Temp&RME_X64_MMU_PDE_SUP)==0))
-        return RME_ERR_PGT_OPFAIL;
+    if((RME_PGT_SIZEORD(Pgt_Op->Order)!=RME_PGT_SIZE_4K)&&((Temp&RME_X64_MMU_PDE_SUP)==0))
+        return RME_ERR_HAL_FAIL;
 
     /* Try to unmap it. Use CAS just in case */
     if(RME_COMP_SWAP(&(Table[Pos]),Temp,0)==0)
-        return RME_ERR_PGT_OPFAIL;
+        return RME_ERR_HAL_FAIL;
 
     return 0;
 }
@@ -2079,7 +2086,7 @@ Input       : struct RME_Cap_Pgt* Pgt_Parent - The parent page table.
               rme_ptr_t Pos - The position in the destination page table.
               rme_ptr_t Flags - The RME standard flags for the child page table.
 Output      : None.
-Return      : rme_ptr_t - If successful, 0; else RME_ERR_PGT_OPFAIL.
+Return      : rme_ptr_t - If successful, 0; else RME_ERR_HAL_FAIL.
 ******************************************************************************/
 rme_ptr_t __RME_Pgt_Pgdir_Map(struct RME_Cap_Pgt* Pgt_Parent, rme_ptr_t Pos,
                                 struct RME_Cap_Pgt* Pgt_Child, rme_ptr_t Flags)
@@ -2090,11 +2097,11 @@ rme_ptr_t __RME_Pgt_Pgdir_Map(struct RME_Cap_Pgt* Pgt_Parent, rme_ptr_t Pos,
 
     /* It should at least be readable */
     if((Flags&RME_PGT_READ)==0)
-        return RME_ERR_PGT_OPFAIL;
+        return RME_ERR_HAL_FAIL;
 
     /* Are we trying to map into the kernel space on the top level? */
-    if(((Pgt_Parent->Base_Addr&RME_PGT_TOP)!=0)&&(Pos>=256))
-        return RME_ERR_PGT_OPFAIL;
+    if(((Pgt_Parent->Base&RME_PGT_TOP)!=0)&&(Pos>=256))
+        return RME_ERR_HAL_FAIL;
 
     /* Get the table */
     Parent_Table=RME_CAP_GETOBJ(Pgt_Parent,rme_ptr_t*);
@@ -2105,7 +2112,7 @@ rme_ptr_t __RME_Pgt_Pgdir_Map(struct RME_Cap_Pgt* Pgt_Parent, rme_ptr_t Pos,
 
     /* Try to map it in - may need to increase some count */
     if(RME_COMP_SWAP(&(Parent_Table[Pos]),0,X64_Flags)==0)
-        return RME_ERR_PGT_OPFAIL;
+        return RME_ERR_HAL_FAIL;
 
     return 0;
 }
@@ -2117,7 +2124,7 @@ Input       : struct RME_Cap_Pgt* Pgt_Parent - The parent page table to unmap fr
               rme_ptr_t Pos - The position in the page table.
               struct RME_Cap_Pgt* Pgt_Child - The child page table to unmap.
 Output      : None.
-Return      : rme_ptr_t - If successful, 0; else RME_ERR_PGT_OPFAIL.
+Return      : rme_ptr_t - If successful, 0; else RME_ERR_HAL_FAIL.
 ******************************************************************************/
 rme_ptr_t __RME_Pgt_Pgdir_Unmap(struct RME_Cap_Pgt* Pgt_Parent, rme_ptr_t Pos,
                                   struct RME_Cap_Pgt* Pgt_Child)
@@ -2127,8 +2134,8 @@ rme_ptr_t __RME_Pgt_Pgdir_Unmap(struct RME_Cap_Pgt* Pgt_Parent, rme_ptr_t Pos,
     rme_ptr_t Temp;
 
     /* Are we trying to unmap the kernel space on the top level? */
-    if(((Pgt_Parent->Base_Addr&RME_PGT_TOP)!=0)&&(Pos>=256))
-        return RME_ERR_PGT_OPFAIL;
+    if(((Pgt_Parent->Base&RME_PGT_TOP)!=0)&&(Pos>=256))
+        return RME_ERR_HAL_FAIL;
 
     /* Get the table */
     Parent_Table=RME_CAP_GETOBJ(Pgt_Parent,rme_ptr_t*);
@@ -2136,18 +2143,21 @@ rme_ptr_t __RME_Pgt_Pgdir_Unmap(struct RME_Cap_Pgt* Pgt_Parent, rme_ptr_t Pos,
     /* Make sure that there is something */
     Temp=Parent_Table[Pos];
     if(Temp==0)
-        return RME_ERR_PGT_OPFAIL;
+        return RME_ERR_HAL_FAIL;
 
     /* Is this a page? We cannot unmap pages like this */
-    if((RME_PGT_SIZEORD(Pgt_Parent->Size_Num_Order)==RME_PGT_SIZE_4K)||((Temp&RME_X64_MMU_PDE_SUP)!=0))
-        return RME_ERR_PGT_OPFAIL;
+    if((RME_PGT_SIZEORD(Pgt_Parent->Order)==RME_PGT_SIZE_4K)||((Temp&RME_X64_MMU_PDE_SUP)!=0))
+        return RME_ERR_HAL_FAIL;
 
     /* Is this child table mapped here? - check that in the future */
 
     Child_Table=(rme_ptr_t*)Temp;
+    rme_ptr_t* Expected_Child_Table = RME_CAP_GETOBJ(Pgt_Child, rme_ptr_t*);
+    if (Child_Table != Expected_Child_Table)
+        return RME_ERR_HAL_FAIL;
     /* Try to unmap it. Use CAS just in case */
     if(RME_COMP_SWAP(&(Parent_Table[Pos]),Temp,0)==0)
-        return RME_ERR_PGT_OPFAIL;
+        return RME_ERR_HAL_FAIL;
 
     return 0;
 }
@@ -2159,7 +2169,7 @@ Input       : struct RME_Cap_Pgt* Pgt_Op - The page directory to lookup.
               rme_ptr_t Pos - The position to look up.
 Output      : rme_ptr_t* Paddr - The physical address of the page.
               rme_ptr_t* Flags - The RME standard flags of the page.
-Return      : rme_ptr_t - If successful, 0; else RME_ERR_PGT_OPFAIL.
+Return      : rme_ptr_t - If successful, 0; else RME_ERR_HAL_FAIL.
 ******************************************************************************/
 rme_ptr_t __RME_Pgt_Lookup(struct RME_Cap_Pgt* Pgt_Op, rme_ptr_t Pos, rme_ptr_t* Paddr, rme_ptr_t* Flags)
 {
@@ -2167,8 +2177,8 @@ rme_ptr_t __RME_Pgt_Lookup(struct RME_Cap_Pgt* Pgt_Op, rme_ptr_t Pos, rme_ptr_t*
     rme_ptr_t Temp;
 
     /* Check if the position is within the range of this page table */
-    if((Pos>>RME_PGT_NUMORD(Pgt_Op->Size_Num_Order))!=0)
-        return RME_ERR_PGT_OPFAIL;
+    if((Pos>>RME_PGT_NUMORD(Pgt_Op->Order))!=0)
+        return RME_ERR_HAL_FAIL;
 
     /* Get the table */
     Table=RME_CAP_GETOBJ(Pgt_Op,rme_ptr_t*);
@@ -2176,15 +2186,15 @@ rme_ptr_t __RME_Pgt_Lookup(struct RME_Cap_Pgt* Pgt_Op, rme_ptr_t Pos, rme_ptr_t*
     Temp=Table[Pos];
 
     /* Start lookup - is this a terminal page, or? */
-    if(RME_PGT_SIZEORD(Pgt_Op->Size_Num_Order)==RME_PGT_SIZE_4K)
+    if(RME_PGT_SIZEORD(Pgt_Op->Order)==RME_PGT_SIZE_4K)
     {
         if((Temp&RME_X64_MMU_P)==0)
-            return RME_ERR_PGT_OPFAIL;
+            return RME_ERR_HAL_FAIL;
     }
     else
     {
         if(((Temp&RME_X64_MMU_P)==0)||((Temp&RME_X64_MMU_PDE_SUP)==0))
-            return RME_ERR_PGT_OPFAIL;
+            return RME_ERR_HAL_FAIL;
     }
 
     /* This is a page. Return the physical address and flags */
@@ -2212,7 +2222,7 @@ Output      : rme_ptr_t* Pgt - The pointer to the page table level.
               rme_ptr_t* Size_Order - The size order of the page.
               rme_ptr_t* Num_Order - The entry order of the page.
               rme_ptr_t* Flags - The RME standard flags of the page.
-Return      : rme_ptr_t - If successful, 0; else RME_ERR_PGT_OPFAIL.
+Return      : rme_ptr_t - If successful, 0; else RME_ERR_HAL_FAIL.
 ******************************************************************************/
 rme_ptr_t __RME_Pgt_Walk(struct RME_Cap_Pgt* Pgt_Op, rme_ptr_t Vaddr, rme_ptr_t* Pgt,
                            rme_ptr_t* Map_Vaddr, rme_ptr_t* Paddr, rme_ptr_t* Size_Order, rme_ptr_t* Num_Order, rme_ptr_t* Flags)
@@ -2227,12 +2237,12 @@ rme_ptr_t __RME_Pgt_Walk(struct RME_Cap_Pgt* Pgt_Op, rme_ptr_t Vaddr, rme_ptr_t*
     rme_ptr_t No_Execute;
 
     /* Check if this is the top-level page table */
-    if(((Pgt_Op->Base_Addr)&RME_PGT_TOP)==0)
-        return RME_ERR_PGT_OPFAIL;
+    if(((Pgt_Op->Base)&RME_PGT_TOP)==0)
+        return RME_ERR_HAL_FAIL;
 
     /* Are we attempting a kernel or non-canonical lookup? If yes, stop immediately */
     if(Vaddr>=0x7FFFFFFFFFFFULL)
-        return RME_ERR_PGT_OPFAIL;
+        return RME_ERR_HAL_FAIL;
 
     /* Get the table and start lookup */
     Table=RME_CAP_GETOBJ(Pgt_Op, rme_ptr_t*);
@@ -2249,7 +2259,7 @@ rme_ptr_t __RME_Pgt_Walk(struct RME_Cap_Pgt* Pgt_Op, rme_ptr_t Vaddr, rme_ptr_t*
         Temp=Table[Pos];
         /* Find the position of the entry - Is there a page, a directory, or nothing? */
         if((Temp&RME_X64_MMU_P)==0)
-            return RME_ERR_PGT_OPFAIL;
+            return RME_ERR_HAL_FAIL;
         if(((Temp&RME_X64_MMU_PDE_SUP)!=0)||(Size_Cnt==RME_PGT_SIZE_4K))
         {
             /* This is a page - we found it */
@@ -2283,6 +2293,52 @@ rme_ptr_t __RME_Pgt_Walk(struct RME_Cap_Pgt* Pgt_Op, rme_ptr_t Vaddr, rme_ptr_t*
     return 0;
 }
 /* End Function:__RME_Pgt_Walk *********************************************/
+
+/*Function:__RME_X64_Pgt_Set*/
+
+/*void __RME_X64_Pgt_Set(rme_ptr_t Pgt)
+{
+
+}*/
+/* End Function:__RME_X64_Pgt_Set*/
+
+/*Function:__RME_Svc_Param_Get*/
+
+void __RME_Svc_Param_Get(struct RME_Reg_Struct* Reg,rme_ptr_t* Svc,rme_ptr_t* Cid,rme_ptr_t* Param)
+{
+
+}
+
+/*End Function:__RME_Svc_Param_Get*/
+
+/*Function:__RME_Svc_Retval_Set*/
+
+void __RME_Svc_Retval_Set(struct RME_Reg_Struct* Reg,rme_ret_t Retval)
+{
+
+}
+
+/*End Function:__RME_Svc_Retval_Set*/
+
+void __RME_Inv_Retval_Set(struct RME_Reg_Struct* Reg,rme_ret_t Retval)
+{
+
+}
+
+void __RME_List_Crt(volatile struct RME_List* Head)
+{
+
+}
+
+void __RME_List_Ins(volatile struct RME_List* New,volatile struct RME_List* Prev,volatile struct RME_List* Next)
+{
+
+}
+
+void __RME_List_Del(volatile struct RME_List* Prev,volatile struct RME_List* Next)
+{
+
+}
 
 /* End Of File ***************************************************************/
 

@@ -229,6 +229,7 @@ rme_cnt_t RME_Int_Print(rme_cnt_t Int)
         /* No action required */
     }
 
+
     /* Correct all negatives into positives */
     if(Int<0)
     {
@@ -250,7 +251,7 @@ rme_cnt_t RME_Int_Print(rme_cnt_t Int)
     Count=0;
     Div=1;
     Iter=Abs;
-    while(1)
+    while(1U)
     {
         Iter/=10;
         Count++;
@@ -317,7 +318,7 @@ rme_cnt_t RME_Hex_Print(rme_ptr_t Uint)
     Iter=Uint;
     while((Iter>>(RME_WORD_BIT-4U))==0U)
     {
-        Iter<<=4U;
+        Iter<<=4;
         Count++;
     }
     
@@ -348,8 +349,9 @@ rme_cnt_t RME_Hex_Print(rme_ptr_t Uint)
 /* End Function:RME_Hex_Print ************************************************/
 
 /* Function:RME_Str_Print *****************************************************
-Description : Print a string on the debugging console.
-Input       : const rme_s8_t* String - The string to print.
+Description : Print a string the kernel console.
+              This is only used for kernel-level debugging.
+Input       : const rme_s8_t* String - The string to print
 Output      : None.
 Return      : rme_cnt_t - The length of the string printed, the '\0' is not included.
 ******************************************************************************/
@@ -372,13 +374,14 @@ rme_cnt_t RME_Str_Print(const rme_s8_t* String)
             /* No action required */
         }
         
-        __RME_Putchar(String[Count]);
+        __RME_Putchar(String[Count++]);
     }
     
     return (rme_cnt_t)Count;
 }
 #endif
 /* End Function:RME_Str_Print ************************************************/
+
 
 /* Function:RME_Log ***********************************************************
 Description : Default logging function, will be used when the user does not 
@@ -429,10 +432,8 @@ void RME_Cov_Print(void)
         if(RME_BITMAP_IS_SET(RME_Cov,Count))
         {
             RME_COV_MARKER();
-            
             RME_DBG_I(Count);
             RME_DBG_S(",");
-            
             /* We put 12 markers on a single line */
             Next++;
             if(Next>11U)
@@ -445,13 +446,13 @@ void RME_Cov_Print(void)
             else
             {
                 RME_COV_MARKER();
-                /* No action required */
+                /* No action needed */
             }
         }
         else
         {
             RME_COV_MARKER();
-            /* No action required */
+            /* No action needed */
         }
     }
 }
@@ -1079,6 +1080,7 @@ Return      : rme_ret_t - This function never returns.
 rme_ret_t RME_Kmain(void)
 {
     /* Disable all interrupts first */
+    RME_Int_Print(1111);
     __RME_Int_Disable();
     /* Some low-level kernel assertions */
     _RME_Lowlvl_Check();
@@ -1176,7 +1178,7 @@ void _RME_Svc_Handler(struct RME_Reg_Struct* Reg)
      * because it can't be deleted anyway */
     Thd_Cur=RME_CPU_LOCAL()->Thd_Cur;
     Inv_Top=RME_INVSTK_TOP(Thd_Cur);
-    if(Inv_Top==RME_NULL)
+    if(Inv_Top==(void*)RME_NULL)
     {
         RME_COV_MARKER();
         
@@ -2165,7 +2167,7 @@ static rme_ret_t _RME_Cpt_Frz(struct RME_Cap_Cpt* Cpt,
     }
 
     /* Update the timestamp */
-    Capobj_Frz->Head.Timestamp=RME_TIMESTAMP;
+    Capobj_Frz->Head.Timestamp=RME_TIMESTAMP();
     
     /* Finally, freeze it. We do not report error here because if we CASFAIL someone must have helped us */
     RME_COMP_SWAP(&(Capobj_Frz->Head.Type_Stat),Type_Stat,
@@ -2830,7 +2832,7 @@ rme_ret_t _RME_Pgt_Boot_Add(struct RME_Cap_Cpt* Cpt,
     /* Check if the target captbl is not frozen, but don't check their properties */
     RME_CAP_CHECK(Pgt_Op,0U);
 
-    Szord=RME_PGT_SZORD(Pgt_Op->Order);
+    Szord=RME_PGT_SIZEORD(Pgt_Op->Order);
 #if(RME_PGT_PHYS_ENABLE!=0U)
     /* Check if we force identical mapping */
     if(Szord==RME_WORD_BIT)
@@ -2863,7 +2865,7 @@ rme_ret_t _RME_Pgt_Boot_Add(struct RME_Cap_Cpt* Cpt,
 #endif
 
     /* See if the mapping range and the granularity is allowed */
-    if(((Pos>>RME_PGT_NMORD(Pgt_Op->Order))!=0U)||
+    if(((Pos>>RME_PGT_NUMORD(Pgt_Op->Order))!=0U)||
        ((Paddr&RME_MASK_END(Szord-1U))!=0U))
     {
         RME_COV_MARKER();
@@ -2938,7 +2940,7 @@ rme_ret_t _RME_Pgt_Boot_Con(struct RME_Cap_Cpt* Cpt,
     RME_CAP_CHECK(Pgt_Child,0U);
     
     /* See if the mapping range is allowed */
-    if((Pos>>RME_PGT_NMORD(Pgt_Parent->Order))!=0U)
+    if((Pos>>RME_PGT_NUMORD(Pgt_Parent->Order))!=0U)
     {
         RME_COV_MARKER();
         
@@ -2951,8 +2953,8 @@ rme_ret_t _RME_Pgt_Boot_Con(struct RME_Cap_Cpt* Cpt,
     }
     
     /* See if the child table falls within one slot of the parent table */
-    Order_Child=RME_PGT_NMORD(Pgt_Child->Order)+RME_PGT_SZORD(Pgt_Child->Order);
-    Szord_Parent=RME_PGT_SZORD(Pgt_Parent->Order);
+    Order_Child=RME_PGT_NUMORD(Pgt_Child->Order)+RME_PGT_SIZEORD(Pgt_Child->Order);
+    Szord_Parent=RME_PGT_SIZEORD(Pgt_Parent->Order);
     if(Szord_Parent<Order_Child)
     {
         RME_COV_MARKER();
@@ -3287,13 +3289,13 @@ static rme_ret_t _RME_Pgt_Del(struct RME_Cap_Cpt* Cpt,
     {
         RME_COV_MARKER();
 
-        Table_Size=RME_PGT_SIZE_TOP(RME_PGT_NMORD(Pgt_Del->Order));
+        Table_Size=RME_PGT_SIZE_TOP(RME_PGT_NUMORD(Pgt_Del->Order));
     }
     else
     {
         RME_COV_MARKER();
 
-        Table_Size=RME_PGT_SIZE_NOM(RME_PGT_NMORD(Pgt_Del->Order));
+        Table_Size=RME_PGT_SIZE_NOM(RME_PGT_NUMORD(Pgt_Del->Order));
     }
     
     /* Now we can safely delete the cap */
@@ -3377,8 +3379,8 @@ static rme_ret_t _RME_Pgt_Add(struct RME_Cap_Cpt* Cpt,
     }
 
     /* See if the size order relationship is correct */
-    Szord_Dst=RME_PGT_SZORD(Pgt_Dst->Order);
-    Szord_Src=RME_PGT_SZORD(Pgt_Src->Order);
+    Szord_Dst=RME_PGT_SIZEORD(Pgt_Dst->Order);
+    Szord_Src=RME_PGT_SIZEORD(Pgt_Src->Order);
     if(Szord_Dst>Szord_Src)
     {
         RME_COV_MARKER();
@@ -3392,8 +3394,8 @@ static rme_ret_t _RME_Pgt_Add(struct RME_Cap_Cpt* Cpt,
     }
 
     /* See if the positions are out of range - NMORD is restricted, no UB */
-    if(((Pos_Dst>>RME_PGT_NMORD(Pgt_Dst->Order))!=0U)||
-       ((Pos_Src>>RME_PGT_NMORD(Pgt_Src->Order))!=0U))
+    if(((Pos_Dst>>RME_PGT_NUMORD(Pgt_Dst->Order))!=0U)||
+       ((Pos_Src>>RME_PGT_NUMORD(Pgt_Src->Order))!=0U))
     {
         RME_COV_MARKER();
 
@@ -3554,7 +3556,7 @@ static rme_ret_t _RME_Pgt_Rem(struct RME_Cap_Cpt* Cpt,
     }
 
     /* See if the unmapping range is allowed */
-    if((Pos>>RME_PGT_NMORD(Pgt_Rem->Order))!=0U)
+    if((Pos>>RME_PGT_NUMORD(Pgt_Rem->Order))!=0U)
     {
         RME_COV_MARKER();
 
@@ -3641,7 +3643,7 @@ static rme_ret_t _RME_Pgt_Con(struct RME_Cap_Cpt* Cpt,
     }
     
     /* See if the mapping range is allowed */
-    if((Pos>>RME_PGT_NMORD(Pgt_Parent->Order))!=0U)
+    if((Pos>>RME_PGT_NUMORD(Pgt_Parent->Order))!=0U)
     {
         RME_COV_MARKER();
 
@@ -3654,8 +3656,8 @@ static rme_ret_t _RME_Pgt_Con(struct RME_Cap_Cpt* Cpt,
     }
     
     /* See if the child table falls within one slot of the parent table */
-    Order_Child=RME_PGT_NMORD(Pgt_Child->Order)+RME_PGT_SZORD(Pgt_Child->Order);
-    Szord_Parent=RME_PGT_SZORD(Pgt_Parent->Order);
+    Order_Child=RME_PGT_NUMORD(Pgt_Child->Order)+RME_PGT_SIZEORD(Pgt_Child->Order);
+    Szord_Parent=RME_PGT_SIZEORD(Pgt_Parent->Order);
     if(Szord_Parent<Order_Child)
     {
         RME_COV_MARKER();
@@ -3813,7 +3815,7 @@ static rme_ret_t _RME_Pgt_Des(struct RME_Cap_Cpt* Cpt,
     }
 
     /* See if the unmapping range is allowed */
-    if((Pos>>RME_PGT_NMORD(Pgt_Parent->Order))!=0U)
+    if((Pos>>RME_PGT_NUMORD(Pgt_Parent->Order))!=0U)
     {
         RME_COV_MARKER();
 
@@ -4361,7 +4363,7 @@ void _RME_Thd_Fatal(struct RME_Reg_Struct* Reg)
             RME_COV_MARKER();
             
             RME_DBG_S("Attempted to kill init thread.");
-            RME_ASSERT_REG(0U,Reg);
+            RME_ASSERT(0U);
         }
         else
         {
@@ -4525,7 +4527,7 @@ static void _RME_Run_Notif(struct RME_Thd_Struct* Thd)
     }
 
     /* If this guy have an endpoint, send to it */
-    if(Thd->Sched.Sched_Sig!=0U)
+    if(Thd->Sched.Sched_Sig!=(void*)0U)
     {
         RME_COV_MARKER();
         _RME_Kern_Snd(Thd->Sched.Sched_Sig);
@@ -4554,7 +4556,7 @@ rme_ptr_t _RME_Thd_Pgt(struct RME_Thd_Struct* Thd)
     
     Inv_Top=RME_INVSTK_TOP(Thd);
     
-    if(Inv_Top==RME_NULL)
+    if(Inv_Top==(void*)RME_NULL)
     {
         RME_COV_MARKER();
 
@@ -4628,7 +4630,7 @@ static rme_ret_t _RME_Run_Swt(struct RME_Reg_Struct* Reg,
     {
         RME_COV_MARKER();
         
-        __RME_Pgt_Set(Pgt_New);
+        __RME_Pgt_Set((rme_ptr_t)Pgt_New);
     }
     else
     {
@@ -5306,7 +5308,7 @@ static rme_ret_t _RME_Thd_Crt(struct RME_Cap_Cpt* Cpt,
         RME_COV_MARKER();
         
         Thread->Ctx.Hyp_Attr=Attr|RME_THD_HYP_FLAG;
-        Thread->Ctx.Reg=(struct RME_Thd_Reg*)RME_HYP_VA_BASE;
+        Thread->Ctx.Reg=RME_HYP_VA_BASE;
     }
     /* Initialize the invocation stack */
     _RME_List_Crt(&(Thread->Ctx.Invstk));
@@ -5665,7 +5667,7 @@ static rme_ret_t _RME_Thd_Sched_Bind(struct RME_Cap_Cpt* Cpt,
                (Thread->Sched.State==RME_THD_EXCPEND));
 
     /* Tie the signal endpoint to it if not zero */
-    if(Sig_Op==0U)
+    if(Sig_Op==(void*)0U)
     {
         RME_COV_MARKER();
 
@@ -5775,7 +5777,7 @@ static rme_ret_t _RME_Thd_Sched_Free(struct RME_Cap_Cpt* Cpt,
     }
 
     /* If we have an scheduler event endpoint, release it */
-    if(Thread->Sched.Sched_Sig!=RME_NULL)
+    if(Thread->Sched.Sched_Sig!=(void*)RME_NULL)
     {
         RME_COV_MARKER();
 
@@ -5827,14 +5829,15 @@ static rme_ret_t _RME_Thd_Sched_Free(struct RME_Cap_Cpt* Cpt,
     /* Cleanup all remaining timeslices on it */
     Thread->Sched.Slice=0U;
     
-    /* Check if this thread is the current one and we may need to switch away.
-     * This check is not necessary to guarantee correctness, but it does boost
-     * the efficiency. Might be removed in the future due to WCET concerns. */
+    /* Check if this thread is the current one and we may need to switch away */
     if(Local->Thd_Cur==Thread)
     {
         RME_COV_MARKER();
 
-        _RME_Kern_High(Reg,Local);
+        Local->Thd_Cur=_RME_Run_High(Local);
+        _RME_Run_Ins(Local->Thd_Cur);
+        RME_ASSERT(Local->Thd_Cur->Sched.State==RME_THD_READY);
+        _RME_Run_Swt(Reg,Thread,Local->Thd_Cur);
     }
     else
     {
@@ -6531,9 +6534,8 @@ Description : Switch to another thread. The thread to switch to must have the sa
               the kernel wiull let it preempt the current thread. 
               If trying to switch to a lower priority thread, this is impossible
               because the current thread just preempts it after the thread switch.
-              This syscall does not end with _RME_Kern_High because (1) the user
-              may designate a specific thread rather than a random one, and (2)
-              extreme efficiency is needed for this system call.
+              This syscall does not end with _RME_Kern_High because the user may
+              designate a specific thread rather than a random one.
 Input       : struct RME_Cap_Cpt* Cpt - The master capability table. 
               volatile struct RME_Reg_Struct* Reg - The register set.
               rme_cid_t Cap_Thd - The capability to the thread. If this is -1,
@@ -6686,8 +6688,8 @@ static rme_ret_t _RME_Thd_Swt(struct RME_Cap_Cpt* Cpt,
     __RME_Svc_Retval_Set(Reg,0);
 
     RME_ASSERT(Thd_New->Sched.State==RME_THD_READY);
-    
-    /* Is the chosen thread the same as the current one? If yes, consider it done */
+    /* We cannot call _RME_Kern_High because it picks some random thread. Instead,
+     * we use a manual implementation that is faster than the _RME_Kern_High. */
     if(Thd_Cur==Thd_New)
     {
         RME_COV_MARKER();
@@ -6842,7 +6844,7 @@ static rme_ret_t _RME_Sig_Del(struct RME_Cap_Cpt* Cpt,
     RME_CAP_DEL_CHECK(Sig_Del,Type_Stat,RME_CAP_TYPE_SIG);
 
     /* Check if the signal endpoint is currently used and cannot be deleted */
-    if(Sig_Del->Thd!=0U)
+    if(Sig_Del->Thd!=(void*)0U)
     {
         RME_COV_MARKER();
 
@@ -6880,7 +6882,7 @@ void _RME_Kern_High(struct RME_Reg_Struct* Reg,
     struct RME_Thd_Struct* Thd_Cur;
 
     Thd_New=_RME_Run_High(Local);
-    RME_ASSERT(Thd_New!=RME_NULL);
+    RME_ASSERT(Thd_New!=(void*)RME_NULL);
     Thd_Cur=Local->Thd_Cur;
 
     /* Are these two threads the same? */
@@ -6946,7 +6948,7 @@ rme_ret_t _RME_Kern_Snd(struct RME_Cap_Sig* Cap_Sig)
     Thd_Sig=Cap_Sig->Thd;
     
     /* If and only if we are calling from the same core do we unblock */
-    if(Thd_Sig!=RME_NULL)
+    if(Thd_Sig!=(void*)RME_NULL)
     {
         RME_COV_MARKER();
 
@@ -7063,7 +7065,7 @@ static rme_ret_t _RME_Sig_Snd(struct RME_Cap_Cpt* Cpt,
     Thd_Rcv=Sig_Root->Thd;
 
     /* If and only if we are calling from the same core do we unblock */
-    if(Thd_Rcv!=RME_NULL)
+    if(Thd_Rcv!=(void*)RME_NULL)
     {
         RME_COV_MARKER();
 
@@ -7228,7 +7230,7 @@ static rme_ret_t _RME_Sig_Rcv(struct RME_Cap_Cpt* Cpt,
     
     /* See if we can receive on that endpoint - if someone blocks on it, we 
      * must wait for it to unblock before we can proceed. */
-    if(Sig_Root->Thd!=RME_NULL)
+    if(Sig_Root->Thd!=(void*)RME_NULL)
     {
         RME_COV_MARKER();
 
@@ -7487,7 +7489,7 @@ static rme_ret_t _RME_Inv_Del(struct RME_Cap_Cpt* Cpt,
     Invocation=RME_CAP_GETOBJ(Inv_Del,struct RME_Inv_Struct*);
     
     /* See if the invocation is currently being used. If yes, we cannot delete it */
-    if(Invocation->Thd_Act!=RME_NULL)
+    if(Invocation->Thd_Act!=(void*)RME_NULL)
     {
         RME_COV_MARKER();
 
@@ -7602,7 +7604,7 @@ static rme_ret_t _RME_Inv_Act(struct RME_Cap_Cpt* Cpt,
     Invocation=RME_CAP_GETOBJ(Inv_Op,struct RME_Inv_Struct*);
     /* Check if this invocation port is already active */
     Thd_Act=Invocation->Thd_Act;
-    if(RME_UNLIKELY(Thd_Act!=0U))
+    if(RME_UNLIKELY(Thd_Act!=(void*)0U))
     {
         RME_COV_MARKER();
 
@@ -7656,7 +7658,7 @@ static rme_ret_t _RME_Inv_Act(struct RME_Cap_Cpt* Cpt,
 #if(RME_PGT_RAW_ENABLE==0U)
     RME_ASSERT(RME_CAP_IS_ROOT(Invocation->Prc->Pgt)!=0U);
 #endif
-    __RME_Pgt_Set(Invocation->Prc->Pgt);
+    __RME_Pgt_Set((rme_ptr_t)Invocation->Prc->Pgt);
     
     return 0;
 }
@@ -7682,7 +7684,7 @@ static rme_ret_t _RME_Inv_Ret(struct RME_Reg_Struct* Reg,
     /* See if we can return; If we can, get the structure */
     Thread=RME_CPU_LOCAL()->Thd_Cur;
     Invocation=RME_INVSTK_TOP(Thread);
-    if(RME_UNLIKELY(Invocation==RME_NULL))
+    if(RME_UNLIKELY(Invocation==(void*)RME_NULL))
     {
         RME_COV_MARKER();
 
@@ -7719,7 +7721,7 @@ static rme_ret_t _RME_Inv_Ret(struct RME_Reg_Struct* Reg,
 
     /* We have successfully returned, set the invocation as inactive. We need
      * a barrier here to avoid potential destruction of the return value. */
-    RME_WRITE_RELEASE((volatile rme_ptr_t*)&(Invocation->Thd_Act),0U);
+    RME_WRITE_RELEASE(&(Invocation->Thd_Act),0U);
 
     /* Decide the system call's return value */
     if(RME_UNLIKELY(Is_Exc!=0U))
@@ -7737,14 +7739,14 @@ static rme_ret_t _RME_Inv_Ret(struct RME_Reg_Struct* Reg,
 
     /* Same assumptions as in invocation activation */
     Invocation=RME_INVSTK_TOP(Thread);
-    if(Invocation!=RME_NULL)
+    if(Invocation!=(void*)RME_NULL)
     {
         RME_COV_MARKER();
         
 #if(RME_PGT_RAW_ENABLE==0U)
         RME_ASSERT(RME_CAP_IS_ROOT(Invocation->Prc->Pgt)!=0U);
 #endif
-        __RME_Pgt_Set(Invocation->Prc->Pgt);
+        __RME_Pgt_Set((rme_ptr_t)Invocation->Prc->Pgt);
     }
     else
     {
@@ -7753,7 +7755,7 @@ static rme_ret_t _RME_Inv_Ret(struct RME_Reg_Struct* Reg,
 #if(RME_PGT_RAW_ENABLE==0U)
         RME_ASSERT(RME_CAP_IS_ROOT(Thread->Sched.Prc->Pgt)!=0U);
 #endif
-        __RME_Pgt_Set(Thread->Sched.Prc->Pgt);
+        __RME_Pgt_Set((rme_ptr_t)Thread->Sched.Prc->Pgt);
     }
     
     return 0;

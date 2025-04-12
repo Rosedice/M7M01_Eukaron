@@ -1114,6 +1114,12 @@ Use_IRET:
     IRETQ
 /* End Function:SVC_Handler **************************************************/
 
+_RME_Tick_SMP_Handler:
+
+
+_RME_Tick_Handler:
+
+
 ;/* End Of File **************************************************************/
 
 ;/* Copyright (C) Evo-Devo Instrum. All rights reserved **********************/

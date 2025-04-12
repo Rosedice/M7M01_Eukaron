@@ -20,13 +20,13 @@ Description : The header of the kernel. Whitebox testing of all branches
               don't mean that writes (that are provably useless in this
               particular kernel trap execution) cannot be optimized away.
 ******************************************************************************/
-
 /* Define ********************************************************************/
 #ifdef __HDR_DEF__
 #ifndef __RME_KERNEL_DEF__
 #define __RME_KERNEL_DEF__
 /*****************************************************************************/
 /* Generic *******************************************************************/
+#define RME_EXTERN                                  EXTERN
 #define RME_NULL                                    (0U)
 #define RME_EXIST                                   (1U)
 #define RME_EMPTY                                   (0U)
@@ -77,48 +77,20 @@ Description : The header of the kernel. Whitebox testing of all branches
 
 /* Maximum logging length */
 #define RME_DBGLOG_MAX                              (255U)
+#define RME_DBGLOG_ENABLE               		    (1U)
 
 /* Debug logging macros */
 #if(RME_DBGLOG_ENABLE!=0U)
 #define RME_DBG_I(INT)                              RME_Int_Print((rme_cnt_t)(INT))
 #define RME_DBG_H(HEX)                              RME_Hex_Print((rme_ptr_t)(HEX))
 #define RME_DBG_S(STR)                              RME_Str_Print((const rme_s8_t*)(STR))
-#define RME_DBG_R(REG)                              __RME_Thd_Reg_Print(REG)
+#define RME_DBG_U(USI)                              RME_Int_Print((rme_cnt_t)(USI))
 #else
-#define RME_DBG_I(INT)                              while(0)
-#define RME_DBG_H(HEX)                              while(0)
-#define RME_DBG_S(STR)                              while(0)
-#define RME_DBG_R(REG)                              while(0)
+#define RME_DBG_I(INT)
+#define RME_DBG_H(HEX)
+#define RME_DBG_S(STR)
+#define RME_DBG_U(USI)
 #endif
-
-#define RME_DBG_SIS(STR1,INT,STR2) \
-do \
-{ \
-    RME_DBG_S(STR1); \
-    RME_DBG_I(INT); \
-    RME_DBG_S(STR2); \
-} \
-while(0)
-    
-#define RME_DBG_SHS(STR1,HEX,STR2) \
-do \
-{ \
-    RME_DBG_S(STR1); \
-    RME_DBG_H(HEX); \
-    RME_DBG_S(STR2); \
-} \
-while(0)
-    
-#define RME_DBG_SISHS(STR1,INT,STR2,HEX,STR3) \
-do \
-{ \
-    RME_DBG_S(STR1); \
-    RME_DBG_I(INT); \
-    RME_DBG_S(STR2); \
-    RME_DBG_H(HEX); \
-    RME_DBG_S(STR3); \
-} \
-while(0)
 
 /* Logging macro */
 #ifndef RME_LOG
@@ -147,18 +119,6 @@ do \
     } \
 } \
 while(0)
-#define RME_ASSERT_REG(X,REG) \
-do \
-{ \
-    if(!(X)) \
-    { \
-        RME_LOG_OP(__FILE__,__LINE__,__DATE__,__TIME__); \
-        RME_DBG_R(REG); \
-        RME_ASSERT_FAIL_OP(__FILE__,__LINE__,__DATE__,__TIME__); \
-        while(1); \
-    } \
-} \
-while(0)
 #else
 #define RME_ASSERT(X) \
 do \
@@ -166,7 +126,6 @@ do \
     RME_USE(X); \
 } \
 while(0)
-#define RME_ASSERT_REG(X,REG)                       RME_ASSERT(X)
 #endif
 
 /* Coverage marker enabling */
@@ -297,9 +256,9 @@ while(0)
 #if(RME_QUIE_TIME!=0U)
 #if(RME_WORD_ORDER==5U)
 /* If this is a 32-bit system, need to consider overflows */
-#define RME_CAP_QUIE(X)                             (_RME_Diff((RME_TIMESTAMP),(X))>RME_QUIE_TIME)
+#define RME_CAP_QUIE(X)                             (_RME_Diff((RME_TIMESTAMP()),(X))>RME_QUIE_TIME)
 #else
-#define RME_CAP_QUIE(X)                             (((RME_TIMESTAMP)-(X))>RME_QUIE_TIME)
+#define RME_CAP_QUIE(X)                             (((RME_TIMESTAMP())-(X))>RME_QUIE_TIME)
 #endif
 #else
 #define RME_CAP_QUIE(X)                             (1U)
@@ -494,7 +453,7 @@ do \
                                   RME_CAP_TYPE_STAT(RME_CAP_TYPE_NOP,RME_CAP_STAT_CREATING,RME_CAP_ATTR_ROOT))==RME_CASFAIL)) \
         return RME_ERR_CPT_EXIST; \
     /* We have taken the slot. Now log the quiescence counter in. No barrier needed as our atomics are serializing */ \
-    (CAP)->Head.Timestamp=RME_TIMESTAMP; \
+    (CAP)->Head.Timestamp=RME_TIMESTAMP(); \
 } \
 while(0)
 
@@ -608,8 +567,8 @@ while(0)
 #define RME_PGT_NOM                                 (0U)
 
 /* Size order and number order */
-#define RME_PGT_SZORD(X)                            ((X)>>RME_WORD_BIT_D1)
-#define RME_PGT_NMORD(X)                            ((X)&RME_MASK_WORD_D)
+#define RME_PGT_SIZEORD(X)                            ((X)>>RME_WORD_BIT_D1)
+#define RME_PGT_NUMORD(X)                            ((X)&RME_MASK_WORD_D)
 #define RME_PGT_ORDER(SIZE,NUM)                     (RME_FIELD(SIZE,RME_WORD_BIT_D1)|(NUM))
     
 /* Kernel Memory *************************************************************/
@@ -1199,7 +1158,7 @@ static rme_ret_t _RME_Kfn_Act(struct RME_Cap_Cpt* Cpt,
 /* Public Variable ***********************************************************/
 /* __HDR_PUBLIC__ */
 #else
-#define __RME_EXTERN__ RME_EXTERN 
+#define __RME_EXTERN__ RME_EXTERN
 /* __HDR_PUBLIC__ */
 #endif
 
