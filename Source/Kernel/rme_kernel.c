@@ -1080,7 +1080,6 @@ Return      : rme_ret_t - This function never returns.
 rme_ret_t RME_Kmain(void)
 {
     /* Disable all interrupts first */
-    RME_Int_Print(1111);
     __RME_Int_Disable();
     /* Some low-level kernel assertions */
     _RME_Lowlvl_Check();
