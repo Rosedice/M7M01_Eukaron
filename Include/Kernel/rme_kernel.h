@@ -755,8 +755,8 @@ struct RME_Cap_Kom
 /* List head structure */
 struct RME_List
 {
-    struct RME_List* Next;
-    struct RME_List* Prev;
+    volatile struct RME_List* Next;
+    volatile struct RME_List* Prev;
 };
 
 /* Per-CPU run queue structure */
@@ -1217,12 +1217,12 @@ __RME_EXTERN__ rme_ptr_t _RME_Fetch_And_Single(volatile rme_ptr_t* Ptr,
                                                rme_ptr_t Operand);
 
 /* Linked list operation */
-__RME_EXTERN__ void _RME_List_Crt(struct RME_List* Head);
-__RME_EXTERN__ void _RME_List_Del(struct RME_List* Prev,
-                                  struct RME_List* Next);
-__RME_EXTERN__ void _RME_List_Ins(struct RME_List* New,
-                                  struct RME_List* Prev,
-                                  struct RME_List* Next);
+__RME_EXTERN__ void _RME_List_Crt(volatile struct RME_List* Head);
+__RME_EXTERN__ void _RME_List_Del(volatile struct RME_List* Prev,
+                                  volatile struct RME_List* Next);
+__RME_EXTERN__ void _RME_List_Ins(volatile struct RME_List* New,
+                                  volatile struct RME_List* Prev,
+                                  volatile struct RME_List* Next);
                                   
 /* Kernel entry */
 __RME_EXTERN__ rme_ret_t RME_Kmain(void);

@@ -298,7 +298,7 @@ rme_cnt_t RME_Hex_Print(rme_ptr_t Uint)
     rme_ptr_t Iter;
     rme_ptr_t Count;
     rme_ptr_t Num;
-    
+
     /* Exit on zero */
     if(Uint==0U)
     {
@@ -373,8 +373,7 @@ rme_cnt_t RME_Str_Print(const rme_s8_t* String)
             RME_COV_MARKER();
             /* No action required */
         }
-        
-        __RME_Putchar(String[Count++]);
+        __RME_Putchar(String[Count]);
     }
     
     return (rme_cnt_t)Count;
@@ -915,7 +914,7 @@ Input       : struct RME_List* Head - The pointer to the list head.
 Output      : None.
 Return      : None.
 ******************************************************************************/
-void _RME_List_Crt(struct RME_List* Head)
+void _RME_List_Crt(volatile struct RME_List* Head)
 {
     Head->Prev=Head;
     Head->Next=Head;
@@ -929,8 +928,8 @@ Input       : struct RME_List* Prev - The previous node.
 Output      : None.
 Return      : None.
 ******************************************************************************/
-void _RME_List_Del(struct RME_List* Prev,
-                   struct RME_List* Next)
+void _RME_List_Del(volatile struct RME_List* Prev,
+                   volatile struct RME_List* Next)
 {
     Next->Prev=Prev;
     Prev->Next=Next;
@@ -945,9 +944,9 @@ Input       : struct RME_List* New - The new node to insert.
 Output      : None.
 Return      : None.
 ******************************************************************************/
-void _RME_List_Ins(struct RME_List* New,
-                   struct RME_List* Prev,
-                   struct RME_List* Next)
+void _RME_List_Ins(volatile struct RME_List* New,
+                   volatile struct RME_List* Prev,
+                   volatile struct RME_List* Next)
 {
     Next->Prev=New;
     New->Next=Next;
@@ -1087,13 +1086,10 @@ rme_ret_t RME_Kmain(void)
     __RME_Lowlvl_Init();
     /* Initialize the kernel page tables or memory mappings */
     __RME_Pgt_Kom_Init();
-    
     /* Initialize the kernel object allocation table - default init */
     _RME_Kot_Init(RME_KOT_WORD_NUM);
-    
     /* Boot into the first process */
     __RME_Boot();
-    
     /* Should never reach here */
     return 0;
 }

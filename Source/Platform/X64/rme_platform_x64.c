@@ -133,22 +133,25 @@ struct RME_X64_ACPI_RDSP_Desc* __RME_X64_RDSP_Scan(rme_ptr_t Base, rme_ptr_t Len
     rme_cnt_t Count;
     rme_ptr_t Checksum;
     rme_cnt_t Check_Cnt;
-
     Pos=(rme_u8_t*)RME_X64_PA2VA(Base);
-
     /* Search a word at a time */
-    for(Count=0;Count<=Len-sizeof(struct RME_X64_ACPI_RDSP_Desc);Count+=4)
+    for(Count=0;Count<=Len-sizeof(struct RME_X64_ACPI_RDSP_Desc);Count+=16)
     {
         /* It seemed that we have found one. See if the checksum is good */
         if(_RME_Memcmp(&(Pos[Count]),"RSD PTR ",8)==0)
         {
+            //RME_DBG_H((rme_ptr_t)(Pos[Count+15]));
             Checksum=0;
             /* 20 is the length of the first part of the table */
             for(Check_Cnt=0;Check_Cnt<20;Check_Cnt++)
-                Checksum+=Pos[Count+Check_Cnt];
+            {
+                Checksum+=( rme_ptr_t)Pos[Count+Check_Cnt];
+            }
             /* Is the checksum good? */
             if((Checksum&0xFF)==0)
+            {
                 return (struct RME_X64_ACPI_RDSP_Desc*)&(Pos[Count]);
+            }
         }
     }
     return 0;
@@ -457,7 +460,7 @@ struct __RME_X64_Mem
     rme_ptr_t Length;
 };
 /* The header of the physical memory linked list */
-struct RME_List RME_X64_Phys_Mem;
+volatile struct RME_List RME_X64_Phys_Mem;
 /* The BIOS wouldn't really report more than 1024 blocks of memory */
 struct __RME_X64_Mem RME_X64_Mem[1024];
 
@@ -467,7 +470,6 @@ void __RME_X64_Mem_Init(rme_ptr_t MMap_Addr, rme_ptr_t MMap_Length)
     volatile struct RME_List* Trav_Ptr;
     rme_ptr_t MMap_Cnt;
     rme_ptr_t Info_Cnt;
-
     MMap_Cnt=0;
     Info_Cnt=0;
 
@@ -1385,7 +1387,6 @@ rme_ptr_t __RME_Boot(void)
     rme_ptr_t Page_Ptr;
     struct RME_Cap_Cpt* Cpt;
     struct RME_CPU_Local* CPU_Local;
-
     /* Initialize our own CPU-local data structures */
     RME_X64_CPU_Cnt=0;
     RME_DBG_S("\r\nCPU 0 local IDT/GDT init");
@@ -2327,17 +2328,22 @@ void __RME_Inv_Retval_Set(struct RME_Reg_Struct* Reg,rme_ret_t Retval)
 
 void __RME_List_Crt(volatile struct RME_List* Head)
 {
-
+    Head->Next=Head;
+    Head->Prev=Head;
 }
 
 void __RME_List_Ins(volatile struct RME_List* New,volatile struct RME_List* Prev,volatile struct RME_List* Next)
 {
-
+    New->Prev=Prev;
+    Prev->Next=New;
+    New->Next=Next;
+    Next->Prev=New;
 }
 
 void __RME_List_Del(volatile struct RME_List* Prev,volatile struct RME_List* Next)
 {
-
+    Prev->Next = Next;
+    Next->Prev = Prev;
 }
 
 /* End Of File ***************************************************************/
