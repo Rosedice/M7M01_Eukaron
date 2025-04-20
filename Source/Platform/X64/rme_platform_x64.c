@@ -240,7 +240,7 @@ rme_ret_t __RME_X64_SMP_Detect(struct RME_X64_ACPI_MADT_Hdr* MADT)
                     break;
 
                 RME_DBG_S("\n\rACPI: CPU ");
-                RME_Int_Print(RME_X64_Num_CPU);
+                RME_Int_Print((rme_cnt_t)RME_X64_Num_CPU);
                 RME_DBG_S(", LAPIC ID ");
                 RME_Int_Print(LAPIC->APIC_ID);
 
@@ -260,7 +260,7 @@ rme_ret_t __RME_X64_SMP_Detect(struct RME_X64_ACPI_MADT_Hdr* MADT)
                     break;
 
                 RME_DBG_S("\n\rACPI: IOAPIC ");
-                RME_Int_Print(RME_X64_Num_IOAPIC);
+                RME_Int_Print((rme_cnt_t)RME_X64_Num_IOAPIC);
                 RME_DBG_S(" @ ");
                 RME_Hex_Print(IOAPIC->Addr);
                 RME_DBG_S(", ID ");
@@ -346,11 +346,11 @@ void __RME_X64_ACPI_Debug(struct RME_X64_ACPI_Desc_Hdr *Header)
     RME_DBG_S(", ");
     RME_DBG_S(Table_ID);
     RME_DBG_S(", ");
-    RME_DBG_S(OEM_Rev);
+    RME_DBG_I(OEM_Rev);
     RME_DBG_S(", ");
     RME_DBG_S(Creator);
     RME_DBG_S(", ");
-    RME_DBG_S(Creator_Rev);
+    RME_DBG_I(Creator_Rev);
     RME_DBG_S(".");
 }
 /* End Function:__RME_X64_ACPI_Debug *****************************************/
@@ -373,11 +373,11 @@ rme_ret_t __RME_X64_ACPI_Init(void)
     /* Try to find RDSP */
     RDSP=__RME_X64_RDSP_Find();
     RME_DBG_S("\r\nRDSP address: ");
-    RME_DBG_U((rme_ptr_t)RDSP);
+    RME_DBG_H((rme_ptr_t)RDSP);
     /* Find the RSDT */
     RSDT=(struct RME_X64_ACPI_RSDT_Hdr*)RME_X64_PA2VA(RDSP->RSDT_Addr_Phys);
     RME_DBG_S("\r\nRSDT address: ");
-    RME_DBG_U((rme_ptr_t)RSDT);
+    RME_DBG_H((rme_ptr_t)RSDT);
     Table_Num=(RSDT->Header.Length-sizeof(struct RME_X64_ACPI_RSDT_Hdr))>>2;
 
     for(Count=0;Count<Table_Num;Count++)
@@ -481,7 +481,15 @@ void __RME_X64_Mem_Init(rme_ptr_t MMap_Addr, rme_ptr_t MMap_Length)
         MMap_Cnt+=MMap->size+4;
 
         if(MMap->type!=1)
+        {
+            RME_DBG_S("\n\rPhysical memory: 0x");
+            RME_Hex_Print(MMap->addr);
+            RME_DBG_S(", 0x");
+            RME_Hex_Print(MMap->len);
+            RME_DBG_S(", ");
+            RME_Hex_Print(MMap->type);
             continue;
+        }
 
         Trav_Ptr=RME_X64_Phys_Mem.Next;
         while(Trav_Ptr!=&RME_X64_Phys_Mem)
@@ -1193,9 +1201,9 @@ rme_ptr_t __RME_Pgt_Kom_Init(void)
         if(Mem->Length<RME_POW2(RME_PGT_SIZE_4M))
         {
             RME_DBG_S("\n\rAbandoning physical memory below 4G: addr 0x");
-            RME_DBG_U(Mem->Start_Addr);
+            RME_DBG_H(Mem->Start_Addr);
             RME_DBG_S(", length 0x");
-            RME_DBG_U(Mem->Length);
+            RME_DBG_H(Mem->Length);
             continue;
         }
         if(Addr_Cnt>=RME_X64_KOM1_MAXSEGS)
@@ -1228,9 +1236,9 @@ rme_ptr_t __RME_Pgt_Kom_Init(void)
         if(Mem->Length<2*RME_POW2(RME_PGT_SIZE_2M))
         {
             RME_DBG_S("\n\rAbandoning physical memory above 4G: addr 0x");
-            RME_DBG_U(Mem->Start_Addr);
+            RME_DBG_H(Mem->Start_Addr);
             RME_DBG_S(", length 0x");
-            RME_DBG_U(Mem->Length);
+            RME_DBG_H(Mem->Length);
             Mem=(struct __RME_X64_Mem*)(Mem->Head.Next);
             continue;
         }
@@ -1294,40 +1302,40 @@ rme_ptr_t __RME_Pgt_Kom_Init(void)
 
     /* Now report all mapping info */
     RME_DBG_S("\n\r\n\rKot_Start:     0x");
-    RME_DBG_U(RME_X64_Layout.Kot_Start);
+    RME_DBG_H(RME_X64_Layout.Kot_Start);
     RME_DBG_S("\n\rKot_Size:      0x");
-    RME_DBG_U(RME_X64_Layout.Kot_Size);
+    RME_DBG_H(RME_X64_Layout.Kot_Size);
     RME_DBG_S("\n\rPerCPU_Start:    0x");
-    RME_DBG_U(RME_X64_Layout.PerCPU_Start);
+    RME_DBG_H(RME_X64_Layout.PerCPU_Start);
     RME_DBG_S("\n\rPerCPU_Size:     0x");
-    RME_DBG_U(RME_X64_Layout.PerCPU_Size);
+    RME_DBG_H(RME_X64_Layout.PerCPU_Size);
     RME_DBG_S("\n\rKpgtbl_Start:    0x");
-    RME_DBG_U(RME_X64_Layout.Kpgtbl_Start);
+    RME_DBG_H(RME_X64_Layout.Kpgtbl_Start);
     RME_DBG_S("\n\rKpgtbl_Size:     0x");
-    RME_DBG_U(RME_X64_Layout.Kpgtbl_Size);
+    RME_DBG_H(RME_X64_Layout.Kpgtbl_Size);
     for(Addr_Cnt=0;Addr_Cnt<RME_X64_Layout.Kom1_Trunks;Addr_Cnt++)
     {
         RME_DBG_S("\n\rKom1_Start[");
         RME_DBG_I(Addr_Cnt);
         RME_DBG_S("]:  0x");
-        RME_DBG_U(RME_X64_Layout.Kom1_Start[Addr_Cnt]);
+        RME_DBG_H(RME_X64_Layout.Kom1_Start[Addr_Cnt]);
         RME_DBG_S("\n\rKom1_Size[");
         RME_DBG_I(Addr_Cnt);
         RME_DBG_S("]:   0x");
-        RME_DBG_U(RME_X64_Layout.Kom1_Size[Addr_Cnt]);
+        RME_DBG_H(RME_X64_Layout.Kom1_Size[Addr_Cnt]);
     }
     RME_DBG_S("\n\rHole_Start:      0x");
-    RME_DBG_U(RME_X64_Layout.Hole_Start);
+    RME_DBG_H(RME_X64_Layout.Hole_Start);
     RME_DBG_S("\n\rHole_Size:       0x");
-    RME_DBG_U(RME_X64_Layout.Hole_Size);
+    RME_DBG_H(RME_X64_Layout.Hole_Size);
     RME_DBG_S("\n\rKom2_Start:     0x");
-    RME_DBG_U(RME_X64_Layout.Kom2_Start);
+    RME_DBG_H(RME_X64_Layout.Kom2_Start);
     RME_DBG_S("\n\rKom2_Size:      0x");
-    RME_DBG_U(RME_X64_Layout.Kom2_Size);
+    RME_DBG_H(RME_X64_Layout.Kom2_Size);
     RME_DBG_S("\n\rStack_Start:     0x");
-    RME_DBG_U(RME_X64_Layout.Stack_Start);
+    RME_DBG_H(RME_X64_Layout.Stack_Start);
     RME_DBG_S("\n\rStack_Size:      0x");
-    RME_DBG_U(RME_X64_Layout.Stack_Size);
+    RME_DBG_H(RME_X64_Layout.Stack_Size);
 
     return 0;
 }
@@ -1406,7 +1414,7 @@ rme_ptr_t __RME_Boot(void)
      * pages at the start to load the init process */
     Cur_Addr=RME_X64_Layout.Kom1_Start[0]+16*RME_POW2(RME_PGT_SIZE_2M);
     RME_DBG_S("\r\nKot registration start offset: 0x");
-    RME_DBG_U(((Cur_Addr-RME_KOM_VA_BASE)>>RME_KOM_SLOT_ORDER)/8);
+    RME_DBG_H(((Cur_Addr-RME_KOM_VA_BASE)>>RME_KOM_SLOT_ORDER)/8);
 
     /* Create the capability table for the init process - always 16 */
     Cpt=(struct RME_Cap_Cpt*)Cur_Addr;
@@ -1460,16 +1468,16 @@ rme_ptr_t __RME_Boot(void)
         }
     }
     RME_DBG_S("\r\nKom1 pages: 0x");
-    RME_DBG_U(Page_Ptr);
+    RME_DBG_H(Page_Ptr);
     RME_DBG_S(", [0x0, 0x");
-    RME_DBG_U(Page_Ptr*RME_POW2(RME_PGT_SIZE_2M)+RME_POW2(RME_PGT_SIZE_2M)-1);
+    RME_DBG_H(Page_Ptr*RME_POW2(RME_PGT_SIZE_2M)+RME_POW2(RME_PGT_SIZE_2M)-1);
     RME_DBG_S("]");
 
     /* Map the Kom2 in - don't want lookups, we know where they are. Offset by 2048 because they are mapped above 4G */
     RME_DBG_S("\r\nKom2 pages: 0x");
-    RME_DBG_U(RME_X64_Layout.Kom2_Size/RME_POW2(RME_PGT_SIZE_2M));
+    RME_DBG_H(RME_X64_Layout.Kom2_Size/RME_POW2(RME_PGT_SIZE_2M));
     RME_DBG_S(", [0x");
-    RME_DBG_U(Page_Ptr*RME_POW2(RME_PGT_SIZE_2M)+RME_POW2(RME_PGT_SIZE_2M));
+    RME_DBG_H(Page_Ptr*RME_POW2(RME_PGT_SIZE_2M)+RME_POW2(RME_PGT_SIZE_2M));
     RME_DBG_S(", 0x");
     for(Count=2048;Count<(RME_X64_Layout.Kom2_Size/RME_POW2(RME_PGT_SIZE_2M)+2048);Count++)
     {
@@ -1479,7 +1487,7 @@ rme_ptr_t __RME_Boot(void)
                                        Phys_Addr, Page_Ptr&0x1FF, RME_PGT_ALL_PERM)==0);
         Page_Ptr++;
     }
-    RME_DBG_U(Page_Ptr*RME_POW2(RME_PGT_SIZE_2M)+RME_POW2(RME_PGT_SIZE_2M)-1);
+    RME_DBG_H(Page_Ptr*RME_POW2(RME_PGT_SIZE_2M)+RME_POW2(RME_PGT_SIZE_2M)-1);
     RME_DBG_S("]");
 
     /* Activate the first process - This process cannot be deleted */
@@ -1539,9 +1547,9 @@ rme_ptr_t __RME_Boot(void)
     }
 
     RME_DBG_S("\r\nKot registration end offset: 0x");
-    RME_DBG_U(((Cur_Addr-RME_KOM_VA_BASE)>>RME_KOM_SLOT_ORDER)/8);
+    RME_DBG_H(((Cur_Addr-RME_KOM_VA_BASE)>>RME_KOM_SLOT_ORDER)/8);
     RME_DBG_S("\r\nKom1 frontier: 0x");
-    RME_DBG_U(Cur_Addr);
+    RME_DBG_H(Cur_Addr);
 
     /* Print sizes and halt */
     RME_DBG_S("\r\nThread object size: ");
@@ -1560,7 +1568,6 @@ rme_ptr_t __RME_Boot(void)
     /* Load the init process to address 0x00 - It should be smaller than 2MB */
     extern const unsigned char UVM_Init[];
     _RME_Memcpy(0,(void*)UVM_Init,RME_POW2(RME_PGT_SIZE_2M));
-
 
     /* Now other non-booting processors may proceed and go into their threads */
     RME_X64_CPU_Cnt=0;
@@ -1858,28 +1865,28 @@ void __RME_X64_Fault_Handler(struct RME_Reg_Struct* Reg, rme_ptr_t Reason)
         default:RME_DBG_S("Unknown exception");break;
     }
     /* Print all registers */
-    RME_DBG_S("\n\rRAX:        0x");RME_DBG_U(Reg->RAX);
-    RME_DBG_S("\n\rRBX:        0x");RME_DBG_U(Reg->RBX);
-    RME_DBG_S("\n\rRCX:        0x");RME_DBG_U(Reg->RCX);
-    RME_DBG_S("\n\rRDX:        0x");RME_DBG_U(Reg->RDX);
-    RME_DBG_S("\n\rRSI:        0x");RME_DBG_U(Reg->RSI);
-    RME_DBG_S("\n\rRDI:        0x");RME_DBG_U(Reg->RDI);
-    RME_DBG_S("\n\rRBP:        0x");RME_DBG_U(Reg->RBP);
-    RME_DBG_S("\n\rR8:         0x");RME_DBG_U(Reg->R8);
-    RME_DBG_S("\n\rR9:         0x");RME_DBG_U(Reg->R9);
-    RME_DBG_S("\n\rR10:        0x");RME_DBG_U(Reg->R10);
-    RME_DBG_S("\n\rR11:        0x");RME_DBG_U(Reg->R11);
-    RME_DBG_S("\n\rR12:        0x");RME_DBG_U(Reg->R12);
-    RME_DBG_S("\n\rR13:        0x");RME_DBG_U(Reg->R13);
-    RME_DBG_S("\n\rR14:        0x");RME_DBG_U(Reg->R14);
-    RME_DBG_S("\n\rR15:        0x");RME_DBG_U(Reg->R15);
-    RME_DBG_S("\n\rINT_NUM:    0x");RME_DBG_U(Reg->INT_NUM);
-    RME_DBG_S("\n\rERROR_CODE: 0x");RME_DBG_U(Reg->ERROR_CODE);
-    RME_DBG_S("\n\rRIP:        0x");RME_DBG_U(Reg->RIP);
-    RME_DBG_S("\n\rCS:         0x");RME_DBG_U(Reg->CS);
-    RME_DBG_S("\n\rRFLAGS:     0x");RME_DBG_U(Reg->RFLAGS);
-    RME_DBG_S("\n\rRSP:        0x");RME_DBG_U(Reg->RSP);
-    RME_DBG_S("\n\rSS:         0x");RME_DBG_U(Reg->SS);
+    RME_DBG_S("\n\rRAX:        0x");RME_DBG_H(Reg->RAX);
+    RME_DBG_S("\n\rRBX:        0x");RME_DBG_H(Reg->RBX);
+    RME_DBG_S("\n\rRCX:        0x");RME_DBG_H(Reg->RCX);
+    RME_DBG_S("\n\rRDX:        0x");RME_DBG_H(Reg->RDX);
+    RME_DBG_S("\n\rRSI:        0x");RME_DBG_H(Reg->RSI);
+    RME_DBG_S("\n\rRDI:        0x");RME_DBG_H(Reg->RDI);
+    RME_DBG_S("\n\rRBP:        0x");RME_DBG_H(Reg->RBP);
+    RME_DBG_S("\n\rR8:         0x");RME_DBG_H(Reg->R8);
+    RME_DBG_S("\n\rR9:         0x");RME_DBG_H(Reg->R9);
+    RME_DBG_S("\n\rR10:        0x");RME_DBG_H(Reg->R10);
+    RME_DBG_S("\n\rR11:        0x");RME_DBG_H(Reg->R11);
+    RME_DBG_S("\n\rR12:        0x");RME_DBG_H(Reg->R12);
+    RME_DBG_S("\n\rR13:        0x");RME_DBG_H(Reg->R13);
+    RME_DBG_S("\n\rR14:        0x");RME_DBG_H(Reg->R14);
+    RME_DBG_S("\n\rR15:        0x");RME_DBG_H(Reg->R15);
+    RME_DBG_S("\n\rINT_NUM:    0x");RME_DBG_H(Reg->INT_NUM);
+    RME_DBG_S("\n\rERROR_CODE: 0x");RME_DBG_H(Reg->ERROR_CODE);
+    RME_DBG_S("\n\rRIP:        0x");RME_DBG_H(Reg->RIP);
+    RME_DBG_S("\n\rCS:         0x");RME_DBG_H(Reg->CS);
+    RME_DBG_S("\n\rRFLAGS:     0x");RME_DBG_H(Reg->RFLAGS);
+    RME_DBG_S("\n\rRSP:        0x");RME_DBG_H(Reg->RSP);
+    RME_DBG_S("\n\rSS:         0x");RME_DBG_H(Reg->SS);
     RME_DBG_S("\n\rHang");
 
     while(1);

@@ -1,2 +1,2 @@
-# typical desktop system, 1 numa node, 1 socket, 1 processors, 1GB RAM */
-qemu-system-x86_64 -serial stdio -net none -smp 1 -cpu IvyBridge -enable-kvm -m 1024 -cdrom ./RME.iso -monitor none -D qemu-log.txt
+# typical desktop system, 1 numa node, 1 socket, 1 processors, 4GB RAM */
+qemu-system-x86_64 -serial stdio -net none -smp 1 -cpu IvyBridge -enable-kvm -m 4096 -cdrom ./RME.iso -monitor none -D qemu-log.txt

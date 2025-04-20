@@ -84,12 +84,10 @@ Description : The header of the kernel. Whitebox testing of all branches
 #define RME_DBG_I(INT)                              RME_Int_Print((rme_cnt_t)(INT))
 #define RME_DBG_H(HEX)                              RME_Hex_Print((rme_ptr_t)(HEX))
 #define RME_DBG_S(STR)                              RME_Str_Print((const rme_s8_t*)(STR))
-#define RME_DBG_U(USI)                              RME_Int_Print((rme_cnt_t)(USI))
 #else
 #define RME_DBG_I(INT)
 #define RME_DBG_H(HEX)
 #define RME_DBG_S(STR)
-#define RME_DBG_U(USI)
 #endif
 
 /* Logging macro */
