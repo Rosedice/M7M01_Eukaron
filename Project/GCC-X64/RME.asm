@@ -13,11 +13,13 @@ ffffffff8010000d:	00 10                	add    %dl,(%rax)
 ffffffff8010000f:	00 00                	add    %al,(%rax)
 ffffffff80100011:	00 10                	add    %dl,(%rax)
 ffffffff80100013:	00 00                	add    %al,(%rax)
-ffffffff80100015:	a0 22 00 58 37 23 00 	movabs 0x8000002337580022,%al
-ffffffff8010001c:	00 80 
-ffffffff8010001e:	10 00                	adc    %al,(%rax)
-ffffffff80100020:	90                   	nop
-ffffffff80100021:	e9 da 0f 00 00       	jmp    ffffffff80101000 <__RME_X64_Mboot_Header+0x1000>
+ffffffff80100015:	c0 22 00             	shlb   $0x0,(%rdx)
+ffffffff80100018:	58                   	pop    %rax
+ffffffff80100019:	57                   	push   %rdi
+ffffffff8010001a:	23 00                	and    (%rax),%eax
+ffffffff8010001c:	00 80 10 00 90 e9    	add    %al,-0x166ffff0(%rax)
+ffffffff80100022:	da 0f                	fimull (%rdi)
+ffffffff80100024:	00 00                	add    %al,(%rax)
 ffffffff80100026:	66 66 2e 0f 1f 84 00 	data16 cs nopw 0x0(%rax,%rax,1)
 ffffffff8010002d:	00 00 00 00 
 ffffffff80100031:	66 66 2e 0f 1f 84 00 	data16 cs nopw 0x0(%rax,%rax,1)
@@ -4463,35 +4465,35 @@ ffffffff8020ca99:	48 89 75 f0          	mov    %rsi,-0x10(%rbp)
 ffffffff8020ca9d:	48 89 55 e8          	mov    %rdx,-0x18(%rbp)
 ffffffff8020caa1:	48 89 4d e0          	mov    %rcx,-0x20(%rbp)
     RME_DBG_S("\r\n***\r\nKernel panic - not syncing :\r\n"); \
-ffffffff8020caa5:	48 c7 c7 c0 87 22 80 	mov    $0xffffffff802287c0,%rdi
+ffffffff8020caa5:	48 c7 c7 c0 71 22 80 	mov    $0xffffffff802271c0,%rdi
 ffffffff8020caac:	e8 7c ff ff ff       	call   ffffffff8020ca2d <RME_Str_Print>
     RME_DBG_S(File); \
 ffffffff8020cab1:	48 8b 45 f8          	mov    -0x8(%rbp),%rax
 ffffffff8020cab5:	48 89 c7             	mov    %rax,%rdi
 ffffffff8020cab8:	e8 70 ff ff ff       	call   ffffffff8020ca2d <RME_Str_Print>
     RME_DBG_S(" , Line "); \
-ffffffff8020cabd:	48 c7 c7 e6 87 22 80 	mov    $0xffffffff802287e6,%rdi
+ffffffff8020cabd:	48 c7 c7 e6 71 22 80 	mov    $0xffffffff802271e6,%rdi
 ffffffff8020cac4:	e8 64 ff ff ff       	call   ffffffff8020ca2d <RME_Str_Print>
     RME_DBG_I(Line); \
 ffffffff8020cac9:	48 8b 45 f0          	mov    -0x10(%rbp),%rax
 ffffffff8020cacd:	48 89 c7             	mov    %rax,%rdi
 ffffffff8020cad0:	e8 5e fd ff ff       	call   ffffffff8020c833 <RME_Int_Print>
     RME_DBG_S("\r\n"); \
-ffffffff8020cad5:	48 c7 c7 ef 87 22 80 	mov    $0xffffffff802287ef,%rdi
+ffffffff8020cad5:	48 c7 c7 ef 71 22 80 	mov    $0xffffffff802271ef,%rdi
 ffffffff8020cadc:	e8 4c ff ff ff       	call   ffffffff8020ca2d <RME_Str_Print>
     RME_DBG_S(Date); \
 ffffffff8020cae1:	48 8b 45 e8          	mov    -0x18(%rbp),%rax
 ffffffff8020cae5:	48 89 c7             	mov    %rax,%rdi
 ffffffff8020cae8:	e8 40 ff ff ff       	call   ffffffff8020ca2d <RME_Str_Print>
     RME_DBG_S(" , "); \
-ffffffff8020caed:	48 c7 c7 f2 87 22 80 	mov    $0xffffffff802287f2,%rdi
+ffffffff8020caed:	48 c7 c7 f2 71 22 80 	mov    $0xffffffff802271f2,%rdi
 ffffffff8020caf4:	e8 34 ff ff ff       	call   ffffffff8020ca2d <RME_Str_Print>
     RME_DBG_S(Time); \
 ffffffff8020caf9:	48 8b 45 e0          	mov    -0x20(%rbp),%rax
 ffffffff8020cafd:	48 89 c7             	mov    %rax,%rdi
 ffffffff8020cb00:	e8 28 ff ff ff       	call   ffffffff8020ca2d <RME_Str_Print>
     RME_DBG_S("\r\n"); \
-ffffffff8020cb05:	48 c7 c7 ef 87 22 80 	mov    $0xffffffff802287ef,%rdi
+ffffffff8020cb05:	48 c7 c7 ef 71 22 80 	mov    $0xffffffff802271ef,%rdi
 ffffffff8020cb0c:	e8 1c ff ff ff       	call   ffffffff8020ca2d <RME_Str_Print>
 }
 ffffffff8020cb11:	90                   	nop
@@ -4573,7 +4575,7 @@ ffffffff8020cbcf:	89 c2                	mov    %eax,%edx
 ffffffff8020cbd1:	48 8b 45 e8          	mov    -0x18(%rbp),%rax
 ffffffff8020cbd5:	89 d1                	mov    %edx,%ecx
 ffffffff8020cbd7:	48 d3 e8             	shr    %cl,%rax
-ffffffff8020cbda:	0f b6 80 40 89 22 80 	movzbl -0x7fdd76c0(%rax),%eax
+ffffffff8020cbda:	0f b6 80 40 73 22 80 	movzbl -0x7fdd8cc0(%rax),%eax
 ffffffff8020cbe1:	0f b6 d0             	movzbl %al,%edx
 ffffffff8020cbe4:	48 8b 45 f8          	mov    -0x8(%rbp),%rax
 ffffffff8020cbe8:	48 01 d0             	add    %rdx,%rax
@@ -4662,7 +4664,7 @@ ffffffff8020ccb0:	89 d1                	mov    %edx,%ecx
 ffffffff8020ccb2:	48 d3 e8             	shr    %cl,%rax
 ffffffff8020ccb5:	0f b6 c0             	movzbl %al,%eax
 ffffffff8020ccb8:	48 98                	cltq
-ffffffff8020ccba:	0f b6 80 40 8a 22 80 	movzbl -0x7fdd75c0(%rax),%eax
+ffffffff8020ccba:	0f b6 80 40 74 22 80 	movzbl -0x7fdd8bc0(%rax),%eax
 ffffffff8020ccc1:	0f b6 d0             	movzbl %al,%edx
 ffffffff8020ccc4:	48 8b 45 f8          	mov    -0x8(%rbp),%rax
 ffffffff8020ccc8:	48 01 d0             	add    %rdx,%rax
@@ -5137,7 +5139,7 @@ ffffffff8020d02f:	48 8b 55 f8          	mov    -0x8(%rbp),%rdx
 ffffffff8020d033:	48 8b 45 a8          	mov    -0x58(%rbp),%rax
 ffffffff8020d037:	48 89 d6             	mov    %rdx,%rsi
 ffffffff8020d03a:	48 89 c7             	mov    %rax,%rdi
-ffffffff8020d03d:	e8 38 a0 01 00       	call   ffffffff8022707a <__RME_Svc_Retval_Set>
+ffffffff8020d03d:	e8 94 a0 01 00       	call   ffffffff802270d6 <__RME_Svc_Retval_Set>
 ffffffff8020d042:	e9 00 09 00 00       	jmp    ffffffff8020d947 <_RME_Svc_Handler+0x982>
         /* No action required */
     }
@@ -5216,7 +5218,7 @@ ffffffff8020d0ed:	48 8b 55 f8          	mov    -0x8(%rbp),%rdx
 ffffffff8020d0f1:	48 8b 45 a8          	mov    -0x58(%rbp),%rax
 ffffffff8020d0f5:	48 89 d6             	mov    %rdx,%rsi
 ffffffff8020d0f8:	48 89 c7             	mov    %rax,%rdi
-ffffffff8020d0fb:	e8 7a 9f 01 00       	call   ffffffff8022707a <__RME_Svc_Retval_Set>
+ffffffff8020d0fb:	e8 d6 9f 01 00       	call   ffffffff802270d6 <__RME_Svc_Retval_Set>
 ffffffff8020d100:	e9 42 08 00 00       	jmp    ffffffff8020d947 <_RME_Svc_Handler+0x982>
      * of these functions shall be: If the function is successful, they shall
      * perform the return value saving on proper register stacks by themselves;
@@ -5228,7 +5230,7 @@ ffffffff8020d105:	48 83 7d e8 09       	cmpq   $0x9,-0x18(%rbp)
 ffffffff8020d10a:	0f 87 03 03 00 00    	ja     ffffffff8020d413 <_RME_Svc_Handler+0x44e>
 ffffffff8020d110:	48 8b 45 e8          	mov    -0x18(%rbp),%rax
 ffffffff8020d114:	48 c1 e0 03          	shl    $0x3,%rax
-ffffffff8020d118:	48 05 f8 87 22 80    	add    $0xffffffff802287f8,%rax
+ffffffff8020d118:	48 05 f8 71 22 80    	add    $0xffffffff802271f8,%rax
 ffffffff8020d11e:	48 8b 00             	mov    (%rax),%rax
 ffffffff8020d121:	3e ff e0             	notrack jmp *%rax
         {
@@ -5256,7 +5258,7 @@ ffffffff8020d156:	48 8b 55 f8          	mov    -0x8(%rbp),%rdx
 ffffffff8020d15a:	48 8b 45 a8          	mov    -0x58(%rbp),%rax
 ffffffff8020d15e:	48 89 d6             	mov    %rdx,%rsi
 ffffffff8020d161:	48 89 c7             	mov    %rax,%rdi
-ffffffff8020d164:	e8 11 9f 01 00       	call   ffffffff8022707a <__RME_Svc_Retval_Set>
+ffffffff8020d164:	e8 6d 9f 01 00       	call   ffffffff802270d6 <__RME_Svc_Retval_Set>
 ffffffff8020d169:	e9 d9 07 00 00       	jmp    ffffffff8020d947 <_RME_Svc_Handler+0x982>
         /* Receive from a signal endpoint */
         case RME_SVC_SIG_RCV:
@@ -5288,7 +5290,7 @@ ffffffff8020d1a7:	48 8b 55 f8          	mov    -0x8(%rbp),%rdx
 ffffffff8020d1ab:	48 8b 45 a8          	mov    -0x58(%rbp),%rax
 ffffffff8020d1af:	48 89 d6             	mov    %rdx,%rsi
 ffffffff8020d1b2:	48 89 c7             	mov    %rax,%rdi
-ffffffff8020d1b5:	e8 c0 9e 01 00       	call   ffffffff8022707a <__RME_Svc_Retval_Set>
+ffffffff8020d1b5:	e8 1c 9f 01 00       	call   ffffffff802270d6 <__RME_Svc_Retval_Set>
 ffffffff8020d1ba:	e9 88 07 00 00       	jmp    ffffffff8020d947 <_RME_Svc_Handler+0x982>
         /* Call kernel functions */
         case RME_SVC_KFN:
@@ -5336,7 +5338,7 @@ ffffffff8020d21d:	48 8b 55 f8          	mov    -0x8(%rbp),%rdx
 ffffffff8020d221:	48 8b 45 a8          	mov    -0x58(%rbp),%rax
 ffffffff8020d225:	48 89 d6             	mov    %rdx,%rsi
 ffffffff8020d228:	48 89 c7             	mov    %rax,%rdi
-ffffffff8020d22b:	e8 4a 9e 01 00       	call   ffffffff8022707a <__RME_Svc_Retval_Set>
+ffffffff8020d22b:	e8 a6 9e 01 00       	call   ffffffff802270d6 <__RME_Svc_Retval_Set>
 ffffffff8020d230:	e9 12 07 00 00       	jmp    ffffffff8020d947 <_RME_Svc_Handler+0x982>
         {
             RME_COV_MARKER();
@@ -5363,7 +5365,7 @@ ffffffff8020d267:	48 8b 55 f8          	mov    -0x8(%rbp),%rdx
 ffffffff8020d26b:	48 8b 45 a8          	mov    -0x58(%rbp),%rax
 ffffffff8020d26f:	48 89 d6             	mov    %rdx,%rsi
 ffffffff8020d272:	48 89 c7             	mov    %rax,%rdi
-ffffffff8020d275:	e8 00 9e 01 00       	call   ffffffff8022707a <__RME_Svc_Retval_Set>
+ffffffff8020d275:	e8 5c 9e 01 00       	call   ffffffff802270d6 <__RME_Svc_Retval_Set>
 ffffffff8020d27a:	e9 c8 06 00 00       	jmp    ffffffff8020d947 <_RME_Svc_Handler+0x982>
         /* Changing thread execution context */
         case RME_SVC_THD_EXEC_SET:
@@ -5400,7 +5402,7 @@ ffffffff8020d2c6:	48 8b 55 f8          	mov    -0x8(%rbp),%rdx
 ffffffff8020d2ca:	48 8b 45 a8          	mov    -0x58(%rbp),%rax
 ffffffff8020d2ce:	48 89 d6             	mov    %rdx,%rsi
 ffffffff8020d2d1:	48 89 c7             	mov    %rax,%rdi
-ffffffff8020d2d4:	e8 a1 9d 01 00       	call   ffffffff8022707a <__RME_Svc_Retval_Set>
+ffffffff8020d2d4:	e8 fd 9d 01 00       	call   ffffffff802270d6 <__RME_Svc_Retval_Set>
 ffffffff8020d2d9:	e9 69 06 00 00       	jmp    ffffffff8020d947 <_RME_Svc_Handler+0x982>
                                        (rme_cid_t)RME_PARAM_D0(Param[0]),   /* rme_cid_t Cap_Thd0 */
                                        RME_PARAM_D1(Param[0]),              /* rme_ptr_t Prio0 */
@@ -5457,7 +5459,7 @@ ffffffff8020d352:	48 8b 55 f8          	mov    -0x8(%rbp),%rdx
 ffffffff8020d356:	48 8b 45 a8          	mov    -0x58(%rbp),%rax
 ffffffff8020d35a:	48 89 d6             	mov    %rdx,%rsi
 ffffffff8020d35d:	48 89 c7             	mov    %rax,%rdi
-ffffffff8020d360:	e8 15 9d 01 00       	call   ffffffff8022707a <__RME_Svc_Retval_Set>
+ffffffff8020d360:	e8 71 9d 01 00       	call   ffffffff802270d6 <__RME_Svc_Retval_Set>
 ffffffff8020d365:	e9 dd 05 00 00       	jmp    ffffffff8020d947 <_RME_Svc_Handler+0x982>
         /* Transfer time to a thread */
         case RME_SVC_THD_TIME_XFER:
@@ -5494,7 +5496,7 @@ ffffffff8020d3aa:	48 8b 55 f8          	mov    -0x8(%rbp),%rdx
 ffffffff8020d3ae:	48 8b 45 a8          	mov    -0x58(%rbp),%rax
 ffffffff8020d3b2:	48 89 d6             	mov    %rdx,%rsi
 ffffffff8020d3b5:	48 89 c7             	mov    %rax,%rdi
-ffffffff8020d3b8:	e8 bd 9c 01 00       	call   ffffffff8022707a <__RME_Svc_Retval_Set>
+ffffffff8020d3b8:	e8 19 9d 01 00       	call   ffffffff802270d6 <__RME_Svc_Retval_Set>
 ffffffff8020d3bd:	e9 85 05 00 00       	jmp    ffffffff8020d947 <_RME_Svc_Handler+0x982>
         /* Switch to another thread */
         case RME_SVC_THD_SWT:
@@ -5526,7 +5528,7 @@ ffffffff8020d3fb:	48 8b 55 f8          	mov    -0x8(%rbp),%rdx
 ffffffff8020d3ff:	48 8b 45 a8          	mov    -0x58(%rbp),%rax
 ffffffff8020d403:	48 89 d6             	mov    %rdx,%rsi
 ffffffff8020d406:	48 89 c7             	mov    %rax,%rdi
-ffffffff8020d409:	e8 6c 9c 01 00       	call   ffffffff8022707a <__RME_Svc_Retval_Set>
+ffffffff8020d409:	e8 c8 9c 01 00       	call   ffffffff802270d6 <__RME_Svc_Retval_Set>
 ffffffff8020d40e:	e9 34 05 00 00       	jmp    ffffffff8020d947 <_RME_Svc_Handler+0x982>
         }
         default:
@@ -5543,7 +5545,7 @@ ffffffff8020d414:	48 8b 45 e8          	mov    -0x18(%rbp),%rax
 ffffffff8020d418:	48 83 e8 0a          	sub    $0xa,%rax
 ffffffff8020d41c:	48 83 f8 17          	cmp    $0x17,%rax
 ffffffff8020d420:	0f 87 05 05 00 00    	ja     ffffffff8020d92b <_RME_Svc_Handler+0x966>
-ffffffff8020d426:	48 8b 04 c5 48 88 22 	mov    -0x7fdd77b8(,%rax,8),%rax
+ffffffff8020d426:	48 8b 04 c5 48 72 22 	mov    -0x7fdd8db8(,%rax,8),%rax
 ffffffff8020d42d:	80 
 ffffffff8020d42e:	3e ff e0             	notrack jmp *%rax
     {
@@ -6214,7 +6216,7 @@ ffffffff8020d934:	48 8b 55 f8          	mov    -0x8(%rbp),%rdx
 ffffffff8020d938:	48 8b 45 a8          	mov    -0x58(%rbp),%rax
 ffffffff8020d93c:	48 89 d6             	mov    %rdx,%rsi
 ffffffff8020d93f:	48 89 c7             	mov    %rax,%rdi
-ffffffff8020d942:	e8 33 97 01 00       	call   ffffffff8022707a <__RME_Svc_Retval_Set>
+ffffffff8020d942:	e8 8f 97 01 00       	call   ffffffff802270d6 <__RME_Svc_Retval_Set>
 }
 ffffffff8020d947:	c9                   	leave
 ffffffff8020d948:	c3                   	ret
@@ -13675,7 +13677,7 @@ ffffffff80212d27:	75 0c                	jne    ffffffff80212d35 <_RME_Thd_Fatal+
             RME_COV_MARKER();
             
             RME_DBG_S("Attempted to kill init thread.");
-ffffffff80212d29:	48 c7 c7 08 89 22 80 	mov    $0xffffffff80228908,%rdi
+ffffffff80212d29:	48 c7 c7 08 73 22 80 	mov    $0xffffffff80227308,%rdi
 ffffffff80212d30:	e8 f8 9c ff ff       	call   ffffffff8020ca2d <RME_Str_Print>
         
         /* We must be running at this point to trigger a synchronous exception */
@@ -18964,7 +18966,7 @@ ffffffff80216d36:	e8 58 5a ff ff       	call   ffffffff8020c793 <_RME_X64_Fetch_
 ffffffff80216d3b:	48 8b 45 d0          	mov    -0x30(%rbp),%rax
 ffffffff80216d3f:	be 00 00 00 00       	mov    $0x0,%esi
 ffffffff80216d44:	48 89 c7             	mov    %rax,%rdi
-ffffffff80216d47:	e8 2e 03 01 00       	call   ffffffff8022707a <__RME_Svc_Retval_Set>
+ffffffff80216d47:	e8 8a 03 01 00       	call   ffffffff802270d6 <__RME_Svc_Retval_Set>
     /* If the thread is ready, kick it out of the run queue. If it is blocked on
      * some endpoint, end the blocking and set the return value to RME_ERR_SIV_FREE.
      * If the thread is killed due to a fault, we will not clear the fault here, and
@@ -19005,7 +19007,7 @@ ffffffff80216d81:	48 8b 45 e0          	mov    -0x20(%rbp),%rax
 ffffffff80216d85:	48 8b 80 90 00 00 00 	mov    0x90(%rax),%rax
 ffffffff80216d8c:	48 c7 c6 ce fe ff ff 	mov    $0xfffffffffffffece,%rsi
 ffffffff80216d93:	48 89 c7             	mov    %rax,%rdi
-ffffffff80216d96:	e8 df 02 01 00       	call   ffffffff8022707a <__RME_Svc_Retval_Set>
+ffffffff80216d96:	e8 3b 03 01 00       	call   ffffffff802270d6 <__RME_Svc_Retval_Set>
         /* Release signal and thread from each other */
         Thread->Sched.Signal->Thd=RME_NULL;
 ffffffff80216d9b:	48 8b 45 e0          	mov    -0x20(%rbp),%rax
@@ -19300,7 +19302,7 @@ ffffffff802170dd:	e8 a5 ec 00 00       	call   ffffffff80225d87 <__RME_Thd_Reg_I
 ffffffff802170e2:	48 8b 45 d0          	mov    -0x30(%rbp),%rax
 ffffffff802170e6:	be 00 00 00 00       	mov    $0x0,%esi
 ffffffff802170eb:	48 89 c7             	mov    %rax,%rdi
-ffffffff802170ee:	e8 87 ff 00 00       	call   ffffffff8022707a <__RME_Svc_Retval_Set>
+ffffffff802170ee:	e8 e3 ff 00 00       	call   ffffffff802270d6 <__RME_Svc_Retval_Set>
     
     /* Check if there is a exception pending and clear it if there is */
     if(Thread->Sched.State==RME_THD_EXCPEND)
@@ -19648,7 +19650,7 @@ ffffffff802174f1:	0f 82 0b fd ff ff    	jb     ffffffff80217202 <_RME_Thd_Sched_
 ffffffff802174f7:	48 8b 85 60 ff ff ff 	mov    -0xa0(%rbp),%rax
 ffffffff802174fe:	be 00 00 00 00       	mov    $0x0,%esi
 ffffffff80217503:	48 89 c7             	mov    %rax,%rdi
-ffffffff80217506:	e8 6f fb 00 00       	call   ffffffff8022707a <__RME_Svc_Retval_Set>
+ffffffff80217506:	e8 cb fb 00 00       	call   ffffffff802270d6 <__RME_Svc_Retval_Set>
     
     /* Change priority for each thread, and we'll switch to the real highest priority
      * thread after all these changes. This can help remove the excessive overhead. */
@@ -20669,7 +20671,7 @@ ffffffff80217ff3:	48 89 c2             	mov    %rax,%rdx
 ffffffff80217ff6:	48 8b 45 b0          	mov    -0x50(%rbp),%rax
 ffffffff80217ffa:	48 89 d6             	mov    %rdx,%rsi
 ffffffff80217ffd:	48 89 c7             	mov    %rax,%rdi
-ffffffff80218000:	e8 75 f0 00 00       	call   ffffffff8022707a <__RME_Svc_Retval_Set>
+ffffffff80218000:	e8 d1 f0 00 00       	call   ffffffff802270d6 <__RME_Svc_Retval_Set>
 
     /* See what was the state of the destination thread. If it is timeout, then activate
      * it. If it is BLOCKED or EXCPEND, then leave it alone, and it will be activated
@@ -21075,7 +21077,7 @@ ffffffff8021841a:	48 89 45 f0          	mov    %rax,-0x10(%rbp)
 ffffffff8021841e:	48 8b 45 c0          	mov    -0x40(%rbp),%rax
 ffffffff80218422:	be 00 00 00 00       	mov    $0x0,%esi
 ffffffff80218427:	48 89 c7             	mov    %rax,%rdi
-ffffffff8021842a:	e8 4b ec 00 00       	call   ffffffff8022707a <__RME_Svc_Retval_Set>
+ffffffff8021842a:	e8 a7 ec 00 00       	call   ffffffff802270d6 <__RME_Svc_Retval_Set>
 
     RME_ASSERT(Thd_New->Sched.State==RME_THD_READY);
     /* We cannot call _RME_Kern_High because it picks some random thread. Instead,
@@ -22037,7 +22039,7 @@ ffffffff80218eff:	48 8b 45 e0          	mov    -0x20(%rbp),%rax
 ffffffff80218f03:	48 8b 80 90 00 00 00 	mov    0x90(%rax),%rax
 ffffffff80218f0a:	be 01 00 00 00       	mov    $0x1,%esi
 ffffffff80218f0f:	48 89 c7             	mov    %rax,%rdi
-ffffffff80218f12:	e8 63 e1 00 00       	call   ffffffff8022707a <__RME_Svc_Retval_Set>
+ffffffff80218f12:	e8 bf e1 00 00       	call   ffffffff802270d6 <__RME_Svc_Retval_Set>
         
         /* See if the thread still have time left */
         if(Thd_Sig->Sched.Slice!=0U)
@@ -22349,7 +22351,7 @@ ffffffff80219245:	0f 84 89 00 00 00    	je     ffffffff802192d4 <_RME_Sig_Snd+0x
 ffffffff8021924b:	48 8b 45 c0          	mov    -0x40(%rbp),%rax
 ffffffff8021924f:	be 00 00 00 00       	mov    $0x0,%esi
 ffffffff80219254:	48 89 c7             	mov    %rax,%rdi
-ffffffff80219257:	e8 1e de 00 00       	call   ffffffff8022707a <__RME_Svc_Retval_Set>
+ffffffff80219257:	e8 7a de 00 00       	call   ffffffff802270d6 <__RME_Svc_Retval_Set>
         
         /* The thread is blocked, and it is on our core. Unblock it, and
          * set the return value to one as always, Even if we were specifying
@@ -22360,7 +22362,7 @@ ffffffff8021925c:	48 8b 45 d0          	mov    -0x30(%rbp),%rax
 ffffffff80219260:	48 8b 80 90 00 00 00 	mov    0x90(%rax),%rax
 ffffffff80219267:	be 01 00 00 00       	mov    $0x1,%esi
 ffffffff8021926c:	48 89 c7             	mov    %rax,%rdi
-ffffffff8021926f:	e8 06 de 00 00       	call   ffffffff8022707a <__RME_Svc_Retval_Set>
+ffffffff8021926f:	e8 62 de 00 00       	call   ffffffff802270d6 <__RME_Svc_Retval_Set>
         
         /* See if the thread still have time left */
         if(Thd_Rcv->Sched.Slice!=0U)
@@ -22446,7 +22448,7 @@ ffffffff80219316:	eb 16                	jmp    ffffffff8021932e <_RME_Sig_Snd+0x
 ffffffff80219318:	48 8b 45 c0          	mov    -0x40(%rbp),%rax
 ffffffff8021931c:	be 00 00 00 00       	mov    $0x0,%esi
 ffffffff80219321:	48 89 c7             	mov    %rax,%rdi
-ffffffff80219324:	e8 51 dd 00 00       	call   ffffffff8022707a <__RME_Svc_Retval_Set>
+ffffffff80219324:	e8 ad dd 00 00       	call   ffffffff802270d6 <__RME_Svc_Retval_Set>
     }
 
     return 0;
@@ -22814,7 +22816,7 @@ ffffffff802196e0:	e9 e4 00 00 00       	jmp    ffffffff802197c9 <_RME_Sig_Rcv+0x
 ffffffff802196e5:	48 8b 45 c0          	mov    -0x40(%rbp),%rax
 ffffffff802196e9:	be 01 00 00 00       	mov    $0x1,%esi
 ffffffff802196ee:	48 89 c7             	mov    %rax,%rdi
-ffffffff802196f1:	e8 84 d9 00 00       	call   ffffffff8022707a <__RME_Svc_Retval_Set>
+ffffffff802196f1:	e8 e0 d9 00 00       	call   ffffffff802270d6 <__RME_Svc_Retval_Set>
 ffffffff802196f6:	eb 40                	jmp    ffffffff80219738 <_RME_Sig_Rcv+0x408>
         else
         {
@@ -22849,7 +22851,7 @@ ffffffff80219725:	48 8b 55 d0          	mov    -0x30(%rbp),%rdx
 ffffffff80219729:	48 8b 45 c0          	mov    -0x40(%rbp),%rax
 ffffffff8021972d:	48 89 d6             	mov    %rdx,%rsi
 ffffffff80219730:	48 89 c7             	mov    %rax,%rdi
-ffffffff80219733:	e8 42 d9 00 00       	call   ffffffff8022707a <__RME_Svc_Retval_Set>
+ffffffff80219733:	e8 9e d9 00 00       	call   ffffffff802270d6 <__RME_Svc_Retval_Set>
         }
         
         return 0;
@@ -22921,7 +22923,7 @@ ffffffff802197b1:	eb 11                	jmp    ffffffff802197c4 <_RME_Sig_Rcv+0x
 ffffffff802197b3:	48 8b 45 c0          	mov    -0x40(%rbp),%rax
 ffffffff802197b7:	be 00 00 00 00       	mov    $0x0,%esi
 ffffffff802197bc:	48 89 c7             	mov    %rax,%rdi
-ffffffff802197bf:	e8 b6 d8 00 00       	call   ffffffff8022707a <__RME_Svc_Retval_Set>
+ffffffff802197bf:	e8 12 d9 00 00       	call   ffffffff802270d6 <__RME_Svc_Retval_Set>
         }
     }
     
@@ -24434,7 +24436,7 @@ ffffffff8021aa95:	48 8b 55 e0          	mov    -0x20(%rbp),%rdx
 ffffffff8021aa99:	48 8b 45 e8          	mov    -0x18(%rbp),%rax
 ffffffff8021aa9d:	48 89 d6             	mov    %rdx,%rsi
 ffffffff8021aaa0:	48 89 c7             	mov    %rax,%rdi
-ffffffff8021aaa3:	e8 e9 c5 00 00       	call   ffffffff80227091 <__RME_Inv_Retval_Set>
+ffffffff8021aaa3:	e8 50 c6 00 00       	call   ffffffff802270f8 <__RME_Inv_Retval_Set>
 
     /* We have successfully returned, set the invocation as inactive. We need
      * a barrier here to avoid potential destruction of the return value. */
@@ -24457,7 +24459,7 @@ ffffffff8021aac2:	74 15                	je     ffffffff8021aad9 <_RME_Inv_Ret+0x
 ffffffff8021aac4:	48 8b 45 e8          	mov    -0x18(%rbp),%rax
 ffffffff8021aac8:	48 c7 c6 d2 fe ff ff 	mov    $0xfffffffffffffed2,%rsi
 ffffffff8021aacf:	48 89 c7             	mov    %rax,%rdi
-ffffffff8021aad2:	e8 a3 c5 00 00       	call   ffffffff8022707a <__RME_Svc_Retval_Set>
+ffffffff8021aad2:	e8 ff c5 00 00       	call   ffffffff802270d6 <__RME_Svc_Retval_Set>
 ffffffff8021aad7:	eb 11                	jmp    ffffffff8021aaea <_RME_Inv_Ret+0x143>
     }
     else
@@ -24468,7 +24470,7 @@ ffffffff8021aad7:	eb 11                	jmp    ffffffff8021aaea <_RME_Inv_Ret+0x
 ffffffff8021aad9:	48 8b 45 e8          	mov    -0x18(%rbp),%rax
 ffffffff8021aadd:	be 00 00 00 00       	mov    $0x0,%esi
 ffffffff8021aae2:	48 89 c7             	mov    %rax,%rdi
-ffffffff8021aae5:	e8 90 c5 00 00       	call   ffffffff8022707a <__RME_Svc_Retval_Set>
+ffffffff8021aae5:	e8 ec c5 00 00       	call   ffffffff802270d6 <__RME_Svc_Retval_Set>
     }
 
     /* Same assumptions as in invocation activation */
@@ -24983,7 +24985,7 @@ ffffffff8021b0df:	48 ba 00 00 00 00 00 	movabs $0xffff800000000000,%rdx
 ffffffff8021b0e6:	80 ff ff 
 ffffffff8021b0e9:	48 8b 45 f8          	mov    -0x8(%rbp),%rax
 ffffffff8021b0ed:	48 01 d0             	add    %rdx,%rax
-ffffffff8021b0f0:	48 89 05 31 6f 01 00 	mov    %rax,0x16f31(%rip)        # ffffffff80232028 <RME_X64_MBInfo>
+ffffffff8021b0f0:	48 89 05 31 8f 01 00 	mov    %rax,0x18f31(%rip)        # ffffffff80234028 <RME_X64_MBInfo>
     _RME_Kmain(RME_KOM_STACK_ADDR);
 ffffffff8021b0f7:	48 c7 c0 00 b8 20 80 	mov    $0xffffffff8020b800,%rax
 ffffffff8021b0fe:	48 89 c7             	mov    %rax,%rdi
@@ -25077,12 +25079,12 @@ ffffffff8021b1eb:	e8 10 06 ff ff       	call   ffffffff8020b800 <__RME_X64_In>
 ffffffff8021b1f0:	48 3d ff 00 00 00    	cmp    $0xff,%rax
 ffffffff8021b1f6:	75 0d                	jne    ffffffff8021b205 <__RME_X64_UART_Init+0x90>
         RME_X64_UART_Exist=0;
-ffffffff8021b1f8:	48 c7 05 1d 6e 01 00 	movq   $0x0,0x16e1d(%rip)        # ffffffff80232020 <RME_X64_UART_Exist>
+ffffffff8021b1f8:	48 c7 05 1d 8e 01 00 	movq   $0x0,0x18e1d(%rip)        # ffffffff80234020 <RME_X64_UART_Exist>
 ffffffff8021b1ff:	00 00 00 00 
 }
 ffffffff8021b203:	eb 0b                	jmp    ffffffff8021b210 <__RME_X64_UART_Init+0x9b>
         RME_X64_UART_Exist=1;
-ffffffff8021b205:	48 c7 05 10 6e 01 00 	movq   $0x1,0x16e10(%rip)        # ffffffff80232020 <RME_X64_UART_Exist>
+ffffffff8021b205:	48 c7 05 10 8e 01 00 	movq   $0x1,0x18e10(%rip)        # ffffffff80234020 <RME_X64_UART_Exist>
 ffffffff8021b20c:	01 00 00 00 
 }
 ffffffff8021b210:	90                   	nop
@@ -25112,7 +25114,7 @@ ffffffff8021b246:	48 8b 55 f8          	mov    -0x8(%rbp),%rdx
 ffffffff8021b24a:	48 8b 45 e0          	mov    -0x20(%rbp),%rax
 ffffffff8021b24e:	48 01 d0             	add    %rdx,%rax
 ffffffff8021b251:	ba 08 00 00 00       	mov    $0x8,%edx
-ffffffff8021b256:	48 c7 c6 22 8d 22 80 	mov    $0xffffffff80228d22,%rsi
+ffffffff8021b256:	48 c7 c6 22 77 22 80 	mov    $0xffffffff80227722,%rsi
 ffffffff8021b25d:	48 89 c7             	mov    %rax,%rdi
 ffffffff8021b260:	e8 f7 1b ff ff       	call   ffffffff8020ce5c <_RME_Memcmp>
 ffffffff8021b265:	48 85 c0             	test   %rax,%rax
@@ -25248,7 +25250,7 @@ ffffffff8021b376:	e9 00 03 00 00       	jmp    ffffffff8021b67b <__RME_X64_SMP_D
 ffffffff8021b37b:	48 8b 45 c8          	mov    -0x38(%rbp),%rax
 ffffffff8021b37f:	8b 40 24             	mov    0x24(%rax),%eax
 ffffffff8021b382:	89 c0                	mov    %eax,%eax
-ffffffff8021b384:	48 89 05 95 7f 01 00 	mov    %rax,0x17f95(%rip)        # ffffffff80233320 <RME_X64_LAPIC_Addr>
+ffffffff8021b384:	48 89 05 95 9f 01 00 	mov    %rax,0x19f95(%rip)        # ffffffff80235320 <RME_X64_LAPIC_Addr>
 
     /* Where does the actual table contents start? */
     Ptr=MADT->Table;
@@ -25266,10 +25268,10 @@ ffffffff8021b3a8:	48 01 d0             	add    %rdx,%rax
 ffffffff8021b3ab:	48 89 45 f0          	mov    %rax,-0x10(%rbp)
 
     RME_X64_Num_IOAPIC=0;
-ffffffff8021b3af:	48 c7 05 06 7f 01 00 	movq   $0x0,0x17f06(%rip)        # ffffffff802332c0 <RME_X64_Num_IOAPIC>
+ffffffff8021b3af:	48 c7 05 06 9f 01 00 	movq   $0x0,0x19f06(%rip)        # ffffffff802352c0 <RME_X64_Num_IOAPIC>
 ffffffff8021b3b6:	00 00 00 00 
     RME_X64_Num_CPU=0;
-ffffffff8021b3ba:	48 c7 05 e3 6e 01 00 	movq   $0x0,0x16ee3(%rip)        # ffffffff802322a8 <RME_X64_Num_CPU>
+ffffffff8021b3ba:	48 c7 05 e3 8e 01 00 	movq   $0x0,0x18ee3(%rip)        # ffffffff802342a8 <RME_X64_Num_CPU>
 ffffffff8021b3c1:	00 00 00 00 
     while(Ptr<End)
 ffffffff8021b3c5:	e9 98 02 00 00       	jmp    ffffffff8021b662 <__RME_X64_SMP_Detect+0x322>
@@ -25327,14 +25329,14 @@ ffffffff8021b448:	83 e0 01             	and    $0x1,%eax
 ffffffff8021b44b:	85 c0                	test   %eax,%eax
 ffffffff8021b44d:	0f 84 00 02 00 00    	je     ffffffff8021b653 <__RME_X64_SMP_Detect+0x313>
                 RME_DBG_S("\n\rACPI: CPU ");
-ffffffff8021b453:	48 c7 c7 2b 8d 22 80 	mov    $0xffffffff80228d2b,%rdi
+ffffffff8021b453:	48 c7 c7 2b 77 22 80 	mov    $0xffffffff8022772b,%rdi
 ffffffff8021b45a:	e8 ce 15 ff ff       	call   ffffffff8020ca2d <RME_Str_Print>
                 RME_Int_Print((rme_cnt_t)RME_X64_Num_CPU);
-ffffffff8021b45f:	48 8b 05 42 6e 01 00 	mov    0x16e42(%rip),%rax        # ffffffff802322a8 <RME_X64_Num_CPU>
+ffffffff8021b45f:	48 8b 05 42 8e 01 00 	mov    0x18e42(%rip),%rax        # ffffffff802342a8 <RME_X64_Num_CPU>
 ffffffff8021b466:	48 89 c7             	mov    %rax,%rdi
 ffffffff8021b469:	e8 c5 13 ff ff       	call   ffffffff8020c833 <RME_Int_Print>
                 RME_DBG_S(", LAPIC ID ");
-ffffffff8021b46e:	48 c7 c7 38 8d 22 80 	mov    $0xffffffff80228d38,%rdi
+ffffffff8021b46e:	48 c7 c7 38 77 22 80 	mov    $0xffffffff80227738,%rdi
 ffffffff8021b475:	e8 b3 15 ff ff       	call   ffffffff8020ca2d <RME_Str_Print>
                 RME_Int_Print(LAPIC->APIC_ID);
 ffffffff8021b47a:	48 8b 45 d0          	mov    -0x30(%rbp),%rax
@@ -25345,22 +25347,22 @@ ffffffff8021b488:	e8 a6 13 ff ff       	call   ffffffff8020c833 <RME_Int_Print>
                 RME_X64_CPU_Info[RME_X64_Num_CPU].LAPIC_ID=LAPIC->APIC_ID;
 ffffffff8021b48d:	48 8b 45 d0          	mov    -0x30(%rbp),%rax
 ffffffff8021b491:	0f b6 40 03          	movzbl 0x3(%rax),%eax
-ffffffff8021b495:	48 8b 15 0c 6e 01 00 	mov    0x16e0c(%rip),%rdx        # ffffffff802322a8 <RME_X64_Num_CPU>
+ffffffff8021b495:	48 8b 15 0c 8e 01 00 	mov    0x18e0c(%rip),%rdx        # ffffffff802342a8 <RME_X64_Num_CPU>
 ffffffff8021b49c:	0f b6 c0             	movzbl %al,%eax
 ffffffff8021b49f:	48 c1 e2 04          	shl    $0x4,%rdx
-ffffffff8021b4a3:	48 81 c2 c0 22 23 80 	add    $0xffffffff802322c0,%rdx
+ffffffff8021b4a3:	48 81 c2 c0 42 23 80 	add    $0xffffffff802342c0,%rdx
 ffffffff8021b4aa:	48 89 02             	mov    %rax,(%rdx)
                 RME_X64_CPU_Info[RME_X64_Num_CPU].Boot_Done=0;
-ffffffff8021b4ad:	48 8b 05 f4 6d 01 00 	mov    0x16df4(%rip),%rax        # ffffffff802322a8 <RME_X64_Num_CPU>
+ffffffff8021b4ad:	48 8b 05 f4 8d 01 00 	mov    0x18df4(%rip),%rax        # ffffffff802342a8 <RME_X64_Num_CPU>
 ffffffff8021b4b4:	48 c1 e0 04          	shl    $0x4,%rax
-ffffffff8021b4b8:	48 05 c8 22 23 80    	add    $0xffffffff802322c8,%rax
+ffffffff8021b4b8:	48 05 c8 42 23 80    	add    $0xffffffff802342c8,%rax
 ffffffff8021b4be:	48 c7 00 00 00 00 00 	movq   $0x0,(%rax)
                 RME_X64_Num_CPU++;
-ffffffff8021b4c5:	48 8b 05 dc 6d 01 00 	mov    0x16ddc(%rip),%rax        # ffffffff802322a8 <RME_X64_Num_CPU>
+ffffffff8021b4c5:	48 8b 05 dc 8d 01 00 	mov    0x18ddc(%rip),%rax        # ffffffff802342a8 <RME_X64_Num_CPU>
 ffffffff8021b4cc:	48 83 c0 01          	add    $0x1,%rax
-ffffffff8021b4d0:	48 89 05 d1 6d 01 00 	mov    %rax,0x16dd1(%rip)        # ffffffff802322a8 <RME_X64_Num_CPU>
+ffffffff8021b4d0:	48 89 05 d1 8d 01 00 	mov    %rax,0x18dd1(%rip)        # ffffffff802342a8 <RME_X64_Num_CPU>
                 RME_ASSERT(RME_X64_Num_CPU<=RME_X64_CPU_NUM);
-ffffffff8021b4d7:	48 8b 05 ca 6d 01 00 	mov    0x16dca(%rip),%rax        # ffffffff802322a8 <RME_X64_Num_CPU>
+ffffffff8021b4d7:	48 8b 05 ca 8d 01 00 	mov    0x18dca(%rip),%rax        # ffffffff802342a8 <RME_X64_Num_CPU>
                 break;
 ffffffff8021b4de:	e9 77 01 00 00       	jmp    ffffffff8021b65a <__RME_X64_SMP_Detect+0x31a>
                 IOAPIC=(struct RME_X64_ACPI_MADT_IOAPIC_Record*)Ptr;
@@ -25370,14 +25372,14 @@ ffffffff8021b4e7:	48 89 45 d8          	mov    %rax,-0x28(%rbp)
 ffffffff8021b4eb:	48 83 7d e8 0b       	cmpq   $0xb,-0x18(%rbp)
 ffffffff8021b4f0:	0f 86 60 01 00 00    	jbe    ffffffff8021b656 <__RME_X64_SMP_Detect+0x316>
                 RME_DBG_S("\n\rACPI: IOAPIC ");
-ffffffff8021b4f6:	48 c7 c7 44 8d 22 80 	mov    $0xffffffff80228d44,%rdi
+ffffffff8021b4f6:	48 c7 c7 44 77 22 80 	mov    $0xffffffff80227744,%rdi
 ffffffff8021b4fd:	e8 2b 15 ff ff       	call   ffffffff8020ca2d <RME_Str_Print>
                 RME_Int_Print((rme_cnt_t)RME_X64_Num_IOAPIC);
-ffffffff8021b502:	48 8b 05 b7 7d 01 00 	mov    0x17db7(%rip),%rax        # ffffffff802332c0 <RME_X64_Num_IOAPIC>
+ffffffff8021b502:	48 8b 05 b7 9d 01 00 	mov    0x19db7(%rip),%rax        # ffffffff802352c0 <RME_X64_Num_IOAPIC>
 ffffffff8021b509:	48 89 c7             	mov    %rax,%rdi
 ffffffff8021b50c:	e8 22 13 ff ff       	call   ffffffff8020c833 <RME_Int_Print>
                 RME_DBG_S(" @ ");
-ffffffff8021b511:	48 c7 c7 54 8d 22 80 	mov    $0xffffffff80228d54,%rdi
+ffffffff8021b511:	48 c7 c7 54 77 22 80 	mov    $0xffffffff80227754,%rdi
 ffffffff8021b518:	e8 10 15 ff ff       	call   ffffffff8020ca2d <RME_Str_Print>
                 RME_Hex_Print(IOAPIC->Addr);
 ffffffff8021b51d:	48 8b 45 d8          	mov    -0x28(%rbp),%rax
@@ -25386,7 +25388,7 @@ ffffffff8021b524:	89 c0                	mov    %eax,%eax
 ffffffff8021b526:	48 89 c7             	mov    %rax,%rdi
 ffffffff8021b529:	e8 3d 14 ff ff       	call   ffffffff8020c96b <RME_Hex_Print>
                 RME_DBG_S(", ID ");
-ffffffff8021b52e:	48 c7 c7 58 8d 22 80 	mov    $0xffffffff80228d58,%rdi
+ffffffff8021b52e:	48 c7 c7 58 77 22 80 	mov    $0xffffffff80227758,%rdi
 ffffffff8021b535:	e8 f3 14 ff ff       	call   ffffffff8020ca2d <RME_Str_Print>
                 RME_Int_Print(IOAPIC->ID);
 ffffffff8021b53a:	48 8b 45 d8          	mov    -0x28(%rbp),%rax
@@ -25395,7 +25397,7 @@ ffffffff8021b542:	0f b6 c0             	movzbl %al,%eax
 ffffffff8021b545:	48 89 c7             	mov    %rax,%rdi
 ffffffff8021b548:	e8 e6 12 ff ff       	call   ffffffff8020c833 <RME_Int_Print>
                 RME_DBG_S(", IBASE ");
-ffffffff8021b54d:	48 c7 c7 5e 8d 22 80 	mov    $0xffffffff80228d5e,%rdi
+ffffffff8021b54d:	48 c7 c7 5e 77 22 80 	mov    $0xffffffff8022775e,%rdi
 ffffffff8021b554:	e8 d4 14 ff ff       	call   ffffffff8020ca2d <RME_Str_Print>
                 RME_Int_Print(IOAPIC->Interrupt_Base);
 ffffffff8021b559:	48 8b 45 d8          	mov    -0x28(%rbp),%rax
@@ -25404,26 +25406,26 @@ ffffffff8021b560:	89 c0                	mov    %eax,%eax
 ffffffff8021b562:	48 89 c7             	mov    %rax,%rdi
 ffffffff8021b565:	e8 c9 12 ff ff       	call   ffffffff8020c833 <RME_Int_Print>
                 if(RME_X64_Num_IOAPIC!=0)
-ffffffff8021b56a:	48 8b 05 4f 7d 01 00 	mov    0x17d4f(%rip),%rax        # ffffffff802332c0 <RME_X64_Num_IOAPIC>
+ffffffff8021b56a:	48 8b 05 4f 9d 01 00 	mov    0x19d4f(%rip),%rax        # ffffffff802352c0 <RME_X64_Num_IOAPIC>
 ffffffff8021b571:	48 85 c0             	test   %rax,%rax
 ffffffff8021b574:	74 0e                	je     ffffffff8021b584 <__RME_X64_SMP_Detect+0x244>
                     RME_DBG_S("Warning: multiple ioapics are not supported - currently we will not initialize IOAPIC > 1\n");
-ffffffff8021b576:	48 c7 c7 68 8d 22 80 	mov    $0xffffffff80228d68,%rdi
+ffffffff8021b576:	48 c7 c7 68 77 22 80 	mov    $0xffffffff80227768,%rdi
 ffffffff8021b57d:	e8 ab 14 ff ff       	call   ffffffff8020ca2d <RME_Str_Print>
 ffffffff8021b582:	eb 1a                	jmp    ffffffff8021b59e <__RME_X64_SMP_Detect+0x25e>
                     RME_X64_IOAPIC_Info[RME_X64_Num_IOAPIC].IOAPIC_ID=IOAPIC->ID;
 ffffffff8021b584:	48 8b 45 d8          	mov    -0x28(%rbp),%rax
 ffffffff8021b588:	0f b6 50 02          	movzbl 0x2(%rax),%edx
-ffffffff8021b58c:	48 8b 05 2d 7d 01 00 	mov    0x17d2d(%rip),%rax        # ffffffff802332c0 <RME_X64_Num_IOAPIC>
+ffffffff8021b58c:	48 8b 05 2d 9d 01 00 	mov    0x19d2d(%rip),%rax        # ffffffff802352c0 <RME_X64_Num_IOAPIC>
 ffffffff8021b593:	0f b6 d2             	movzbl %dl,%edx
-ffffffff8021b596:	48 89 14 c5 e0 32 23 	mov    %rdx,-0x7fdccd20(,%rax,8)
+ffffffff8021b596:	48 89 14 c5 e0 52 23 	mov    %rdx,-0x7fdcad20(,%rax,8)
 ffffffff8021b59d:	80 
                 RME_X64_Num_IOAPIC++;
-ffffffff8021b59e:	48 8b 05 1b 7d 01 00 	mov    0x17d1b(%rip),%rax        # ffffffff802332c0 <RME_X64_Num_IOAPIC>
+ffffffff8021b59e:	48 8b 05 1b 9d 01 00 	mov    0x19d1b(%rip),%rax        # ffffffff802352c0 <RME_X64_Num_IOAPIC>
 ffffffff8021b5a5:	48 83 c0 01          	add    $0x1,%rax
-ffffffff8021b5a9:	48 89 05 10 7d 01 00 	mov    %rax,0x17d10(%rip)        # ffffffff802332c0 <RME_X64_Num_IOAPIC>
+ffffffff8021b5a9:	48 89 05 10 9d 01 00 	mov    %rax,0x19d10(%rip)        # ffffffff802352c0 <RME_X64_Num_IOAPIC>
                 RME_ASSERT(RME_X64_Num_IOAPIC<=RME_X64_IOAPIC_NUM);
-ffffffff8021b5b0:	48 8b 05 09 7d 01 00 	mov    0x17d09(%rip),%rax        # ffffffff802332c0 <RME_X64_Num_IOAPIC>
+ffffffff8021b5b0:	48 8b 05 09 9d 01 00 	mov    0x19d09(%rip),%rax        # ffffffff802352c0 <RME_X64_Num_IOAPIC>
                 break;
 ffffffff8021b5b7:	e9 9e 00 00 00       	jmp    ffffffff8021b65a <__RME_X64_SMP_Detect+0x31a>
                 OVERRIDE=(struct RME_X64_ACPI_MADT_SRC_OVERRIDE_Record*)Ptr;
@@ -25433,7 +25435,7 @@ ffffffff8021b5c0:	48 89 45 e0          	mov    %rax,-0x20(%rbp)
 ffffffff8021b5c4:	48 83 7d e8 06       	cmpq   $0x6,-0x18(%rbp)
 ffffffff8021b5c9:	0f 86 8a 00 00 00    	jbe    ffffffff8021b659 <__RME_X64_SMP_Detect+0x319>
                 RME_DBG_S("\n\rACPI: OVERRIDE Bus ");
-ffffffff8021b5cf:	48 c7 c7 c3 8d 22 80 	mov    $0xffffffff80228dc3,%rdi
+ffffffff8021b5cf:	48 c7 c7 c3 77 22 80 	mov    $0xffffffff802277c3,%rdi
 ffffffff8021b5d6:	e8 52 14 ff ff       	call   ffffffff8020ca2d <RME_Str_Print>
                 RME_Int_Print(OVERRIDE->Bus);
 ffffffff8021b5db:	48 8b 45 e0          	mov    -0x20(%rbp),%rax
@@ -25442,7 +25444,7 @@ ffffffff8021b5e3:	0f b6 c0             	movzbl %al,%eax
 ffffffff8021b5e6:	48 89 c7             	mov    %rax,%rdi
 ffffffff8021b5e9:	e8 45 12 ff ff       	call   ffffffff8020c833 <RME_Int_Print>
                 RME_DBG_S(", Source ");
-ffffffff8021b5ee:	48 c7 c7 d9 8d 22 80 	mov    $0xffffffff80228dd9,%rdi
+ffffffff8021b5ee:	48 c7 c7 d9 77 22 80 	mov    $0xffffffff802277d9,%rdi
 ffffffff8021b5f5:	e8 33 14 ff ff       	call   ffffffff8020ca2d <RME_Str_Print>
                 RME_Hex_Print(OVERRIDE->Source);
 ffffffff8021b5fa:	48 8b 45 e0          	mov    -0x20(%rbp),%rax
@@ -25451,7 +25453,7 @@ ffffffff8021b602:	0f b6 c0             	movzbl %al,%eax
 ffffffff8021b605:	48 89 c7             	mov    %rax,%rdi
 ffffffff8021b608:	e8 5e 13 ff ff       	call   ffffffff8020c96b <RME_Hex_Print>
                 RME_DBG_S(", GSI ");
-ffffffff8021b60d:	48 c7 c7 e3 8d 22 80 	mov    $0xffffffff80228de3,%rdi
+ffffffff8021b60d:	48 c7 c7 e3 77 22 80 	mov    $0xffffffff802277e3,%rdi
 ffffffff8021b614:	e8 14 14 ff ff       	call   ffffffff8020ca2d <RME_Str_Print>
                 RME_Int_Print(OVERRIDE->GS_Interrupt);
 ffffffff8021b619:	48 8b 45 e0          	mov    -0x20(%rbp),%rax
@@ -25460,7 +25462,7 @@ ffffffff8021b621:	0f b6 c0             	movzbl %al,%eax
 ffffffff8021b624:	48 89 c7             	mov    %rax,%rdi
 ffffffff8021b627:	e8 07 12 ff ff       	call   ffffffff8020c833 <RME_Int_Print>
                 RME_DBG_S(", Flags ");
-ffffffff8021b62c:	48 c7 c7 ea 8d 22 80 	mov    $0xffffffff80228dea,%rdi
+ffffffff8021b62c:	48 c7 c7 ea 77 22 80 	mov    $0xffffffff802277ea,%rdi
 ffffffff8021b633:	e8 f5 13 ff ff       	call   ffffffff8020ca2d <RME_Str_Print>
                 RME_Int_Print(OVERRIDE->MPS_Int_Flags);
 ffffffff8021b638:	48 8b 45 e0          	mov    -0x20(%rbp),%rax
@@ -25577,49 +25579,49 @@ ffffffff8021b71f:	48 89 45 f0          	mov    %rax,-0x10(%rbp)
 
     /* And print these entries */
     RME_DBG_S("\n\rACPI:");
-ffffffff8021b723:	48 c7 c7 f3 8d 22 80 	mov    $0xffffffff80228df3,%rdi
+ffffffff8021b723:	48 c7 c7 f3 77 22 80 	mov    $0xffffffff802277f3,%rdi
 ffffffff8021b72a:	e8 fe 12 ff ff       	call   ffffffff8020ca2d <RME_Str_Print>
     RME_DBG_S(Signature);
 ffffffff8021b72f:	48 8d 45 eb          	lea    -0x15(%rbp),%rax
 ffffffff8021b733:	48 89 c7             	mov    %rax,%rdi
 ffffffff8021b736:	e8 f2 12 ff ff       	call   ffffffff8020ca2d <RME_Str_Print>
     RME_DBG_S(", ");
-ffffffff8021b73b:	48 c7 c7 fb 8d 22 80 	mov    $0xffffffff80228dfb,%rdi
+ffffffff8021b73b:	48 c7 c7 fb 77 22 80 	mov    $0xffffffff802277fb,%rdi
 ffffffff8021b742:	e8 e6 12 ff ff       	call   ffffffff8020ca2d <RME_Str_Print>
     RME_DBG_S(ID);
 ffffffff8021b747:	48 8d 45 e4          	lea    -0x1c(%rbp),%rax
 ffffffff8021b74b:	48 89 c7             	mov    %rax,%rdi
 ffffffff8021b74e:	e8 da 12 ff ff       	call   ffffffff8020ca2d <RME_Str_Print>
     RME_DBG_S(", ");
-ffffffff8021b753:	48 c7 c7 fb 8d 22 80 	mov    $0xffffffff80228dfb,%rdi
+ffffffff8021b753:	48 c7 c7 fb 77 22 80 	mov    $0xffffffff802277fb,%rdi
 ffffffff8021b75a:	e8 ce 12 ff ff       	call   ffffffff8020ca2d <RME_Str_Print>
     RME_DBG_S(Table_ID);
 ffffffff8021b75f:	48 8d 45 db          	lea    -0x25(%rbp),%rax
 ffffffff8021b763:	48 89 c7             	mov    %rax,%rdi
 ffffffff8021b766:	e8 c2 12 ff ff       	call   ffffffff8020ca2d <RME_Str_Print>
     RME_DBG_S(", ");
-ffffffff8021b76b:	48 c7 c7 fb 8d 22 80 	mov    $0xffffffff80228dfb,%rdi
+ffffffff8021b76b:	48 c7 c7 fb 77 22 80 	mov    $0xffffffff802277fb,%rdi
 ffffffff8021b772:	e8 b6 12 ff ff       	call   ffffffff8020ca2d <RME_Str_Print>
     RME_DBG_I(OEM_Rev);
 ffffffff8021b777:	48 8b 45 f8          	mov    -0x8(%rbp),%rax
 ffffffff8021b77b:	48 89 c7             	mov    %rax,%rdi
 ffffffff8021b77e:	e8 b0 10 ff ff       	call   ffffffff8020c833 <RME_Int_Print>
     RME_DBG_S(", ");
-ffffffff8021b783:	48 c7 c7 fb 8d 22 80 	mov    $0xffffffff80228dfb,%rdi
+ffffffff8021b783:	48 c7 c7 fb 77 22 80 	mov    $0xffffffff802277fb,%rdi
 ffffffff8021b78a:	e8 9e 12 ff ff       	call   ffffffff8020ca2d <RME_Str_Print>
     RME_DBG_S(Creator);
 ffffffff8021b78f:	48 8d 45 d6          	lea    -0x2a(%rbp),%rax
 ffffffff8021b793:	48 89 c7             	mov    %rax,%rdi
 ffffffff8021b796:	e8 92 12 ff ff       	call   ffffffff8020ca2d <RME_Str_Print>
     RME_DBG_S(", ");
-ffffffff8021b79b:	48 c7 c7 fb 8d 22 80 	mov    $0xffffffff80228dfb,%rdi
+ffffffff8021b79b:	48 c7 c7 fb 77 22 80 	mov    $0xffffffff802277fb,%rdi
 ffffffff8021b7a2:	e8 86 12 ff ff       	call   ffffffff8020ca2d <RME_Str_Print>
     RME_DBG_I(Creator_Rev);
 ffffffff8021b7a7:	48 8b 45 f0          	mov    -0x10(%rbp),%rax
 ffffffff8021b7ab:	48 89 c7             	mov    %rax,%rdi
 ffffffff8021b7ae:	e8 80 10 ff ff       	call   ffffffff8020c833 <RME_Int_Print>
     RME_DBG_S(".");
-ffffffff8021b7b3:	48 c7 c7 fe 8d 22 80 	mov    $0xffffffff80228dfe,%rdi
+ffffffff8021b7b3:	48 c7 c7 fe 77 22 80 	mov    $0xffffffff802277fe,%rdi
 ffffffff8021b7ba:	e8 6e 12 ff ff       	call   ffffffff8020ca2d <RME_Str_Print>
 }
 ffffffff8021b7bf:	90                   	nop
@@ -25657,7 +25659,7 @@ ffffffff8021b7ed:	00
 ffffffff8021b7ee:	e8 ee fa ff ff       	call   ffffffff8021b2e1 <__RME_X64_RDSP_Find>
 ffffffff8021b7f3:	48 89 45 e8          	mov    %rax,-0x18(%rbp)
     RME_DBG_S("\r\nRDSP address: ");
-ffffffff8021b7f7:	48 c7 c7 00 8e 22 80 	mov    $0xffffffff80228e00,%rdi
+ffffffff8021b7f7:	48 c7 c7 00 78 22 80 	mov    $0xffffffff80227800,%rdi
 ffffffff8021b7fe:	e8 2a 12 ff ff       	call   ffffffff8020ca2d <RME_Str_Print>
     RME_DBG_H((rme_ptr_t)RDSP);
 ffffffff8021b803:	48 8b 45 e8          	mov    -0x18(%rbp),%rax
@@ -25673,7 +25675,7 @@ ffffffff8021b81f:	80 ff ff
 ffffffff8021b822:	48 01 d0             	add    %rdx,%rax
 ffffffff8021b825:	48 89 45 e0          	mov    %rax,-0x20(%rbp)
     RME_DBG_S("\r\nRSDT address: ");
-ffffffff8021b829:	48 c7 c7 11 8e 22 80 	mov    $0xffffffff80228e11,%rdi
+ffffffff8021b829:	48 c7 c7 11 78 22 80 	mov    $0xffffffff80227811,%rdi
 ffffffff8021b830:	e8 f8 11 ff ff       	call   ffffffff8020ca2d <RME_Str_Print>
     RME_DBG_H((rme_ptr_t)RSDT);
 ffffffff8021b835:	48 8b 45 e0          	mov    -0x20(%rbp),%rax
@@ -25711,7 +25713,7 @@ ffffffff8021b88a:	e8 ee fd ff ff       	call   ffffffff8021b67d <__RME_X64_ACPI_
         if(_RME_Memcmp(Header->Signature, "APIC", 4)==0)
 ffffffff8021b88f:	48 8b 45 d8          	mov    -0x28(%rbp),%rax
 ffffffff8021b893:	ba 04 00 00 00       	mov    $0x4,%edx
-ffffffff8021b898:	48 c7 c6 22 8e 22 80 	mov    $0xffffffff80228e22,%rsi
+ffffffff8021b898:	48 c7 c6 22 78 22 80 	mov    $0xffffffff80227822,%rsi
 ffffffff8021b89f:	48 89 c7             	mov    %rax,%rdi
 ffffffff8021b8a2:	e8 b5 15 ff ff       	call   ffffffff8020ce5c <_RME_Memcmp>
 ffffffff8021b8a7:	48 85 c0             	test   %rax,%rax
@@ -25749,18 +25751,18 @@ ffffffff8021b8d9:	48 83 ec 10          	sub    $0x10,%rsp
 
     /* What's the maximum feature? */
     RME_X64_Feature.Max_Func=__RME_X64_CPUID_Get(RME_X64_CPUID_0_VENDOR_ID,
-ffffffff8021b8dd:	48 c7 c1 68 33 23 80 	mov    $0xffffffff80233368,%rcx
-ffffffff8021b8e4:	48 c7 c2 60 33 23 80 	mov    $0xffffffff80233360,%rdx
-ffffffff8021b8eb:	48 c7 c6 58 33 23 80 	mov    $0xffffffff80233358,%rsi
+ffffffff8021b8dd:	48 c7 c1 68 53 23 80 	mov    $0xffffffff80235368,%rcx
+ffffffff8021b8e4:	48 c7 c2 60 53 23 80 	mov    $0xffffffff80235360,%rdx
+ffffffff8021b8eb:	48 c7 c6 58 53 23 80 	mov    $0xffffffff80235358,%rsi
 ffffffff8021b8f2:	bf 00 00 00 00       	mov    $0x0,%edi
 ffffffff8021b8f7:	e8 4d ff fe ff       	call   ffffffff8020b849 <__RME_X64_CPUID_Get>
-ffffffff8021b8fc:	48 89 05 3d 7a 01 00 	mov    %rax,0x17a3d(%rip)        # ffffffff80233340 <RME_X64_Feature>
+ffffffff8021b8fc:	48 89 05 3d 9a 01 00 	mov    %rax,0x19a3d(%rip)        # ffffffff80235340 <RME_X64_Feature>
                                                  (rme_ptr_t*)&(RME_X64_Feature.Func[0][1]),
                                                  (rme_ptr_t*)&(RME_X64_Feature.Func[0][2]),
                                                  (rme_ptr_t*)&(RME_X64_Feature.Func[0][3]));
     RME_X64_Feature.Func[0][0]=RME_X64_Feature.Max_Func;
-ffffffff8021b903:	48 8b 05 36 7a 01 00 	mov    0x17a36(%rip),%rax        # ffffffff80233340 <RME_X64_Feature>
-ffffffff8021b90a:	48 89 05 3f 7a 01 00 	mov    %rax,0x17a3f(%rip)        # ffffffff80233350 <RME_X64_Feature+0x10>
+ffffffff8021b903:	48 8b 05 36 9a 01 00 	mov    0x19a36(%rip),%rax        # ffffffff80235340 <RME_X64_Feature>
+ffffffff8021b90a:	48 89 05 3f 9a 01 00 	mov    %rax,0x19a3f(%rip)        # ffffffff80235350 <RME_X64_Feature+0x10>
 
     /* Get all the feature bits */
     for(Count=1;Count<=RME_X64_Feature.Max_Func;Count++)
@@ -25775,28 +25777,28 @@ ffffffff8021b919:	eb 5c                	jmp    ffffffff8021b977 <__RME_X64_Featu
 ffffffff8021b91b:	48 8b 45 f8          	mov    -0x8(%rbp),%rax
 ffffffff8021b91f:	48 c1 e0 05          	shl    $0x5,%rax
 ffffffff8021b923:	48 83 c0 28          	add    $0x28,%rax
-ffffffff8021b927:	48 8d 88 40 33 23 80 	lea    -0x7fdcccc0(%rax),%rcx
+ffffffff8021b927:	48 8d 88 40 53 23 80 	lea    -0x7fdcacc0(%rax),%rcx
                                                            (rme_ptr_t*)&(RME_X64_Feature.Func[Count][2]),
 ffffffff8021b92e:	48 8b 45 f8          	mov    -0x8(%rbp),%rax
 ffffffff8021b932:	48 83 c0 01          	add    $0x1,%rax
 ffffffff8021b936:	48 c1 e0 05          	shl    $0x5,%rax
-ffffffff8021b93a:	48 8d 90 40 33 23 80 	lea    -0x7fdcccc0(%rax),%rdx
+ffffffff8021b93a:	48 8d 90 40 53 23 80 	lea    -0x7fdcacc0(%rax),%rdx
                                                            (rme_ptr_t*)&(RME_X64_Feature.Func[Count][1]),
 ffffffff8021b941:	48 8b 45 f8          	mov    -0x8(%rbp),%rax
 ffffffff8021b945:	48 c1 e0 05          	shl    $0x5,%rax
 ffffffff8021b949:	48 83 c0 18          	add    $0x18,%rax
-ffffffff8021b94d:	48 8d b0 40 33 23 80 	lea    -0x7fdcccc0(%rax),%rsi
+ffffffff8021b94d:	48 8d b0 40 53 23 80 	lea    -0x7fdcacc0(%rax),%rsi
         RME_X64_Feature.Func[Count][0]=__RME_X64_CPUID_Get(Count,
 ffffffff8021b954:	48 8b 45 f8          	mov    -0x8(%rbp),%rax
 ffffffff8021b958:	48 89 c7             	mov    %rax,%rdi
 ffffffff8021b95b:	e8 e9 fe fe ff       	call   ffffffff8020b849 <__RME_X64_CPUID_Get>
 ffffffff8021b960:	48 8b 55 f8          	mov    -0x8(%rbp),%rdx
 ffffffff8021b964:	48 c1 e2 05          	shl    $0x5,%rdx
-ffffffff8021b968:	48 81 c2 50 33 23 80 	add    $0xffffffff80233350,%rdx
+ffffffff8021b968:	48 81 c2 50 53 23 80 	add    $0xffffffff80235350,%rdx
 ffffffff8021b96f:	48 89 02             	mov    %rax,(%rdx)
     for(Count=1;Count<=RME_X64_Feature.Max_Func;Count++)
 ffffffff8021b972:	48 83 45 f8 01       	addq   $0x1,-0x8(%rbp)
-ffffffff8021b977:	48 8b 15 c2 79 01 00 	mov    0x179c2(%rip),%rdx        # ffffffff80233340 <RME_X64_Feature>
+ffffffff8021b977:	48 8b 15 c2 99 01 00 	mov    0x199c2(%rip),%rdx        # ffffffff80235340 <RME_X64_Feature>
 ffffffff8021b97e:	48 8b 45 f8          	mov    -0x8(%rbp),%rax
 ffffffff8021b982:	48 39 c2             	cmp    %rax,%rdx
 ffffffff8021b985:	73 94                	jae    ffffffff8021b91b <__RME_X64_Feature_Get+0x4a>
@@ -25804,19 +25806,19 @@ ffffffff8021b985:	73 94                	jae    ffffffff8021b91b <__RME_X64_Featu
 
     /* What's the maximum extended feature? */
     RME_X64_Feature.Max_Ext=__RME_X64_CPUID_Get(RME_X64_CPUID_E0_EXT_MAX,
-ffffffff8021b987:	48 c7 c1 68 35 23 80 	mov    $0xffffffff80233568,%rcx
-ffffffff8021b98e:	48 c7 c2 60 35 23 80 	mov    $0xffffffff80233560,%rdx
-ffffffff8021b995:	48 c7 c6 58 35 23 80 	mov    $0xffffffff80233558,%rsi
+ffffffff8021b987:	48 c7 c1 68 55 23 80 	mov    $0xffffffff80235568,%rcx
+ffffffff8021b98e:	48 c7 c2 60 55 23 80 	mov    $0xffffffff80235560,%rdx
+ffffffff8021b995:	48 c7 c6 58 55 23 80 	mov    $0xffffffff80235558,%rsi
 ffffffff8021b99c:	b8 00 00 00 80       	mov    $0x80000000,%eax
 ffffffff8021b9a1:	48 89 c7             	mov    %rax,%rdi
 ffffffff8021b9a4:	e8 a0 fe fe ff       	call   ffffffff8020b849 <__RME_X64_CPUID_Get>
-ffffffff8021b9a9:	48 89 05 98 79 01 00 	mov    %rax,0x17998(%rip)        # ffffffff80233348 <RME_X64_Feature+0x8>
+ffffffff8021b9a9:	48 89 05 98 99 01 00 	mov    %rax,0x19998(%rip)        # ffffffff80235348 <RME_X64_Feature+0x8>
                                                 (rme_ptr_t*)&(RME_X64_Feature.Ext[0][1]),
                                                 (rme_ptr_t*)&(RME_X64_Feature.Ext[0][2]),
                                                 (rme_ptr_t*)&(RME_X64_Feature.Ext[0][3]));
     RME_X64_Feature.Ext[0][0]=RME_X64_Feature.Max_Ext;
-ffffffff8021b9b0:	48 8b 05 91 79 01 00 	mov    0x17991(%rip),%rax        # ffffffff80233348 <RME_X64_Feature+0x8>
-ffffffff8021b9b7:	48 89 05 92 7b 01 00 	mov    %rax,0x17b92(%rip)        # ffffffff80233550 <RME_X64_Feature+0x210>
+ffffffff8021b9b0:	48 8b 05 91 99 01 00 	mov    0x19991(%rip),%rax        # ffffffff80235348 <RME_X64_Feature+0x8>
+ffffffff8021b9b7:	48 89 05 92 9b 01 00 	mov    %rax,0x19b92(%rip)        # ffffffff80235550 <RME_X64_Feature+0x210>
 
 
     /* Get all the feature bits */
@@ -25832,17 +25834,17 @@ ffffffff8021b9c6:	eb 67                	jmp    ffffffff8021ba2f <__RME_X64_Featu
 ffffffff8021b9c8:	48 8b 45 f8          	mov    -0x8(%rbp),%rax
 ffffffff8021b9cc:	48 c1 e0 05          	shl    $0x5,%rax
 ffffffff8021b9d0:	48 05 28 02 00 00    	add    $0x228,%rax
-ffffffff8021b9d6:	48 8d 88 40 33 23 80 	lea    -0x7fdcccc0(%rax),%rcx
+ffffffff8021b9d6:	48 8d 88 40 53 23 80 	lea    -0x7fdcacc0(%rax),%rcx
                                                           (rme_ptr_t*)&(RME_X64_Feature.Ext[Count][2]),
 ffffffff8021b9dd:	48 8b 45 f8          	mov    -0x8(%rbp),%rax
 ffffffff8021b9e1:	48 83 c0 11          	add    $0x11,%rax
 ffffffff8021b9e5:	48 c1 e0 05          	shl    $0x5,%rax
-ffffffff8021b9e9:	48 8d 90 40 33 23 80 	lea    -0x7fdcccc0(%rax),%rdx
+ffffffff8021b9e9:	48 8d 90 40 53 23 80 	lea    -0x7fdcacc0(%rax),%rdx
                                                           (rme_ptr_t*)&(RME_X64_Feature.Ext[Count][1]),
 ffffffff8021b9f0:	48 8b 45 f8          	mov    -0x8(%rbp),%rax
 ffffffff8021b9f4:	48 c1 e0 05          	shl    $0x5,%rax
 ffffffff8021b9f8:	48 05 18 02 00 00    	add    $0x218,%rax
-ffffffff8021b9fe:	48 05 40 33 23 80    	add    $0xffffffff80233340,%rax
+ffffffff8021b9fe:	48 05 40 53 23 80    	add    $0xffffffff80235340,%rax
         RME_X64_Feature.Ext[Count][0]=__RME_X64_CPUID_Get(RME_X64_CPUID_E0_EXT_MAX|Count,
 ffffffff8021ba04:	be 00 00 00 80       	mov    $0x80000000,%esi
 ffffffff8021ba09:	48 0b 75 f8          	or     -0x8(%rbp),%rsi
@@ -25851,11 +25853,11 @@ ffffffff8021ba10:	48 89 c6             	mov    %rax,%rsi
 ffffffff8021ba13:	e8 31 fe fe ff       	call   ffffffff8020b849 <__RME_X64_CPUID_Get>
 ffffffff8021ba18:	48 8b 55 f8          	mov    -0x8(%rbp),%rdx
 ffffffff8021ba1c:	48 c1 e2 05          	shl    $0x5,%rdx
-ffffffff8021ba20:	48 81 c2 50 35 23 80 	add    $0xffffffff80233550,%rdx
+ffffffff8021ba20:	48 81 c2 50 55 23 80 	add    $0xffffffff80235550,%rdx
 ffffffff8021ba27:	48 89 02             	mov    %rax,(%rdx)
     for(Count=1;Count<=RME_X64_Feature.Max_Ext-RME_X64_CPUID_E0_EXT_MAX;Count++)
 ffffffff8021ba2a:	48 83 45 f8 01       	addq   $0x1,-0x8(%rbp)
-ffffffff8021ba2f:	48 8b 05 12 79 01 00 	mov    0x17912(%rip),%rax        # ffffffff80233348 <RME_X64_Feature+0x8>
+ffffffff8021ba2f:	48 8b 05 12 99 01 00 	mov    0x19912(%rip),%rax        # ffffffff80235348 <RME_X64_Feature+0x8>
 ffffffff8021ba36:	48 8d 90 00 00 00 80 	lea    -0x80000000(%rax),%rdx
 ffffffff8021ba3d:	48 8b 45 f8          	mov    -0x8(%rbp),%rax
 ffffffff8021ba41:	48 39 c2             	cmp    %rax,%rdx
@@ -25894,8 +25896,8 @@ ffffffff8021ba66:	48 c7 45 e8 00 00 00 	movq   $0x0,-0x18(%rbp)
 ffffffff8021ba6d:	00 
 
     __RME_List_Crt(&RME_X64_Phys_Mem);
-ffffffff8021ba6e:	48 c7 c7 00 a0 22 80 	mov    $0xffffffff8022a000,%rdi
-ffffffff8021ba75:	e8 2e b6 00 00       	call   ffffffff802270a8 <__RME_List_Crt>
+ffffffff8021ba6e:	48 c7 c7 00 c0 22 80 	mov    $0xffffffff8022c000,%rdi
+ffffffff8021ba75:	e8 a1 b6 00 00       	call   ffffffff8022711b <__RME_List_Crt>
 
     while(MMap_Cnt<MMap_Length)
 ffffffff8021ba7a:	e9 72 01 00 00       	jmp    ffffffff8021bbf1 <__RME_X64_Mem_Init+0x1a7>
@@ -25919,7 +25921,7 @@ ffffffff8021baa4:	83 f8 01             	cmp    $0x1,%eax
 ffffffff8021baa7:	74 5a                	je     ffffffff8021bb03 <__RME_X64_Mem_Init+0xb9>
         {
             RME_DBG_S("\n\rPhysical memory: 0x");
-ffffffff8021baa9:	48 c7 c7 27 8e 22 80 	mov    $0xffffffff80228e27,%rdi
+ffffffff8021baa9:	48 c7 c7 27 78 22 80 	mov    $0xffffffff80227827,%rdi
 ffffffff8021bab0:	e8 78 0f ff ff       	call   ffffffff8020ca2d <RME_Str_Print>
             RME_Hex_Print(MMap->addr);
 ffffffff8021bab5:	48 8b 45 e0          	mov    -0x20(%rbp),%rax
@@ -25927,7 +25929,7 @@ ffffffff8021bab9:	48 8b 40 04          	mov    0x4(%rax),%rax
 ffffffff8021babd:	48 89 c7             	mov    %rax,%rdi
 ffffffff8021bac0:	e8 a6 0e ff ff       	call   ffffffff8020c96b <RME_Hex_Print>
             RME_DBG_S(", 0x");
-ffffffff8021bac5:	48 c7 c7 3d 8e 22 80 	mov    $0xffffffff80228e3d,%rdi
+ffffffff8021bac5:	48 c7 c7 3d 78 22 80 	mov    $0xffffffff8022783d,%rdi
 ffffffff8021bacc:	e8 5c 0f ff ff       	call   ffffffff8020ca2d <RME_Str_Print>
             RME_Hex_Print(MMap->len);
 ffffffff8021bad1:	48 8b 45 e0          	mov    -0x20(%rbp),%rax
@@ -25935,7 +25937,7 @@ ffffffff8021bad5:	48 8b 40 0c          	mov    0xc(%rax),%rax
 ffffffff8021bad9:	48 89 c7             	mov    %rax,%rdi
 ffffffff8021badc:	e8 8a 0e ff ff       	call   ffffffff8020c96b <RME_Hex_Print>
             RME_DBG_S(", ");
-ffffffff8021bae1:	48 c7 c7 fb 8d 22 80 	mov    $0xffffffff80228dfb,%rdi
+ffffffff8021bae1:	48 c7 c7 fb 77 22 80 	mov    $0xffffffff802277fb,%rdi
 ffffffff8021bae8:	e8 40 0f ff ff       	call   ffffffff8020ca2d <RME_Str_Print>
             RME_Hex_Print(MMap->type);
 ffffffff8021baed:	48 8b 45 e0          	mov    -0x20(%rbp),%rax
@@ -25948,7 +25950,7 @@ ffffffff8021bafe:	e9 ee 00 00 00       	jmp    ffffffff8021bbf1 <__RME_X64_Mem_I
         }
 
         Trav_Ptr=RME_X64_Phys_Mem.Next;
-ffffffff8021bb03:	48 8b 05 f6 e4 00 00 	mov    0xe4f6(%rip),%rax        # ffffffff8022a000 <RME_X64_Phys_Mem>
+ffffffff8021bb03:	48 8b 05 f6 04 01 00 	mov    0x104f6(%rip),%rax        # ffffffff8022c000 <RME_X64_Phys_Mem>
 ffffffff8021bb0a:	48 89 45 f8          	mov    %rax,-0x8(%rbp)
         while(Trav_Ptr!=&RME_X64_Phys_Mem)
 ffffffff8021bb0e:	eb 20                	jmp    ffffffff8021bb30 <__RME_X64_Mem_Init+0xe6>
@@ -25966,7 +25968,7 @@ ffffffff8021bb25:	48 8b 45 f8          	mov    -0x8(%rbp),%rax
 ffffffff8021bb29:	48 8b 00             	mov    (%rax),%rax
 ffffffff8021bb2c:	48 89 45 f8          	mov    %rax,-0x8(%rbp)
         while(Trav_Ptr!=&RME_X64_Phys_Mem)
-ffffffff8021bb30:	48 81 7d f8 00 a0 22 	cmpq   $0xffffffff8022a000,-0x8(%rbp)
+ffffffff8021bb30:	48 81 7d f8 00 c0 22 	cmpq   $0xffffffff8022c000,-0x8(%rbp)
 ffffffff8021bb37:	80 
 ffffffff8021bb38:	75 d6                	jne    ffffffff8021bb10 <__RME_X64_Mem_Init+0xc6>
 ffffffff8021bb3a:	eb 01                	jmp    ffffffff8021bb3d <__RME_X64_Mem_Init+0xf3>
@@ -25978,29 +25980,29 @@ ffffffff8021bb3d:	48 8b 45 e0          	mov    -0x20(%rbp),%rax
 ffffffff8021bb41:	48 8b 40 04          	mov    0x4(%rax),%rax
 ffffffff8021bb45:	48 8b 55 e8          	mov    -0x18(%rbp),%rdx
 ffffffff8021bb49:	48 c1 e2 05          	shl    $0x5,%rdx
-ffffffff8021bb4d:	48 81 c2 30 a0 22 80 	add    $0xffffffff8022a030,%rdx
+ffffffff8021bb4d:	48 81 c2 30 c0 22 80 	add    $0xffffffff8022c030,%rdx
 ffffffff8021bb54:	48 89 02             	mov    %rax,(%rdx)
         RME_X64_Mem[Info_Cnt].Length=MMap->len;
 ffffffff8021bb57:	48 8b 45 e0          	mov    -0x20(%rbp),%rax
 ffffffff8021bb5b:	48 8b 40 0c          	mov    0xc(%rax),%rax
 ffffffff8021bb5f:	48 8b 55 e8          	mov    -0x18(%rbp),%rdx
 ffffffff8021bb63:	48 c1 e2 05          	shl    $0x5,%rdx
-ffffffff8021bb67:	48 81 c2 38 a0 22 80 	add    $0xffffffff8022a038,%rdx
+ffffffff8021bb67:	48 81 c2 38 c0 22 80 	add    $0xffffffff8022c038,%rdx
 ffffffff8021bb6e:	48 89 02             	mov    %rax,(%rdx)
         __RME_List_Ins(&(RME_X64_Mem[Info_Cnt].Head),Trav_Ptr->Prev,Trav_Ptr);
 ffffffff8021bb71:	48 8b 45 f8          	mov    -0x8(%rbp),%rax
 ffffffff8021bb75:	48 8b 40 08          	mov    0x8(%rax),%rax
 ffffffff8021bb79:	48 8b 55 e8          	mov    -0x18(%rbp),%rdx
 ffffffff8021bb7d:	48 c1 e2 05          	shl    $0x5,%rdx
-ffffffff8021bb81:	48 8d 8a 20 a0 22 80 	lea    -0x7fdd5fe0(%rdx),%rcx
+ffffffff8021bb81:	48 8d 8a 20 c0 22 80 	lea    -0x7fdd3fe0(%rdx),%rcx
 ffffffff8021bb88:	48 8b 55 f8          	mov    -0x8(%rbp),%rdx
 ffffffff8021bb8c:	48 89 c6             	mov    %rax,%rsi
 ffffffff8021bb8f:	48 89 cf             	mov    %rcx,%rdi
-ffffffff8021bb92:	e8 3b b5 00 00       	call   ffffffff802270d2 <__RME_List_Ins>
+ffffffff8021bb92:	e8 ae b5 00 00       	call   ffffffff80227145 <__RME_List_Ins>
 
         /* Just print them then */
         RME_DBG_S("\n\rPhysical memory: 0x");
-ffffffff8021bb97:	48 c7 c7 27 8e 22 80 	mov    $0xffffffff80228e27,%rdi
+ffffffff8021bb97:	48 c7 c7 27 78 22 80 	mov    $0xffffffff80227827,%rdi
 ffffffff8021bb9e:	e8 8a 0e ff ff       	call   ffffffff8020ca2d <RME_Str_Print>
         RME_Hex_Print(MMap->addr);
 ffffffff8021bba3:	48 8b 45 e0          	mov    -0x20(%rbp),%rax
@@ -26008,7 +26010,7 @@ ffffffff8021bba7:	48 8b 40 04          	mov    0x4(%rax),%rax
 ffffffff8021bbab:	48 89 c7             	mov    %rax,%rdi
 ffffffff8021bbae:	e8 b8 0d ff ff       	call   ffffffff8020c96b <RME_Hex_Print>
         RME_DBG_S(", 0x");
-ffffffff8021bbb3:	48 c7 c7 3d 8e 22 80 	mov    $0xffffffff80228e3d,%rdi
+ffffffff8021bbb3:	48 c7 c7 3d 78 22 80 	mov    $0xffffffff8022783d,%rdi
 ffffffff8021bbba:	e8 6e 0e ff ff       	call   ffffffff8020ca2d <RME_Str_Print>
         RME_Hex_Print(MMap->len);
 ffffffff8021bbbf:	48 8b 45 e0          	mov    -0x20(%rbp),%rax
@@ -26016,7 +26018,7 @@ ffffffff8021bbc3:	48 8b 40 0c          	mov    0xc(%rax),%rax
 ffffffff8021bbc7:	48 89 c7             	mov    %rax,%rdi
 ffffffff8021bbca:	e8 9c 0d ff ff       	call   ffffffff8020c96b <RME_Hex_Print>
         RME_DBG_S(", ");
-ffffffff8021bbcf:	48 c7 c7 fb 8d 22 80 	mov    $0xffffffff80228dfb,%rdi
+ffffffff8021bbcf:	48 c7 c7 fb 77 22 80 	mov    $0xffffffff802277fb,%rdi
 ffffffff8021bbd6:	e8 52 0e ff ff       	call   ffffffff8020ca2d <RME_Str_Print>
         RME_Hex_Print(MMap->type);
 ffffffff8021bbdb:	48 8b 45 e0          	mov    -0x20(%rbp),%rax
@@ -26036,7 +26038,7 @@ ffffffff8021bbf9:	0f 82 80 fe ff ff    	jb     ffffffff8021ba7f <__RME_X64_Mem_I
     /* Check if any memory segment overlaps. If yes, merge them into one,
      * until there is no overlapping segments */
     Trav_Ptr=RME_X64_Phys_Mem.Next;
-ffffffff8021bbff:	48 8b 05 fa e3 00 00 	mov    0xe3fa(%rip),%rax        # ffffffff8022a000 <RME_X64_Phys_Mem>
+ffffffff8021bbff:	48 8b 05 fa 03 01 00 	mov    0x103fa(%rip),%rax        # ffffffff8022c000 <RME_X64_Phys_Mem>
 ffffffff8021bc06:	48 89 45 f8          	mov    %rax,-0x8(%rbp)
     while((Trav_Ptr!=&RME_X64_Phys_Mem)&&((Trav_Ptr->Next)!=&RME_X64_Phys_Mem))
 ffffffff8021bc0a:	eb 75                	jmp    ffffffff8021bc81 <__RME_X64_Mem_Init+0x237>
@@ -26084,7 +26086,7 @@ ffffffff8021bc62:	48 8b 10             	mov    (%rax),%rdx
 ffffffff8021bc65:	48 8b 45 f8          	mov    -0x8(%rbp),%rax
 ffffffff8021bc69:	48 89 d6             	mov    %rdx,%rsi
 ffffffff8021bc6c:	48 89 c7             	mov    %rax,%rdi
-ffffffff8021bc6f:	e8 a7 b4 00 00       	call   ffffffff8022711b <__RME_List_Del>
+ffffffff8021bc6f:	e8 1a b5 00 00       	call   ffffffff8022718e <__RME_List_Del>
             continue;
 ffffffff8021bc74:	eb 0b                	jmp    ffffffff8021bc81 <__RME_X64_Mem_Init+0x237>
         }
@@ -26093,12 +26095,12 @@ ffffffff8021bc76:	48 8b 45 f8          	mov    -0x8(%rbp),%rax
 ffffffff8021bc7a:	48 8b 00             	mov    (%rax),%rax
 ffffffff8021bc7d:	48 89 45 f8          	mov    %rax,-0x8(%rbp)
     while((Trav_Ptr!=&RME_X64_Phys_Mem)&&((Trav_Ptr->Next)!=&RME_X64_Phys_Mem))
-ffffffff8021bc81:	48 81 7d f8 00 a0 22 	cmpq   $0xffffffff8022a000,-0x8(%rbp)
+ffffffff8021bc81:	48 81 7d f8 00 c0 22 	cmpq   $0xffffffff8022c000,-0x8(%rbp)
 ffffffff8021bc88:	80 
 ffffffff8021bc89:	74 13                	je     ffffffff8021bc9e <__RME_X64_Mem_Init+0x254>
 ffffffff8021bc8b:	48 8b 45 f8          	mov    -0x8(%rbp),%rax
 ffffffff8021bc8f:	48 8b 00             	mov    (%rax),%rax
-ffffffff8021bc92:	48 3d 00 a0 22 80    	cmp    $0xffffffff8022a000,%rax
+ffffffff8021bc92:	48 3d 00 c0 22 80    	cmp    $0xffffffff8022c000,%rax
 ffffffff8021bc98:	0f 85 6e ff ff ff    	jne    ffffffff8021bc0c <__RME_X64_Mem_Init+0x1c2>
     }
 
@@ -26107,7 +26109,7 @@ ffffffff8021bc98:	0f 85 6e ff ff ff    	jne    ffffffff8021bc0c <__RME_X64_Mem_I
 ffffffff8021bc9e:	48 c7 45 f0 00 00 00 	movq   $0x0,-0x10(%rbp)
 ffffffff8021bca5:	00 
     Trav_Ptr=RME_X64_Phys_Mem.Next;
-ffffffff8021bca6:	48 8b 05 53 e3 00 00 	mov    0xe353(%rip),%rax        # ffffffff8022a000 <RME_X64_Phys_Mem>
+ffffffff8021bca6:	48 8b 05 53 03 01 00 	mov    0x10353(%rip),%rax        # ffffffff8022c000 <RME_X64_Phys_Mem>
 ffffffff8021bcad:	48 89 45 f8          	mov    %rax,-0x8(%rbp)
     while(Trav_Ptr!=&RME_X64_Phys_Mem)
 ffffffff8021bcb1:	eb 17                	jmp    ffffffff8021bcca <__RME_X64_Mem_Init+0x280>
@@ -26121,12 +26123,12 @@ ffffffff8021bcbf:	48 8b 45 f8          	mov    -0x8(%rbp),%rax
 ffffffff8021bcc3:	48 8b 00             	mov    (%rax),%rax
 ffffffff8021bcc6:	48 89 45 f8          	mov    %rax,-0x8(%rbp)
     while(Trav_Ptr!=&RME_X64_Phys_Mem)
-ffffffff8021bcca:	48 81 7d f8 00 a0 22 	cmpq   $0xffffffff8022a000,-0x8(%rbp)
+ffffffff8021bcca:	48 81 7d f8 00 c0 22 	cmpq   $0xffffffff8022c000,-0x8(%rbp)
 ffffffff8021bcd1:	80 
 ffffffff8021bcd2:	75 df                	jne    ffffffff8021bcb3 <__RME_X64_Mem_Init+0x269>
     }
     RME_DBG_S("\n\rTotal physical memory: 0x");
-ffffffff8021bcd4:	48 c7 c7 42 8e 22 80 	mov    $0xffffffff80228e42,%rdi
+ffffffff8021bcd4:	48 c7 c7 42 78 22 80 	mov    $0xffffffff80227842,%rdi
 ffffffff8021bcdb:	e8 4d 0d ff ff       	call   ffffffff8020ca2d <RME_Str_Print>
     RME_Hex_Print(MMap_Cnt);
 ffffffff8021bce0:	48 8b 45 f0          	mov    -0x10(%rbp),%rax
@@ -26140,7 +26142,7 @@ ffffffff8021bce7:	e8 7f 0c ff ff       	call   ffffffff8020c96b <RME_Hex_Print>
     RME_X64_Layout.Kot_Start=(rme_ptr_t)RME_KOT_VA_BASE;
 ffffffff8021bcec:	48 b8 00 00 00 01 00 	movabs $0xffff800001000000,%rax
 ffffffff8021bcf3:	80 ff ff 
-ffffffff8021bcf6:	48 89 05 43 63 01 00 	mov    %rax,0x16343(%rip)        # ffffffff80232040 <RME_X64_Layout>
+ffffffff8021bcf6:	48 89 05 43 83 01 00 	mov    %rax,0x18343(%rip)        # ffffffff80234040 <RME_X64_Layout>
     /* +1G in cases where we have > 3GB memory for covering the memory hole */
     Info_Cnt=(MMap_Cnt>3*RME_POW2(RME_PGT_SIZE_1G))?(MMap_Cnt+RME_POW2(RME_PGT_SIZE_1G)):MMap_Cnt;
 ffffffff8021bcfd:	b8 00 00 00 c0       	mov    $0xc0000000,%eax
@@ -26155,26 +26157,26 @@ ffffffff8021bd18:	48 89 45 e8          	mov    %rax,-0x18(%rbp)
 ffffffff8021bd1c:	48 8b 45 e8          	mov    -0x18(%rbp),%rax
 ffffffff8021bd20:	48 c1 e8 0a          	shr    $0xa,%rax
 ffffffff8021bd24:	48 83 c0 01          	add    $0x1,%rax
-ffffffff8021bd28:	48 89 05 19 63 01 00 	mov    %rax,0x16319(%rip)        # ffffffff80232048 <RME_X64_Layout+0x8>
+ffffffff8021bd28:	48 89 05 19 83 01 00 	mov    %rax,0x18319(%rip)        # ffffffff80234048 <RME_X64_Layout+0x8>
 
     /* Calculate the per-CPU data structure size - each CPU have two 4k pages */
     RME_X64_Layout.PerCPU_Start=RME_ROUND_UP(RME_X64_Layout.Kot_Start+RME_X64_Layout.Kot_Size,RME_PGT_SIZE_4K);
-ffffffff8021bd2f:	48 8b 15 0a 63 01 00 	mov    0x1630a(%rip),%rdx        # ffffffff80232040 <RME_X64_Layout>
-ffffffff8021bd36:	48 8b 05 0b 63 01 00 	mov    0x1630b(%rip),%rax        # ffffffff80232048 <RME_X64_Layout+0x8>
+ffffffff8021bd2f:	48 8b 15 0a 83 01 00 	mov    0x1830a(%rip),%rdx        # ffffffff80234040 <RME_X64_Layout>
+ffffffff8021bd36:	48 8b 05 0b 83 01 00 	mov    0x1830b(%rip),%rax        # ffffffff80234048 <RME_X64_Layout+0x8>
 ffffffff8021bd3d:	48 01 d0             	add    %rdx,%rax
 ffffffff8021bd40:	48 05 ff 0f 00 00    	add    $0xfff,%rax
 ffffffff8021bd46:	48 25 00 f0 ff ff    	and    $0xfffffffffffff000,%rax
-ffffffff8021bd4c:	48 89 05 fd 62 01 00 	mov    %rax,0x162fd(%rip)        # ffffffff80232050 <RME_X64_Layout+0x10>
+ffffffff8021bd4c:	48 89 05 fd 82 01 00 	mov    %rax,0x182fd(%rip)        # ffffffff80234050 <RME_X64_Layout+0x10>
     RME_X64_Layout.PerCPU_Size=2*RME_POW2(RME_PGT_SIZE_4K)*RME_X64_Num_CPU;
-ffffffff8021bd53:	48 8b 05 4e 65 01 00 	mov    0x1654e(%rip),%rax        # ffffffff802322a8 <RME_X64_Num_CPU>
+ffffffff8021bd53:	48 8b 05 4e 85 01 00 	mov    0x1854e(%rip),%rax        # ffffffff802342a8 <RME_X64_Num_CPU>
 ffffffff8021bd5a:	48 c1 e0 0d          	shl    $0xd,%rax
-ffffffff8021bd5e:	48 89 05 f3 62 01 00 	mov    %rax,0x162f3(%rip)        # ffffffff80232058 <RME_X64_Layout+0x18>
+ffffffff8021bd5e:	48 89 05 f3 82 01 00 	mov    %rax,0x182f3(%rip)        # ffffffff80234058 <RME_X64_Layout+0x18>
 
     /* Now decide the size of the stack */
     RME_X64_Layout.Stack_Size=RME_X64_Num_CPU<<RME_X64_KSTACK_ORDER;
-ffffffff8021bd65:	48 8b 05 3c 65 01 00 	mov    0x1653c(%rip),%rax        # ffffffff802322a8 <RME_X64_Num_CPU>
+ffffffff8021bd65:	48 8b 05 3c 85 01 00 	mov    0x1853c(%rip),%rax        # ffffffff802342a8 <RME_X64_Num_CPU>
 ffffffff8021bd6c:	48 c1 e0 14          	shl    $0x14,%rax
-ffffffff8021bd70:	48 89 05 29 65 01 00 	mov    %rax,0x16529(%rip)        # ffffffff802322a0 <RME_X64_Layout+0x260>
+ffffffff8021bd70:	48 89 05 29 85 01 00 	mov    %rax,0x18529(%rip)        # ffffffff802342a0 <RME_X64_Layout+0x260>
 }
 ffffffff8021bd77:	90                   	nop
 ffffffff8021bd78:	c9                   	leave
@@ -26197,8 +26199,8 @@ ffffffff8021bd82:	48 83 ec 40          	sub    $0x40,%rsp
     rme_cnt_t Count;
 
     IDT_Table=(struct RME_X64_IDT_Entry*)RME_X64_CPU_LOCAL_BASE(RME_X64_CPU_Cnt);
-ffffffff8021bd86:	48 8b 05 c3 62 01 00 	mov    0x162c3(%rip),%rax        # ffffffff80232050 <RME_X64_Layout+0x10>
-ffffffff8021bd8d:	48 8b 15 1c 65 01 00 	mov    0x1651c(%rip),%rdx        # ffffffff802322b0 <RME_X64_CPU_Cnt>
+ffffffff8021bd86:	48 8b 05 c3 82 01 00 	mov    0x182c3(%rip),%rax        # ffffffff80234050 <RME_X64_Layout+0x10>
+ffffffff8021bd8d:	48 8b 15 1c 85 01 00 	mov    0x1851c(%rip),%rdx        # ffffffff802342b0 <RME_X64_CPU_Cnt>
 ffffffff8021bd94:	48 c1 e2 0d          	shl    $0xd,%rdx
 ffffffff8021bd98:	48 01 d0             	add    %rdx,%rax
 ffffffff8021bd9b:	48 89 45 f0          	mov    %rax,-0x10(%rbp)
@@ -33209,7 +33211,7 @@ ffffffff80223ecd:	c7 40 0c 00 00 00 00 	movl   $0x0,0xc(%rax)
      * is only processed by the first processor, so we don't register it
      * for other auxiliary processors */
     if(RME_X64_CPU_Cnt==0)
-ffffffff80223ed4:	48 8b 05 d5 e3 00 00 	mov    0xe3d5(%rip),%rax        # ffffffff802322b0 <RME_X64_CPU_Cnt>
+ffffffff80223ed4:	48 8b 05 d5 03 01 00 	mov    0x103d5(%rip),%rax        # ffffffff802342b0 <RME_X64_CPU_Cnt>
 ffffffff80223edb:	48 85 c0             	test   %rax,%rax
 ffffffff80223ede:	0f 85 88 00 00 00    	jne    ffffffff80223f6c <__RME_X64_CPU_Local_Init+0x81f2>
         RME_X64_SET_IDT(IDT_Table, RME_X64_INT_SYSTICK, RME_X64_IDT_VECT, SysTick_Handler);
@@ -33296,15 +33298,15 @@ ffffffff8022402a:	48 89 c7             	mov    %rax,%rdi
 ffffffff8022402d:	e8 47 78 fe ff       	call   ffffffff8020b879 <__RME_X64_IDT_Load>
 
     GDT_Table=(rme_ptr_t*)(RME_X64_CPU_LOCAL_BASE(RME_X64_CPU_Cnt)+RME_POW2(RME_PGT_SIZE_4K));
-ffffffff80224032:	48 8b 05 17 e0 00 00 	mov    0xe017(%rip),%rax        # ffffffff80232050 <RME_X64_Layout+0x10>
-ffffffff80224039:	48 8b 15 70 e2 00 00 	mov    0xe270(%rip),%rdx        # ffffffff802322b0 <RME_X64_CPU_Cnt>
+ffffffff80224032:	48 8b 05 17 00 01 00 	mov    0x10017(%rip),%rax        # ffffffff80234050 <RME_X64_Layout+0x10>
+ffffffff80224039:	48 8b 15 70 02 01 00 	mov    0x10270(%rip),%rdx        # ffffffff802342b0 <RME_X64_CPU_Cnt>
 ffffffff80224040:	48 c1 e2 0d          	shl    $0xd,%rdx
 ffffffff80224044:	48 01 d0             	add    %rdx,%rax
 ffffffff80224047:	48 05 00 10 00 00    	add    $0x1000,%rax
 ffffffff8022404d:	48 89 45 e8          	mov    %rax,-0x18(%rbp)
     TSS_Table=(rme_ptr_t)(RME_X64_CPU_LOCAL_BASE(RME_X64_CPU_Cnt)+RME_POW2(RME_PGT_SIZE_4K)+16*sizeof(rme_ptr_t));
-ffffffff80224051:	48 8b 05 f8 df 00 00 	mov    0xdff8(%rip),%rax        # ffffffff80232050 <RME_X64_Layout+0x10>
-ffffffff80224058:	48 8b 15 51 e2 00 00 	mov    0xe251(%rip),%rdx        # ffffffff802322b0 <RME_X64_CPU_Cnt>
+ffffffff80224051:	48 8b 05 f8 ff 00 00 	mov    0xfff8(%rip),%rax        # ffffffff80234050 <RME_X64_Layout+0x10>
+ffffffff80224058:	48 8b 15 51 02 01 00 	mov    0x10251(%rip),%rdx        # ffffffff802342b0 <RME_X64_CPU_Cnt>
 ffffffff8022405f:	48 c1 e2 0d          	shl    $0xd,%rdx
 ffffffff80224063:	48 01 d0             	add    %rdx,%rax
 ffffffff80224066:	48 05 80 10 00 00    	add    $0x1080,%rax
@@ -33397,9 +33399,9 @@ ffffffff80224169:	48 89 c7             	mov    %rax,%rdi
 ffffffff8022416c:	e8 04 77 fe ff       	call   ffffffff8020b875 <__RME_X64_GDT_Load>
     /* Set the RSP to TSS */
     ((rme_u32_t*)TSS_Table)[1]=RME_X64_KSTACK(RME_X64_CPU_Cnt);
-ffffffff80224171:	48 8b 05 20 e1 00 00 	mov    0xe120(%rip),%rax        # ffffffff80232298 <RME_X64_Layout+0x258>
+ffffffff80224171:	48 8b 05 20 01 01 00 	mov    0x10120(%rip),%rax        # ffffffff80234298 <RME_X64_Layout+0x258>
 ffffffff80224178:	89 c6                	mov    %eax,%esi
-ffffffff8022417a:	48 8b 05 2f e1 00 00 	mov    0xe12f(%rip),%rax        # ffffffff802322b0 <RME_X64_CPU_Cnt>
+ffffffff8022417a:	48 8b 05 2f 01 01 00 	mov    0x1012f(%rip),%rax        # ffffffff802342b0 <RME_X64_CPU_Cnt>
 ffffffff80224181:	83 c0 01             	add    $0x1,%eax
 ffffffff80224184:	c1 e0 14             	shl    $0x14,%eax
 ffffffff80224187:	89 c2                	mov    %eax,%edx
@@ -33409,8 +33411,8 @@ ffffffff80224191:	48 89 c1             	mov    %rax,%rcx
 ffffffff80224194:	8d 04 16             	lea    (%rsi,%rdx,1),%eax
 ffffffff80224197:	89 01                	mov    %eax,(%rcx)
     ((rme_u32_t*)TSS_Table)[2]=RME_X64_KSTACK(RME_X64_CPU_Cnt)>>32;
-ffffffff80224199:	48 8b 05 f8 e0 00 00 	mov    0xe0f8(%rip),%rax        # ffffffff80232298 <RME_X64_Layout+0x258>
-ffffffff802241a0:	48 8b 15 09 e1 00 00 	mov    0xe109(%rip),%rdx        # ffffffff802322b0 <RME_X64_CPU_Cnt>
+ffffffff80224199:	48 8b 05 f8 00 01 00 	mov    0x100f8(%rip),%rax        # ffffffff80234298 <RME_X64_Layout+0x258>
+ffffffff802241a0:	48 8b 15 09 01 01 00 	mov    0x10109(%rip),%rdx        # ffffffff802342b0 <RME_X64_CPU_Cnt>
 ffffffff802241a7:	48 83 c2 01          	add    $0x1,%rdx
 ffffffff802241ab:	48 c1 e2 14          	shl    $0x14,%rdx
 ffffffff802241af:	48 01 d0             	add    %rdx,%rax
@@ -33430,8 +33432,8 @@ ffffffff802241d6:	e8 a2 76 fe ff       	call   ffffffff8020b87d <__RME_X64_TSS_L
 
     /* Initialize the RME per-cpu data here */
     CPU_Local=(struct RME_CPU_Local*)(RME_X64_CPU_LOCAL_BASE(RME_X64_CPU_Cnt)+
-ffffffff802241db:	48 8b 05 6e de 00 00 	mov    0xde6e(%rip),%rax        # ffffffff80232050 <RME_X64_Layout+0x10>
-ffffffff802241e2:	48 8b 15 c7 e0 00 00 	mov    0xe0c7(%rip),%rdx        # ffffffff802322b0 <RME_X64_CPU_Cnt>
+ffffffff802241db:	48 8b 05 6e fe 00 00 	mov    0xfe6e(%rip),%rax        # ffffffff80234050 <RME_X64_Layout+0x10>
+ffffffff802241e2:	48 8b 15 c7 00 01 00 	mov    0x100c7(%rip),%rdx        # ffffffff802342b0 <RME_X64_CPU_Cnt>
 ffffffff802241e9:	48 c1 e2 0d          	shl    $0xd,%rdx
 ffffffff802241ed:	48 01 d0             	add    %rdx,%rax
     		                          RME_POW2(RME_PGT_SIZE_4K)+
@@ -33440,7 +33442,7 @@ ffffffff802241f0:	48 05 00 14 00 00    	add    $0x1400,%rax
 ffffffff802241f6:	48 89 45 d8          	mov    %rax,-0x28(%rbp)
 									  RME_POW2(RME_PGT_SIZE_1K));
     _RME_CPU_Local_Init(CPU_Local,RME_X64_CPU_Cnt);
-ffffffff802241fa:	48 8b 15 af e0 00 00 	mov    0xe0af(%rip),%rdx        # ffffffff802322b0 <RME_X64_CPU_Cnt>
+ffffffff802241fa:	48 8b 15 af 00 01 00 	mov    0x100af(%rip),%rdx        # ffffffff802342b0 <RME_X64_CPU_Cnt>
 ffffffff80224201:	48 8b 45 d8          	mov    -0x28(%rbp),%rax
 ffffffff80224205:	48 89 d6             	mov    %rdx,%rsi
 ffffffff80224208:	48 89 c7             	mov    %rax,%rdi
@@ -33448,8 +33450,8 @@ ffffffff8022420b:	e8 28 ea fe ff       	call   ffffffff80212c38 <_RME_CPU_Local_
 
     /* Initialize x64 specific CPU-local data structure */
     Temp=(struct RME_X64_Temp*)(RME_X64_CPU_LOCAL_BASE(RME_X64_CPU_Cnt+1)-sizeof(struct RME_X64_Temp));
-ffffffff80224210:	48 8b 05 39 de 00 00 	mov    0xde39(%rip),%rax        # ffffffff80232050 <RME_X64_Layout+0x10>
-ffffffff80224217:	48 8b 15 92 e0 00 00 	mov    0xe092(%rip),%rdx        # ffffffff802322b0 <RME_X64_CPU_Cnt>
+ffffffff80224210:	48 8b 05 39 fe 00 00 	mov    0xfe39(%rip),%rax        # ffffffff80234050 <RME_X64_Layout+0x10>
+ffffffff80224217:	48 8b 15 92 00 01 00 	mov    0x10092(%rip),%rdx        # ffffffff802342b0 <RME_X64_CPU_Cnt>
 ffffffff8022421e:	48 83 c2 01          	add    $0x1,%rdx
 ffffffff80224222:	48 c1 e2 0d          	shl    $0xd,%rdx
 ffffffff80224226:	48 01 d0             	add    %rdx,%rax
@@ -33460,8 +33462,8 @@ ffffffff80224231:	48 8b 55 d8          	mov    -0x28(%rbp),%rdx
 ffffffff80224235:	48 8b 45 d0          	mov    -0x30(%rbp),%rax
 ffffffff80224239:	48 89 10             	mov    %rdx,(%rax)
     Temp->Kernel_SP=RME_X64_KSTACK(RME_X64_CPU_Cnt);
-ffffffff8022423c:	48 8b 05 55 e0 00 00 	mov    0xe055(%rip),%rax        # ffffffff80232298 <RME_X64_Layout+0x258>
-ffffffff80224243:	48 8b 15 66 e0 00 00 	mov    0xe066(%rip),%rdx        # ffffffff802322b0 <RME_X64_CPU_Cnt>
+ffffffff8022423c:	48 8b 05 55 00 01 00 	mov    0x10055(%rip),%rax        # ffffffff80234298 <RME_X64_Layout+0x258>
+ffffffff80224243:	48 8b 15 66 00 01 00 	mov    0x10066(%rip),%rdx        # ffffffff802342b0 <RME_X64_CPU_Cnt>
 ffffffff8022424a:	48 83 c2 01          	add    $0x1,%rdx
 ffffffff8022424e:	48 c1 e2 14          	shl    $0x14,%rdx
 ffffffff80224252:	48 01 c2             	add    %rax,%rdx
@@ -33534,7 +33536,7 @@ ffffffff802242ff:	48 89 e5             	mov    %rsp,%rbp
 ffffffff80224302:	48 83 ec 08          	sub    $0x8,%rsp
 ffffffff80224306:	48 89 7d f8          	mov    %rdi,-0x8(%rbp)
 	return (struct RME_CPU_Local*)(RME_X64_CPU_LOCAL_BASE(CPUID)+
-ffffffff8022430a:	48 8b 05 3f dd 00 00 	mov    0xdd3f(%rip),%rax        # ffffffff80232050 <RME_X64_Layout+0x10>
+ffffffff8022430a:	48 8b 05 3f fd 00 00 	mov    0xfd3f(%rip),%rax        # ffffffff80234050 <RME_X64_Layout+0x10>
 ffffffff80224311:	48 8b 55 f8          	mov    -0x8(%rbp),%rdx
 ffffffff80224315:	48 c1 e2 0d          	shl    $0xd,%rdx
 ffffffff80224319:	48 01 d0             	add    %rdx,%rax
@@ -33556,7 +33558,7 @@ ffffffff80224324:	f3 0f 1e fa          	endbr64
 ffffffff80224328:	55                   	push   %rbp
 ffffffff80224329:	48 89 e5             	mov    %rsp,%rbp
     RME_X64_LAPIC_WRITE(RME_X64_LAPIC_EOI, 0);
-ffffffff8022432c:	48 8b 05 ed ef 00 00 	mov    0xefed(%rip),%rax        # ffffffff80233320 <RME_X64_LAPIC_Addr>
+ffffffff8022432c:	48 8b 05 ed 0f 01 00 	mov    0x10fed(%rip),%rax        # ffffffff80235320 <RME_X64_LAPIC_Addr>
 ffffffff80224333:	48 ba b0 00 00 00 00 	movabs $0xffff8000000000b0,%rdx
 ffffffff8022433a:	80 ff ff 
 ffffffff8022433d:	48 01 d0             	add    %rdx,%rax
@@ -33578,11 +33580,11 @@ ffffffff8022434d:	55                   	push   %rbp
 ffffffff8022434e:	48 89 e5             	mov    %rsp,%rbp
     /* LAPIC initialization - Check if there is any LAPIC */
     RME_ASSERT(RME_X64_LAPIC_Addr!=0);
-ffffffff80224351:	48 8b 05 c8 ef 00 00 	mov    0xefc8(%rip),%rax        # ffffffff80233320 <RME_X64_LAPIC_Addr>
+ffffffff80224351:	48 8b 05 c8 0f 01 00 	mov    0x10fc8(%rip),%rax        # ffffffff80235320 <RME_X64_LAPIC_Addr>
 
     /* Enable local APIC; set spurious interrupt vector to 32 */
     RME_X64_LAPIC_WRITE(RME_X64_LAPIC_SVR, RME_X64_LAPIC_SVR_ENABLE|RME_X64_INT_SPUR);
-ffffffff80224358:	48 8b 05 c1 ef 00 00 	mov    0xefc1(%rip),%rax        # ffffffff80233320 <RME_X64_LAPIC_Addr>
+ffffffff80224358:	48 8b 05 c1 0f 01 00 	mov    0x10fc1(%rip),%rax        # ffffffff80235320 <RME_X64_LAPIC_Addr>
 ffffffff8022435f:	48 ba f0 00 00 00 00 	movabs $0xffff8000000000f0,%rdx
 ffffffff80224366:	80 ff ff 
 ffffffff80224369:	48 01 d0             	add    %rdx,%rax
@@ -33590,13 +33592,13 @@ ffffffff8022436c:	c7 00 80 01 00 00    	movl   $0x180,(%rax)
 
     /* Disable local interrupt lines */
     RME_X64_LAPIC_WRITE(RME_X64_LAPIC_LINT0, RME_X64_LAPIC_MASKED);
-ffffffff80224372:	48 8b 05 a7 ef 00 00 	mov    0xefa7(%rip),%rax        # ffffffff80233320 <RME_X64_LAPIC_Addr>
+ffffffff80224372:	48 8b 05 a7 0f 01 00 	mov    0x10fa7(%rip),%rax        # ffffffff80235320 <RME_X64_LAPIC_Addr>
 ffffffff80224379:	48 ba 50 03 00 00 00 	movabs $0xffff800000000350,%rdx
 ffffffff80224380:	80 ff ff 
 ffffffff80224383:	48 01 d0             	add    %rdx,%rax
 ffffffff80224386:	c7 00 00 00 01 00    	movl   $0x10000,(%rax)
     RME_X64_LAPIC_WRITE(RME_X64_LAPIC_LINT1, RME_X64_LAPIC_MASKED);
-ffffffff8022438c:	48 8b 05 8d ef 00 00 	mov    0xef8d(%rip),%rax        # ffffffff80233320 <RME_X64_LAPIC_Addr>
+ffffffff8022438c:	48 8b 05 8d 0f 01 00 	mov    0x10f8d(%rip),%rax        # ffffffff80235320 <RME_X64_LAPIC_Addr>
 ffffffff80224393:	48 ba 60 03 00 00 00 	movabs $0xffff800000000360,%rdx
 ffffffff8022439a:	80 ff ff 
 ffffffff8022439d:	48 01 d0             	add    %rdx,%rax
@@ -33604,7 +33606,7 @@ ffffffff802243a0:	c7 00 00 00 01 00    	movl   $0x10000,(%rax)
 
     /* Disable performance counter overflow interrupts when there is one */
     if(((RME_X64_LAPIC_READ(RME_X64_LAPIC_VER)>>16)&0xFF)>=4)
-ffffffff802243a6:	48 8b 05 73 ef 00 00 	mov    0xef73(%rip),%rax        # ffffffff80233320 <RME_X64_LAPIC_Addr>
+ffffffff802243a6:	48 8b 05 73 0f 01 00 	mov    0x10f73(%rip),%rax        # ffffffff80235320 <RME_X64_LAPIC_Addr>
 ffffffff802243ad:	48 ba 30 00 00 00 00 	movabs $0xffff800000000030,%rdx
 ffffffff802243b4:	80 ff ff 
 ffffffff802243b7:	48 01 d0             	add    %rdx,%rax
@@ -33613,7 +33615,7 @@ ffffffff802243bc:	25 00 00 fc 00       	and    $0xfc0000,%eax
 ffffffff802243c1:	85 c0                	test   %eax,%eax
 ffffffff802243c3:	74 1a                	je     ffffffff802243df <__RME_X64_LAPIC_Init+0x96>
         RME_X64_LAPIC_WRITE(RME_X64_LAPIC_PCINT, RME_X64_LAPIC_MASKED);
-ffffffff802243c5:	48 8b 05 54 ef 00 00 	mov    0xef54(%rip),%rax        # ffffffff80233320 <RME_X64_LAPIC_Addr>
+ffffffff802243c5:	48 8b 05 54 0f 01 00 	mov    0x10f54(%rip),%rax        # ffffffff80235320 <RME_X64_LAPIC_Addr>
 ffffffff802243cc:	48 ba 40 03 00 00 00 	movabs $0xffff800000000340,%rdx
 ffffffff802243d3:	80 ff ff 
 ffffffff802243d6:	48 01 d0             	add    %rdx,%rax
@@ -33621,7 +33623,7 @@ ffffffff802243d9:	c7 00 00 00 01 00    	movl   $0x10000,(%rax)
 
     /* Map error interrupt to IRQ_ERROR */
     RME_X64_LAPIC_WRITE(RME_X64_LAPIC_ERROR, RME_X64_INT_ERROR);
-ffffffff802243df:	48 8b 05 3a ef 00 00 	mov    0xef3a(%rip),%rax        # ffffffff80233320 <RME_X64_LAPIC_Addr>
+ffffffff802243df:	48 8b 05 3a 0f 01 00 	mov    0x10f3a(%rip),%rax        # ffffffff80235320 <RME_X64_LAPIC_Addr>
 ffffffff802243e6:	48 ba 70 03 00 00 00 	movabs $0xffff800000000370,%rdx
 ffffffff802243ed:	80 ff ff 
 ffffffff802243f0:	48 01 d0             	add    %rdx,%rax
@@ -33629,13 +33631,13 @@ ffffffff802243f3:	c7 00 81 00 00 00    	movl   $0x81,(%rax)
 
     /* Clear error status register (requires back-to-back writes) */
     RME_X64_LAPIC_WRITE(RME_X64_LAPIC_ESR, 0);
-ffffffff802243f9:	48 8b 05 20 ef 00 00 	mov    0xef20(%rip),%rax        # ffffffff80233320 <RME_X64_LAPIC_Addr>
+ffffffff802243f9:	48 8b 05 20 0f 01 00 	mov    0x10f20(%rip),%rax        # ffffffff80235320 <RME_X64_LAPIC_Addr>
 ffffffff80224400:	48 ba 80 02 00 00 00 	movabs $0xffff800000000280,%rdx
 ffffffff80224407:	80 ff ff 
 ffffffff8022440a:	48 01 d0             	add    %rdx,%rax
 ffffffff8022440d:	c7 00 00 00 00 00    	movl   $0x0,(%rax)
     RME_X64_LAPIC_WRITE(RME_X64_LAPIC_ESR, 0);
-ffffffff80224413:	48 8b 05 06 ef 00 00 	mov    0xef06(%rip),%rax        # ffffffff80233320 <RME_X64_LAPIC_Addr>
+ffffffff80224413:	48 8b 05 06 0f 01 00 	mov    0x10f06(%rip),%rax        # ffffffff80235320 <RME_X64_LAPIC_Addr>
 ffffffff8022441a:	48 ba 80 02 00 00 00 	movabs $0xffff800000000280,%rdx
 ffffffff80224421:	80 ff ff 
 ffffffff80224424:	48 01 d0             	add    %rdx,%rax
@@ -33647,13 +33649,13 @@ ffffffff8022442d:	e8 f2 fe ff ff       	call   ffffffff80224324 <__RME_X64_LAPIC
 
     /* Send an Init Level De-Assert to synchronise arbitration IDs */
     RME_X64_LAPIC_WRITE(RME_X64_LAPIC_ICRHI, 0);
-ffffffff80224432:	48 8b 05 e7 ee 00 00 	mov    0xeee7(%rip),%rax        # ffffffff80233320 <RME_X64_LAPIC_Addr>
+ffffffff80224432:	48 8b 05 e7 0e 01 00 	mov    0x10ee7(%rip),%rax        # ffffffff80235320 <RME_X64_LAPIC_Addr>
 ffffffff80224439:	48 ba 10 03 00 00 00 	movabs $0xffff800000000310,%rdx
 ffffffff80224440:	80 ff ff 
 ffffffff80224443:	48 01 d0             	add    %rdx,%rax
 ffffffff80224446:	c7 00 00 00 00 00    	movl   $0x0,(%rax)
     RME_X64_LAPIC_WRITE(RME_X64_LAPIC_ICRLO, RME_X64_LAPIC_ICRLO_BCAST|
-ffffffff8022444c:	48 8b 05 cd ee 00 00 	mov    0xeecd(%rip),%rax        # ffffffff80233320 <RME_X64_LAPIC_Addr>
+ffffffff8022444c:	48 8b 05 cd 0e 01 00 	mov    0x10ecd(%rip),%rax        # ffffffff80235320 <RME_X64_LAPIC_Addr>
 ffffffff80224453:	48 ba 00 03 00 00 00 	movabs $0xffff800000000300,%rdx
 ffffffff8022445a:	80 ff ff 
 ffffffff8022445d:	48 01 d0             	add    %rdx,%rax
@@ -33662,7 +33664,7 @@ ffffffff80224460:	c7 00 00 85 08 00    	movl   $0x88500,(%rax)
                                              RME_X64_LAPIC_ICRLO_LEVEL);
     while(RME_X64_LAPIC_READ(RME_X64_LAPIC_ICRLO)&RME_X64_LAPIC_ICRLO_DELIVS);
 ffffffff80224466:	90                   	nop
-ffffffff80224467:	48 8b 05 b2 ee 00 00 	mov    0xeeb2(%rip),%rax        # ffffffff80233320 <RME_X64_LAPIC_Addr>
+ffffffff80224467:	48 8b 05 b2 0e 01 00 	mov    0x10eb2(%rip),%rax        # ffffffff80235320 <RME_X64_LAPIC_Addr>
 ffffffff8022446e:	48 ba 00 03 00 00 00 	movabs $0xffff800000000300,%rdx
 ffffffff80224475:	80 ff ff 
 ffffffff80224478:	48 01 d0             	add    %rdx,%rax
@@ -33673,7 +33675,7 @@ ffffffff80224484:	75 e1                	jne    ffffffff80224467 <__RME_X64_LAPIC
 
     /* Enable interrupts on the APIC */
     RME_X64_LAPIC_WRITE(RME_X64_LAPIC_TPR, 0);
-ffffffff80224486:	48 8b 05 93 ee 00 00 	mov    0xee93(%rip),%rax        # ffffffff80233320 <RME_X64_LAPIC_Addr>
+ffffffff80224486:	48 8b 05 93 0e 01 00 	mov    0x10e93(%rip),%rax        # ffffffff80235320 <RME_X64_LAPIC_Addr>
 ffffffff8022448d:	48 ba 80 00 00 00 00 	movabs $0xffff800000000080,%rdx
 ffffffff80224494:	80 ff ff 
 ffffffff80224497:	48 01 d0             	add    %rdx,%rax
@@ -33888,8 +33890,8 @@ ffffffff802246a6:	48 8b 45 f0          	mov    -0x10(%rbp),%rax
 ffffffff802246aa:	48 c1 e8 10          	shr    $0x10,%rax
 ffffffff802246ae:	25 ff 00 00 00       	and    $0xff,%eax
 ffffffff802246b3:	48 89 45 f0          	mov    %rax,-0x10(%rbp)
-    RME_DBG_S("\n\rMax int is: ");
-ffffffff802246b7:	48 c7 c7 5e 8e 22 80 	mov    $0xffffffff80228e5e,%rdi
+    RME_DBG_S("\n\rMax interupt number is: ");
+ffffffff802246b7:	48 c7 c7 5e 78 22 80 	mov    $0xffffffff8022785e,%rdi
 ffffffff802246be:	e8 6a 83 fe ff       	call   ffffffff8020ca2d <RME_Str_Print>
     RME_DBG_I(Max_Int);
 ffffffff802246c3:	48 8b 45 f0          	mov    -0x10(%rbp),%rax
@@ -33909,7 +33911,7 @@ ffffffff802246f2:	48 c1 6d e8 18       	shrq   $0x18,-0x18(%rbp)
     /* This is not necessarily true when we have >1 IOAPICs */
     /* RME_ASSERT(IOAPIC_ID==RME_X64_IOAPIC_Info[0].IOAPIC_ID); */
     RME_DBG_S("\n\rIOAPIC ID is: ");
-ffffffff802246f7:	48 c7 c7 6d 8e 22 80 	mov    $0xffffffff80228e6d,%rdi
+ffffffff802246f7:	48 c7 c7 79 78 22 80 	mov    $0xffffffff80227879,%rdi
 ffffffff802246fe:	e8 2a 83 fe ff       	call   ffffffff8020ca2d <RME_Str_Print>
     RME_DBG_I(IOAPIC_ID);
 ffffffff80224703:	48 8b 45 e8          	mov    -0x18(%rbp),%rax
@@ -33965,7 +33967,7 @@ ffffffff8022475c:	48 8b 55 f8          	mov    -0x8(%rbp),%rdx
 ffffffff80224760:	48 8b 45 f0          	mov    -0x10(%rbp),%rax
 ffffffff80224764:	48 01 c2             	add    %rax,%rdx
 ffffffff80224767:	48 8b 45 f8          	mov    -0x8(%rbp),%rax
-ffffffff8022476b:	48 05 c0 8c 22 80    	add    $0xffffffff80228cc0,%rax
+ffffffff8022476b:	48 05 c0 76 22 80    	add    $0xffffffff802276c0,%rax
 ffffffff80224771:	0f b6 00             	movzbl (%rax),%eax
 ffffffff80224774:	88 02                	mov    %al,(%rdx)
     for(Count=0;Count<sizeof(RME_X64_Boot_Code);Count++)
@@ -33976,7 +33978,7 @@ ffffffff80224783:	76 d7                	jbe    ffffffff8022475c <__RME_X64_SMP_I
 
     /* Start the CPUs one by one - the first one is ourself */
     RME_X64_CPU_Cnt=1;
-ffffffff80224785:	48 c7 05 20 db 00 00 	movq   $0x1,0xdb20(%rip)        # ffffffff802322b0 <RME_X64_CPU_Cnt>
+ffffffff80224785:	48 c7 05 20 fb 00 00 	movq   $0x1,0xfb20(%rip)        # ffffffff802342b0 <RME_X64_CPU_Cnt>
 ffffffff8022478c:	01 00 00 00 
     for(Count=1;Count<RME_X64_Num_CPU;Count++)
 ffffffff80224790:	48 c7 45 f8 01 00 00 	movq   $0x1,-0x8(%rbp)
@@ -33984,7 +33986,7 @@ ffffffff80224797:	00
 ffffffff80224798:	e9 d1 01 00 00       	jmp    ffffffff8022496e <__RME_X64_SMP_Init+0x236>
     {
         RME_DBG_S("\n\rBooting CPU ");
-ffffffff8022479d:	48 c7 c7 7e 8e 22 80 	mov    $0xffffffff80228e7e,%rdi
+ffffffff8022479d:	48 c7 c7 8a 78 22 80 	mov    $0xffffffff8022788a,%rdi
 ffffffff802247a4:	e8 84 82 fe ff       	call   ffffffff8020ca2d <RME_Str_Print>
         RME_DBG_I(Count);
 ffffffff802247a9:	48 8b 45 f8          	mov    -0x8(%rbp),%rax
@@ -34003,7 +34005,7 @@ ffffffff802247d0:	48 83 e8 08          	sub    $0x8,%rax
 ffffffff802247d4:	81 c2 00 00 00 80    	add    $0x80000000,%edx
 ffffffff802247da:	89 10                	mov    %edx,(%rax)
         *(rme_ptr_t*)(Code-16)=RME_X64_KSTACK(Count);
-ffffffff802247dc:	48 8b 15 b5 da 00 00 	mov    0xdab5(%rip),%rdx        # ffffffff80232298 <RME_X64_Layout+0x258>
+ffffffff802247dc:	48 8b 15 b5 fa 00 00 	mov    0xfab5(%rip),%rdx        # ffffffff80234298 <RME_X64_Layout+0x258>
 ffffffff802247e3:	48 8b 45 f8          	mov    -0x8(%rbp),%rax
 ffffffff802247e7:	48 83 c0 01          	add    $0x1,%rax
 ffffffff802247eb:	48 c1 e0 14          	shl    $0x14,%rax
@@ -34039,10 +34041,10 @@ ffffffff8022483d:	66 c7 00 00 07       	movw   $0x700,(%rax)
         RME_X64_LAPIC_WRITE(RME_X64_LAPIC_ICRHI, RME_X64_CPU_Info[Count].LAPIC_ID<<24);
 ffffffff80224842:	48 8b 45 f8          	mov    -0x8(%rbp),%rax
 ffffffff80224846:	48 c1 e0 04          	shl    $0x4,%rax
-ffffffff8022484a:	48 05 c0 22 23 80    	add    $0xffffffff802322c0,%rax
+ffffffff8022484a:	48 05 c0 42 23 80    	add    $0xffffffff802342c0,%rax
 ffffffff80224850:	48 8b 00             	mov    (%rax),%rax
 ffffffff80224853:	89 c1                	mov    %eax,%ecx
-ffffffff80224855:	48 8b 05 c4 ea 00 00 	mov    0xeac4(%rip),%rax        # ffffffff80233320 <RME_X64_LAPIC_Addr>
+ffffffff80224855:	48 8b 05 c4 0a 01 00 	mov    0x10ac4(%rip),%rax        # ffffffff80235320 <RME_X64_LAPIC_Addr>
 ffffffff8022485c:	48 ba 10 03 00 00 00 	movabs $0xffff800000000310,%rdx
 ffffffff80224863:	80 ff ff 
 ffffffff80224866:	48 01 d0             	add    %rdx,%rax
@@ -34051,7 +34053,7 @@ ffffffff8022486c:	89 c8                	mov    %ecx,%eax
 ffffffff8022486e:	c1 e0 18             	shl    $0x18,%eax
 ffffffff80224871:	89 02                	mov    %eax,(%rdx)
         RME_X64_LAPIC_WRITE(RME_X64_LAPIC_ICRLO, RME_X64_LAPIC_ICRLO_INIT|
-ffffffff80224873:	48 8b 05 a6 ea 00 00 	mov    0xeaa6(%rip),%rax        # ffffffff80233320 <RME_X64_LAPIC_Addr>
+ffffffff80224873:	48 8b 05 a6 0a 01 00 	mov    0x10aa6(%rip),%rax        # ffffffff80235320 <RME_X64_LAPIC_Addr>
 ffffffff8022487a:	48 ba 00 03 00 00 00 	movabs $0xffff800000000300,%rdx
 ffffffff80224881:	80 ff ff 
 ffffffff80224884:	48 01 d0             	add    %rdx,%rax
@@ -34060,7 +34062,7 @@ ffffffff80224887:	c7 00 00 c5 00 00    	movl   $0xc500,(%rax)
                                                  RME_X64_LAPIC_ICRLO_ASSERT);
         RME_X64_UDELAY(200);
         RME_X64_LAPIC_WRITE(RME_X64_LAPIC_ICRLO, RME_X64_LAPIC_ICRLO_INIT|
-ffffffff8022488d:	48 8b 05 8c ea 00 00 	mov    0xea8c(%rip),%rax        # ffffffff80233320 <RME_X64_LAPIC_Addr>
+ffffffff8022488d:	48 8b 05 8c 0a 01 00 	mov    0x10a8c(%rip),%rax        # ffffffff80235320 <RME_X64_LAPIC_Addr>
 ffffffff80224894:	48 ba 00 03 00 00 00 	movabs $0xffff800000000300,%rdx
 ffffffff8022489b:	80 ff ff 
 ffffffff8022489e:	48 01 d0             	add    %rdx,%rax
@@ -34072,10 +34074,10 @@ ffffffff802248a1:	c7 00 00 85 00 00    	movl   $0x8500,(%rax)
         RME_X64_LAPIC_WRITE(RME_X64_LAPIC_ICRHI, RME_X64_CPU_Info[Count].LAPIC_ID<<24);
 ffffffff802248a7:	48 8b 45 f8          	mov    -0x8(%rbp),%rax
 ffffffff802248ab:	48 c1 e0 04          	shl    $0x4,%rax
-ffffffff802248af:	48 05 c0 22 23 80    	add    $0xffffffff802322c0,%rax
+ffffffff802248af:	48 05 c0 42 23 80    	add    $0xffffffff802342c0,%rax
 ffffffff802248b5:	48 8b 00             	mov    (%rax),%rax
 ffffffff802248b8:	89 c1                	mov    %eax,%ecx
-ffffffff802248ba:	48 8b 05 5f ea 00 00 	mov    0xea5f(%rip),%rax        # ffffffff80233320 <RME_X64_LAPIC_Addr>
+ffffffff802248ba:	48 8b 05 5f 0a 01 00 	mov    0x10a5f(%rip),%rax        # ffffffff80235320 <RME_X64_LAPIC_Addr>
 ffffffff802248c1:	48 ba 10 03 00 00 00 	movabs $0xffff800000000310,%rdx
 ffffffff802248c8:	80 ff ff 
 ffffffff802248cb:	48 01 d0             	add    %rdx,%rax
@@ -34084,7 +34086,7 @@ ffffffff802248d1:	89 c8                	mov    %ecx,%eax
 ffffffff802248d3:	c1 e0 18             	shl    $0x18,%eax
 ffffffff802248d6:	89 02                	mov    %eax,(%rdx)
         RME_X64_LAPIC_WRITE(RME_X64_LAPIC_ICRLO, RME_X64_LAPIC_ICRLO_STARTUP|(0x7000>>12));
-ffffffff802248d8:	48 8b 05 41 ea 00 00 	mov    0xea41(%rip),%rax        # ffffffff80233320 <RME_X64_LAPIC_Addr>
+ffffffff802248d8:	48 8b 05 41 0a 01 00 	mov    0x10a41(%rip),%rax        # ffffffff80235320 <RME_X64_LAPIC_Addr>
 ffffffff802248df:	48 ba 00 03 00 00 00 	movabs $0xffff800000000300,%rdx
 ffffffff802248e6:	80 ff ff 
 ffffffff802248e9:	48 01 d0             	add    %rdx,%rax
@@ -34093,10 +34095,10 @@ ffffffff802248ec:	c7 00 07 06 00 00    	movl   $0x607,(%rax)
         RME_X64_LAPIC_WRITE(RME_X64_LAPIC_ICRHI, RME_X64_CPU_Info[Count].LAPIC_ID<<24);
 ffffffff802248f2:	48 8b 45 f8          	mov    -0x8(%rbp),%rax
 ffffffff802248f6:	48 c1 e0 04          	shl    $0x4,%rax
-ffffffff802248fa:	48 05 c0 22 23 80    	add    $0xffffffff802322c0,%rax
+ffffffff802248fa:	48 05 c0 42 23 80    	add    $0xffffffff802342c0,%rax
 ffffffff80224900:	48 8b 00             	mov    (%rax),%rax
 ffffffff80224903:	89 c1                	mov    %eax,%ecx
-ffffffff80224905:	48 8b 05 14 ea 00 00 	mov    0xea14(%rip),%rax        # ffffffff80233320 <RME_X64_LAPIC_Addr>
+ffffffff80224905:	48 8b 05 14 0a 01 00 	mov    0x10a14(%rip),%rax        # ffffffff80235320 <RME_X64_LAPIC_Addr>
 ffffffff8022490c:	48 ba 10 03 00 00 00 	movabs $0xffff800000000310,%rdx
 ffffffff80224913:	80 ff ff 
 ffffffff80224916:	48 01 d0             	add    %rdx,%rax
@@ -34105,7 +34107,7 @@ ffffffff8022491c:	89 c8                	mov    %ecx,%eax
 ffffffff8022491e:	c1 e0 18             	shl    $0x18,%eax
 ffffffff80224921:	89 02                	mov    %eax,(%rdx)
         RME_X64_LAPIC_WRITE(RME_X64_LAPIC_ICRLO, RME_X64_LAPIC_ICRLO_STARTUP|(0x7000>>12));
-ffffffff80224923:	48 8b 05 f6 e9 00 00 	mov    0xe9f6(%rip),%rax        # ffffffff80233320 <RME_X64_LAPIC_Addr>
+ffffffff80224923:	48 8b 05 f6 09 01 00 	mov    0x109f6(%rip),%rax        # ffffffff80235320 <RME_X64_LAPIC_Addr>
 ffffffff8022492a:	48 ba 00 03 00 00 00 	movabs $0xffff800000000300,%rdx
 ffffffff80224931:	80 ff ff 
 ffffffff80224934:	48 01 d0             	add    %rdx,%rax
@@ -34115,20 +34117,20 @@ ffffffff80224937:	c7 00 07 06 00 00    	movl   $0x607,(%rax)
         /* Wait for CPU to finish its own initialization */
         while(RME_X64_CPU_Info[RME_X64_CPU_Cnt].Boot_Done==0);
 ffffffff8022493d:	90                   	nop
-ffffffff8022493e:	48 8b 05 6b d9 00 00 	mov    0xd96b(%rip),%rax        # ffffffff802322b0 <RME_X64_CPU_Cnt>
+ffffffff8022493e:	48 8b 05 6b f9 00 00 	mov    0xf96b(%rip),%rax        # ffffffff802342b0 <RME_X64_CPU_Cnt>
 ffffffff80224945:	48 c1 e0 04          	shl    $0x4,%rax
-ffffffff80224949:	48 05 c8 22 23 80    	add    $0xffffffff802322c8,%rax
+ffffffff80224949:	48 05 c8 42 23 80    	add    $0xffffffff802342c8,%rax
 ffffffff8022494f:	48 8b 00             	mov    (%rax),%rax
 ffffffff80224952:	48 85 c0             	test   %rax,%rax
 ffffffff80224955:	74 e7                	je     ffffffff8022493e <__RME_X64_SMP_Init+0x206>
         RME_X64_CPU_Cnt++;
-ffffffff80224957:	48 8b 05 52 d9 00 00 	mov    0xd952(%rip),%rax        # ffffffff802322b0 <RME_X64_CPU_Cnt>
+ffffffff80224957:	48 8b 05 52 f9 00 00 	mov    0xf952(%rip),%rax        # ffffffff802342b0 <RME_X64_CPU_Cnt>
 ffffffff8022495e:	48 83 c0 01          	add    $0x1,%rax
-ffffffff80224962:	48 89 05 47 d9 00 00 	mov    %rax,0xd947(%rip)        # ffffffff802322b0 <RME_X64_CPU_Cnt>
+ffffffff80224962:	48 89 05 47 f9 00 00 	mov    %rax,0xf947(%rip)        # ffffffff802342b0 <RME_X64_CPU_Cnt>
     for(Count=1;Count<RME_X64_Num_CPU;Count++)
 ffffffff80224969:	48 83 45 f8 01       	addq   $0x1,-0x8(%rbp)
 ffffffff8022496e:	48 8b 55 f8          	mov    -0x8(%rbp),%rdx
-ffffffff80224972:	48 8b 05 2f d9 00 00 	mov    0xd92f(%rip),%rax        # ffffffff802322a8 <RME_X64_Num_CPU>
+ffffffff80224972:	48 8b 05 2f f9 00 00 	mov    0xf92f(%rip),%rax        # ffffffff802342a8 <RME_X64_Num_CPU>
 ffffffff80224979:	48 39 c2             	cmp    %rax,%rdx
 ffffffff8022497c:	0f 82 1b fe ff ff    	jb     ffffffff8022479d <__RME_X64_SMP_Init+0x65>
     }
@@ -34150,18 +34152,18 @@ ffffffff8022498a:	55                   	push   %rbp
 ffffffff8022498b:	48 89 e5             	mov    %rsp,%rbp
     /* Is this a SMP? */
     if(RME_X64_Num_CPU>1)
-ffffffff8022498e:	48 8b 05 13 d9 00 00 	mov    0xd913(%rip),%rax        # ffffffff802322a8 <RME_X64_Num_CPU>
+ffffffff8022498e:	48 8b 05 13 f9 00 00 	mov    0xf913(%rip),%rax        # ffffffff802342a8 <RME_X64_Num_CPU>
 ffffffff80224995:	48 83 f8 01          	cmp    $0x1,%rax
 ffffffff80224999:	76 34                	jbe    ffffffff802249cf <__RME_X64_SMP_Tick+0x49>
     {
         RME_X64_LAPIC_WRITE(RME_X64_LAPIC_ICRHI, 0xFFULL<<24);
-ffffffff8022499b:	48 8b 05 7e e9 00 00 	mov    0xe97e(%rip),%rax        # ffffffff80233320 <RME_X64_LAPIC_Addr>
+ffffffff8022499b:	48 8b 05 7e 09 01 00 	mov    0x1097e(%rip),%rax        # ffffffff80235320 <RME_X64_LAPIC_Addr>
 ffffffff802249a2:	48 ba 10 03 00 00 00 	movabs $0xffff800000000310,%rdx
 ffffffff802249a9:	80 ff ff 
 ffffffff802249ac:	48 01 d0             	add    %rdx,%rax
 ffffffff802249af:	c7 00 00 00 00 ff    	movl   $0xff000000,(%rax)
         RME_X64_LAPIC_WRITE(RME_X64_LAPIC_ICRLO, RME_X64_LAPIC_ICRLO_EXC_SELF|
-ffffffff802249b5:	48 8b 05 64 e9 00 00 	mov    0xe964(%rip),%rax        # ffffffff80233320 <RME_X64_LAPIC_Addr>
+ffffffff802249b5:	48 8b 05 64 09 01 00 	mov    0x10964(%rip),%rax        # ffffffff80235320 <RME_X64_LAPIC_Addr>
 ffffffff802249bc:	48 ba 00 03 00 00 00 	movabs $0xffff800000000300,%rdx
 ffffffff802249c3:	80 ff ff 
 ffffffff802249c6:	48 01 d0             	add    %rdx,%rax
@@ -34225,10 +34227,10 @@ ffffffff80224a17:	e8 a6 6d ff ff       	call   ffffffff8021b7c2 <__RME_X64_ACPI_
 ffffffff80224a1c:	e8 b0 6e ff ff       	call   ffffffff8021b8d1 <__RME_X64_Feature_Get>
     /* Extract memory specifications */
     __RME_X64_Mem_Init(RME_X64_MBInfo->mmap_addr,RME_X64_MBInfo->mmap_length);
-ffffffff80224a21:	48 8b 05 00 d6 00 00 	mov    0xd600(%rip),%rax        # ffffffff80232028 <RME_X64_MBInfo>
+ffffffff80224a21:	48 8b 05 00 f6 00 00 	mov    0xf600(%rip),%rax        # ffffffff80234028 <RME_X64_MBInfo>
 ffffffff80224a28:	8b 40 2c             	mov    0x2c(%rax),%eax
 ffffffff80224a2b:	89 c2                	mov    %eax,%edx
-ffffffff80224a2d:	48 8b 05 f4 d5 00 00 	mov    0xd5f4(%rip),%rax        # ffffffff80232028 <RME_X64_MBInfo>
+ffffffff80224a2d:	48 8b 05 f4 f5 00 00 	mov    0xf5f4(%rip),%rax        # ffffffff80234028 <RME_X64_MBInfo>
 ffffffff80224a34:	8b 40 30             	mov    0x30(%rax),%eax
 ffffffff80224a37:	89 c0                	mov    %eax,%eax
 ffffffff80224a39:	48 89 d6             	mov    %rdx,%rsi
@@ -34258,13 +34260,13 @@ ffffffff80224a53:	48 83 ec 30          	sub    $0x30,%rsp
 
     /* Now initialize the kernel object allocation table */
     _RME_Kot_Init(RME_X64_Layout.Kot_Size/sizeof(rme_ptr_t));
-ffffffff80224a57:	48 8b 05 ea d5 00 00 	mov    0xd5ea(%rip),%rax        # ffffffff80232048 <RME_X64_Layout+0x8>
+ffffffff80224a57:	48 8b 05 ea f5 00 00 	mov    0xf5ea(%rip),%rax        # ffffffff80234048 <RME_X64_Layout+0x8>
 ffffffff80224a5e:	48 c1 e8 03          	shr    $0x3,%rax
 ffffffff80224a62:	48 89 c7             	mov    %rax,%rdi
 ffffffff80224a65:	e8 78 d8 fe ff       	call   ffffffff802122e2 <_RME_Kot_Init>
     /* Reset PCID counter */
     RME_X64_PCID_Inc=0;
-ffffffff80224a6a:	48 c7 05 db ec 00 00 	movq   $0x0,0xecdb(%rip)        # ffffffff80233750 <RME_X64_PCID_Inc>
+ffffffff80224a6a:	48 c7 05 db 0c 01 00 	movq   $0x0,0x10cdb(%rip)        # ffffffff80235750 <RME_X64_PCID_Inc>
 ffffffff80224a71:	00 00 00 00 
 
     /* Create the frame for kernel page tables */
@@ -34321,14 +34323,14 @@ ffffffff80224b11:	0f 8e 6b ff ff ff    	jle    ffffffff80224a82 <__RME_Pgt_Kom_I
      * We need to detect whether the 1GB page is supported. If not, we just map the initial tables
      * in, and we know where they are hard-coded in the assembly file */
     if((RME_X64_EXT(RME_X64_CPUID_E1_INFO_FEATURE,3)&RME_X64_E1_EDX_PDPE1GB)!=0)
-ffffffff80224b17:	48 8b 05 6a ea 00 00 	mov    0xea6a(%rip),%rax        # ffffffff80233588 <RME_X64_Feature+0x248>
+ffffffff80224b17:	48 8b 05 6a 0a 01 00 	mov    0x10a6a(%rip),%rax        # ffffffff80235588 <RME_X64_Feature+0x248>
 ffffffff80224b1e:	25 00 00 00 04       	and    $0x4000000,%eax
 ffffffff80224b23:	48 85 c0             	test   %rax,%rax
 ffffffff80224b26:	0f 84 97 00 00 00    	je     ffffffff80224bc3 <__RME_Pgt_Kom_Init+0x178>
     {
         /* Can use 1GB pages */
         RME_DBG_S("\n\rThis CPU have 1GB superpage support");
-ffffffff80224b2c:	48 c7 c7 90 8e 22 80 	mov    $0xffffffff80228e90,%rdi
+ffffffff80224b2c:	48 c7 c7 a0 78 22 80 	mov    $0xffffffff802278a0,%rdi
 ffffffff80224b33:	e8 f5 7e fe ff       	call   ffffffff8020ca2d <RME_Str_Print>
         RME_X64_Kpgt.PDP[0][0]|=RME_X64_MMU_ADDR(0)|RME_X64_MMU_PDE_SUP|RME_X64_MMU_P;
 ffffffff80224b38:	48 8b 05 c1 54 ee ff 	mov    -0x11ab3f(%rip),%rax        # ffffffff8010a000 <RME_X64_Kpgt+0x1000>
@@ -34368,7 +34370,7 @@ ffffffff80224bbe:	e9 84 00 00 00       	jmp    ffffffff80224c47 <__RME_Pgt_Kom_I
     else
     {
         RME_DBG_S("\n\rThis CPU do not have 1GB superpage support");
-ffffffff80224bc3:	48 c7 c7 b8 8e 22 80 	mov    $0xffffffff80228eb8,%rdi
+ffffffff80224bc3:	48 c7 c7 c8 78 22 80 	mov    $0xffffffff802278c8,%rdi
 ffffffff80224bca:	e8 5e 7e fe ff       	call   ffffffff8020ca2d <RME_Str_Print>
         /* Cannot use 1GB pages, we revert to 2MB pages used during kernel startup */
         RME_X64_Kpgt.PDP[0][0]|=0x104000|RME_X64_MMU_P;
@@ -34401,7 +34403,7 @@ ffffffff80224c40:	48 89 05 b1 53 fe ff 	mov    %rax,-0x1ac4f(%rip)        # ffff
 
     /* Ignore all memory below 4G, but we need to get the size of such memory above 16MB */
     Mem=(struct __RME_X64_Mem*)RME_X64_Phys_Mem.Next;
-ffffffff80224c47:	48 8b 05 b2 53 00 00 	mov    0x53b2(%rip),%rax        # ffffffff8022a000 <RME_X64_Phys_Mem>
+ffffffff80224c47:	48 8b 05 b2 73 00 00 	mov    0x73b2(%rip),%rax        # ffffffff8022c000 <RME_X64_Phys_Mem>
 ffffffff80224c4e:	48 89 45 d8          	mov    %rax,-0x28(%rbp)
     while(Mem!=(struct __RME_X64_Mem*)(&RME_X64_Phys_Mem))
 ffffffff80224c52:	eb 26                	jmp    ffffffff80224c7a <__RME_Pgt_Kom_Init+0x22f>
@@ -34420,7 +34422,7 @@ ffffffff80224c6f:	48 8b 45 d8          	mov    -0x28(%rbp),%rax
 ffffffff80224c73:	48 8b 00             	mov    (%rax),%rax
 ffffffff80224c76:	48 89 45 d8          	mov    %rax,-0x28(%rbp)
     while(Mem!=(struct __RME_X64_Mem*)(&RME_X64_Phys_Mem))
-ffffffff80224c7a:	48 81 7d d8 00 a0 22 	cmpq   $0xffffffff8022a000,-0x28(%rbp)
+ffffffff80224c7a:	48 81 7d d8 00 c0 22 	cmpq   $0xffffffff8022c000,-0x28(%rbp)
 ffffffff80224c81:	80 
 ffffffff80224c82:	75 d0                	jne    ffffffff80224c54 <__RME_Pgt_Kom_Init+0x209>
 ffffffff80224c84:	eb 01                	jmp    ffffffff80224c87 <__RME_Pgt_Kom_Init+0x23c>
@@ -34433,10 +34435,10 @@ ffffffff80224c86:	90                   	nop
     RME_ASSERT(Mem->Start_Addr<=RME_POW2(RME_PGT_SIZE_16M));
     /* The raw sizes of kernel memory segment 1 - per CPU area is already aligned so no need to align again */
     RME_X64_Layout.Kom1_Start[0]=RME_X64_Layout.PerCPU_Start+RME_X64_Layout.PerCPU_Size;
-ffffffff80224c87:	48 8b 15 c2 d3 00 00 	mov    0xd3c2(%rip),%rdx        # ffffffff80232050 <RME_X64_Layout+0x10>
-ffffffff80224c8e:	48 8b 05 c3 d3 00 00 	mov    0xd3c3(%rip),%rax        # ffffffff80232058 <RME_X64_Layout+0x18>
+ffffffff80224c87:	48 8b 15 c2 f3 00 00 	mov    0xf3c2(%rip),%rdx        # ffffffff80234050 <RME_X64_Layout+0x10>
+ffffffff80224c8e:	48 8b 05 c3 f3 00 00 	mov    0xf3c3(%rip),%rax        # ffffffff80234058 <RME_X64_Layout+0x18>
 ffffffff80224c95:	48 01 d0             	add    %rdx,%rax
-ffffffff80224c98:	48 89 05 d9 d3 00 00 	mov    %rax,0xd3d9(%rip)        # ffffffff80232078 <RME_X64_Layout+0x38>
+ffffffff80224c98:	48 89 05 d9 f3 00 00 	mov    %rax,0xf3d9(%rip)        # ffffffff80234078 <RME_X64_Layout+0x38>
     RME_X64_Layout.Kom1_Size[0]=Mem->Start_Addr+Mem->Length-RME_POW2(RME_PGT_SIZE_16M)-
 ffffffff80224c9f:	48 8b 45 d8          	mov    -0x28(%rbp),%rax
 ffffffff80224ca3:	48 8b 50 10          	mov    0x10(%rax),%rdx
@@ -34444,13 +34446,13 @@ ffffffff80224ca7:	48 8b 45 d8          	mov    -0x28(%rbp),%rax
 ffffffff80224cab:	48 8b 40 18          	mov    0x18(%rax),%rax
 ffffffff80224caf:	48 01 c2             	add    %rax,%rdx
     		                     RME_X64_VA2PA(RME_X64_Layout.Kom1_Start[0]);
-ffffffff80224cb2:	48 8b 05 bf d3 00 00 	mov    0xd3bf(%rip),%rax        # ffffffff80232078 <RME_X64_Layout+0x38>
+ffffffff80224cb2:	48 8b 05 bf f3 00 00 	mov    0xf3bf(%rip),%rax        # ffffffff80234078 <RME_X64_Layout+0x38>
     RME_X64_Layout.Kom1_Size[0]=Mem->Start_Addr+Mem->Length-RME_POW2(RME_PGT_SIZE_16M)-
 ffffffff80224cb9:	48 29 c2             	sub    %rax,%rdx
 ffffffff80224cbc:	48 b8 00 00 00 ff ff 	movabs $0xffff7fffff000000,%rax
 ffffffff80224cc3:	7f ff ff 
 ffffffff80224cc6:	48 01 d0             	add    %rdx,%rax
-ffffffff80224cc9:	48 89 05 a8 d4 00 00 	mov    %rax,0xd4a8(%rip)        # ffffffff80232178 <RME_X64_Layout+0x138>
+ffffffff80224cc9:	48 89 05 a8 f4 00 00 	mov    %rax,0xf4a8(%rip)        # ffffffff80234178 <RME_X64_Layout+0x138>
 
     /* Add the rest of Kom1 into the array */
     Addr_Cnt=1;
@@ -34480,7 +34482,7 @@ ffffffff80224d06:	48 3d ff ff 3f 00    	cmp    $0x3fffff,%rax
 ffffffff80224d0c:	77 3a                	ja     ffffffff80224d48 <__RME_Pgt_Kom_Init+0x2fd>
         {
             RME_DBG_S("\n\rAbandoning physical memory below 4G: addr 0x");
-ffffffff80224d0e:	48 c7 c7 e8 8e 22 80 	mov    $0xffffffff80228ee8,%rdi
+ffffffff80224d0e:	48 c7 c7 f8 78 22 80 	mov    $0xffffffff802278f8,%rdi
 ffffffff80224d15:	e8 13 7d fe ff       	call   ffffffff8020ca2d <RME_Str_Print>
             RME_DBG_H(Mem->Start_Addr);
 ffffffff80224d1a:	48 8b 45 d8          	mov    -0x28(%rbp),%rax
@@ -34488,7 +34490,7 @@ ffffffff80224d1e:	48 8b 40 10          	mov    0x10(%rax),%rax
 ffffffff80224d22:	48 89 c7             	mov    %rax,%rdi
 ffffffff80224d25:	e8 41 7c fe ff       	call   ffffffff8020c96b <RME_Hex_Print>
             RME_DBG_S(", length 0x");
-ffffffff80224d2a:	48 c7 c7 17 8f 22 80 	mov    $0xffffffff80228f17,%rdi
+ffffffff80224d2a:	48 c7 c7 27 79 22 80 	mov    $0xffffffff80227927,%rdi
 ffffffff80224d31:	e8 f7 7c fe ff       	call   ffffffff8020ca2d <RME_Str_Print>
             RME_DBG_H(Mem->Length);
 ffffffff80224d36:	48 8b 45 d8          	mov    -0x28(%rbp),%rax
@@ -34503,7 +34505,7 @@ ffffffff80224d48:	48 83 7d e0 1f       	cmpq   $0x1f,-0x20(%rbp)
 ffffffff80224d4d:	7e 0c                	jle    ffffffff80224d5b <__RME_Pgt_Kom_Init+0x310>
         {
             RME_DBG_S("\r\nThe memory under 4G is too fragmented. Aborting.");
-ffffffff80224d4f:	48 c7 c7 28 8f 22 80 	mov    $0xffffffff80228f28,%rdi
+ffffffff80224d4f:	48 c7 c7 38 79 22 80 	mov    $0xffffffff80227938,%rdi
 ffffffff80224d56:	e8 d2 7c fe ff       	call   ffffffff8020ca2d <RME_Str_Print>
             RME_ASSERT(0);
         }
@@ -34518,7 +34520,7 @@ ffffffff80224d79:	80 ff ff
 ffffffff80224d7c:	48 01 c2             	add    %rax,%rdx
 ffffffff80224d7f:	48 8b 45 e0          	mov    -0x20(%rbp),%rax
 ffffffff80224d83:	48 83 c0 06          	add    $0x6,%rax
-ffffffff80224d87:	48 89 14 c5 48 20 23 	mov    %rdx,-0x7fdcdfb8(,%rax,8)
+ffffffff80224d87:	48 89 14 c5 48 40 23 	mov    %rdx,-0x7fdcbfb8(,%rax,8)
 ffffffff80224d8e:	80 
         RME_X64_Layout.Kom1_Size[Addr_Cnt]=RME_ROUND_DOWN(Mem->Length,RME_PGT_SIZE_2M);
 ffffffff80224d8f:	48 8b 45 d8          	mov    -0x28(%rbp),%rax
@@ -34527,12 +34529,12 @@ ffffffff80224d97:	48 25 00 00 e0 ff    	and    $0xffffffffffe00000,%rax
 ffffffff80224d9d:	48 89 c2             	mov    %rax,%rdx
 ffffffff80224da0:	48 8b 45 e0          	mov    -0x20(%rbp),%rax
 ffffffff80224da4:	48 83 c0 26          	add    $0x26,%rax
-ffffffff80224da8:	48 89 14 c5 48 20 23 	mov    %rdx,-0x7fdcdfb8(,%rax,8)
+ffffffff80224da8:	48 89 14 c5 48 40 23 	mov    %rdx,-0x7fdcbfb8(,%rax,8)
 ffffffff80224daf:	80 
         Addr_Cnt++;
 ffffffff80224db0:	48 83 45 e0 01       	addq   $0x1,-0x20(%rbp)
     while(Mem!=(struct __RME_X64_Mem*)(&RME_X64_Phys_Mem))
-ffffffff80224db5:	48 81 7d d8 00 a0 22 	cmpq   $0xffffffff8022a000,-0x28(%rbp)
+ffffffff80224db5:	48 81 7d d8 00 c0 22 	cmpq   $0xffffffff8022c000,-0x28(%rbp)
 ffffffff80224dbc:	80 
 ffffffff80224dbd:	0f 85 1a ff ff ff    	jne    ffffffff80224cdd <__RME_Pgt_Kom_Init+0x292>
 ffffffff80224dc3:	eb 01                	jmp    ffffffff80224dc6 <__RME_Pgt_Kom_Init+0x37b>
@@ -34541,39 +34543,39 @@ ffffffff80224dc5:	90                   	nop
     }
     RME_X64_Layout.Kom1_Trunks=Addr_Cnt;
 ffffffff80224dc6:	48 8b 45 e0          	mov    -0x20(%rbp),%rax
-ffffffff80224dca:	48 89 05 9f d2 00 00 	mov    %rax,0xd29f(%rip)        # ffffffff80232070 <RME_X64_Layout+0x30>
+ffffffff80224dca:	48 89 05 9f f2 00 00 	mov    %rax,0xf29f(%rip)        # ffffffff80234070 <RME_X64_Layout+0x30>
 
     /* This is the hole */
     RME_X64_Layout.Hole_Start=RME_X64_Layout.Kom1_Start[Addr_Cnt-1]+RME_X64_Layout.Kom1_Size[Addr_Cnt-1];
 ffffffff80224dd1:	48 8b 45 e0          	mov    -0x20(%rbp),%rax
 ffffffff80224dd5:	48 83 e8 01          	sub    $0x1,%rax
 ffffffff80224dd9:	48 83 c0 06          	add    $0x6,%rax
-ffffffff80224ddd:	48 8b 14 c5 48 20 23 	mov    -0x7fdcdfb8(,%rax,8),%rdx
+ffffffff80224ddd:	48 8b 14 c5 48 40 23 	mov    -0x7fdcbfb8(,%rax,8),%rdx
 ffffffff80224de4:	80 
 ffffffff80224de5:	48 8b 45 e0          	mov    -0x20(%rbp),%rax
 ffffffff80224de9:	48 83 e8 01          	sub    $0x1,%rax
 ffffffff80224ded:	48 83 c0 26          	add    $0x26,%rax
-ffffffff80224df1:	48 8b 04 c5 48 20 23 	mov    -0x7fdcdfb8(,%rax,8),%rax
+ffffffff80224df1:	48 8b 04 c5 48 40 23 	mov    -0x7fdcbfb8(,%rax,8),%rax
 ffffffff80224df8:	80 
 ffffffff80224df9:	48 01 d0             	add    %rdx,%rax
-ffffffff80224dfc:	48 89 05 75 d4 00 00 	mov    %rax,0xd475(%rip)        # ffffffff80232278 <RME_X64_Layout+0x238>
+ffffffff80224dfc:	48 89 05 75 f4 00 00 	mov    %rax,0xf475(%rip)        # ffffffff80234278 <RME_X64_Layout+0x238>
     RME_X64_Layout.Hole_Size=RME_POW2(RME_PGT_SIZE_4G)-RME_X64_VA2PA(RME_X64_Layout.Hole_Start);
-ffffffff80224e03:	48 8b 05 6e d4 00 00 	mov    0xd46e(%rip),%rax        # ffffffff80232278 <RME_X64_Layout+0x238>
+ffffffff80224e03:	48 8b 05 6e f4 00 00 	mov    0xf46e(%rip),%rax        # ffffffff80234278 <RME_X64_Layout+0x238>
 ffffffff80224e0a:	48 ba 00 00 00 00 01 	movabs $0xffff800100000000,%rdx
 ffffffff80224e11:	80 ff ff 
 ffffffff80224e14:	48 29 c2             	sub    %rax,%rdx
-ffffffff80224e17:	48 89 15 62 d4 00 00 	mov    %rdx,0xd462(%rip)        # ffffffff80232280 <RME_X64_Layout+0x240>
+ffffffff80224e17:	48 89 15 62 f4 00 00 	mov    %rdx,0xf462(%rip)        # ffffffff80234280 <RME_X64_Layout+0x240>
 
     /* Create kernel page mappings for memory above 4GB - we assume only one segment below 4GB */
     RME_X64_Layout.Kpgtbl_Start=RME_X64_Layout.Kom1_Start[0];
-ffffffff80224e1e:	48 8b 05 53 d2 00 00 	mov    0xd253(%rip),%rax        # ffffffff80232078 <RME_X64_Layout+0x38>
-ffffffff80224e25:	48 89 05 34 d2 00 00 	mov    %rax,0xd234(%rip)        # ffffffff80232060 <RME_X64_Layout+0x20>
+ffffffff80224e1e:	48 8b 05 53 f2 00 00 	mov    0xf253(%rip),%rax        # ffffffff80234078 <RME_X64_Layout+0x38>
+ffffffff80224e25:	48 89 05 34 f2 00 00 	mov    %rax,0xf234(%rip)        # ffffffff80234060 <RME_X64_Layout+0x20>
     RME_X64_Layout.Kom2_Start=RME_X64_PA2VA(RME_POW2(RME_PGT_SIZE_4G));
 ffffffff80224e2c:	48 b8 00 00 00 00 01 	movabs $0xffff800100000000,%rax
 ffffffff80224e33:	80 ff ff 
-ffffffff80224e36:	48 89 05 4b d4 00 00 	mov    %rax,0xd44b(%rip)        # ffffffff80232288 <RME_X64_Layout+0x248>
+ffffffff80224e36:	48 89 05 4b f4 00 00 	mov    %rax,0xf44b(%rip)        # ffffffff80234288 <RME_X64_Layout+0x248>
     RME_X64_Layout.Kom2_Size=0;
-ffffffff80224e3d:	48 c7 05 48 d4 00 00 	movq   $0x0,0xd448(%rip)        # ffffffff80232290 <RME_X64_Layout+0x250>
+ffffffff80224e3d:	48 c7 05 48 f4 00 00 	movq   $0x0,0xf448(%rip)        # ffffffff80234290 <RME_X64_Layout+0x250>
 ffffffff80224e44:	00 00 00 00 
 
     /* We have filled the first 4 1GB superpages */
@@ -34597,7 +34599,7 @@ ffffffff80224e6d:	48 3d ff ff 3f 00    	cmp    $0x3fffff,%rax
 ffffffff80224e73:	77 48                	ja     ffffffff80224ebd <__RME_Pgt_Kom_Init+0x472>
         {
             RME_DBG_S("\n\rAbandoning physical memory above 4G: addr 0x");
-ffffffff80224e75:	48 c7 c7 60 8f 22 80 	mov    $0xffffffff80228f60,%rdi
+ffffffff80224e75:	48 c7 c7 70 79 22 80 	mov    $0xffffffff80227970,%rdi
 ffffffff80224e7c:	e8 ac 7b fe ff       	call   ffffffff8020ca2d <RME_Str_Print>
             RME_DBG_H(Mem->Start_Addr);
 ffffffff80224e81:	48 8b 45 d8          	mov    -0x28(%rbp),%rax
@@ -34605,7 +34607,7 @@ ffffffff80224e85:	48 8b 40 10          	mov    0x10(%rax),%rax
 ffffffff80224e89:	48 89 c7             	mov    %rax,%rdi
 ffffffff80224e8c:	e8 da 7a fe ff       	call   ffffffff8020c96b <RME_Hex_Print>
             RME_DBG_S(", length 0x");
-ffffffff80224e91:	48 c7 c7 17 8f 22 80 	mov    $0xffffffff80228f17,%rdi
+ffffffff80224e91:	48 c7 c7 27 79 22 80 	mov    $0xffffffff80227927,%rdi
 ffffffff80224e98:	e8 90 7b fe ff       	call   ffffffff8020ca2d <RME_Str_Print>
             RME_DBG_H(Mem->Length);
 ffffffff80224e9d:	48 8b 45 d8          	mov    -0x28(%rbp),%rax
@@ -34669,7 +34671,7 @@ ffffffff80224f38:	48 83 45 f8 01       	addq   $0x1,-0x8(%rbp)
                 }
                 /* Map this PDE into the PDP */
                 RME_X64_Kpgt.PDP[PML4_Cnt][PDP_Cnt]|=RME_X64_MMU_ADDR(RME_X64_VA2PA(RME_X64_Layout.Kom1_Start[0]))|RME_X64_MMU_P;
-ffffffff80224f3d:	48 8b 05 34 d1 00 00 	mov    0xd134(%rip),%rax        # ffffffff80232078 <RME_X64_Layout+0x38>
+ffffffff80224f3d:	48 8b 05 34 f1 00 00 	mov    0xf134(%rip),%rax        # ffffffff80234078 <RME_X64_Layout+0x38>
 ffffffff80224f44:	48 ba 00 00 00 00 00 	movabs $0x800000000000,%rdx
 ffffffff80224f4b:	80 00 00 
 ffffffff80224f4e:	48 01 c2             	add    %rax,%rdx
@@ -34705,21 +34707,21 @@ ffffffff80224fb4:	48 01 c2             	add    %rax,%rdx
 ffffffff80224fb7:	48 b8 00 f0 ff ff ff 	movabs $0xffffffffff000,%rax
 ffffffff80224fbe:	ff 0f 00 
 ffffffff80224fc1:	48 21 d0             	and    %rdx,%rax
-ffffffff80224fc4:	48 8b 15 ad d0 00 00 	mov    0xd0ad(%rip),%rdx        # ffffffff80232078 <RME_X64_Layout+0x38>
+ffffffff80224fc4:	48 8b 15 ad f0 00 00 	mov    0xf0ad(%rip),%rdx        # ffffffff80234078 <RME_X64_Layout+0x38>
 ffffffff80224fcb:	48 0d 83 01 00 00    	or     $0x183,%rax
 ffffffff80224fd1:	48 89 02             	mov    %rax,(%rdx)
             RME_X64_Layout.Kom1_Start[0]+=sizeof(rme_ptr_t);
-ffffffff80224fd4:	48 8b 05 9d d0 00 00 	mov    0xd09d(%rip),%rax        # ffffffff80232078 <RME_X64_Layout+0x38>
+ffffffff80224fd4:	48 8b 05 9d f0 00 00 	mov    0xf09d(%rip),%rax        # ffffffff80234078 <RME_X64_Layout+0x38>
 ffffffff80224fdb:	48 83 c0 08          	add    $0x8,%rax
-ffffffff80224fdf:	48 89 05 92 d0 00 00 	mov    %rax,0xd092(%rip)        # ffffffff80232078 <RME_X64_Layout+0x38>
+ffffffff80224fdf:	48 89 05 92 f0 00 00 	mov    %rax,0xf092(%rip)        # ffffffff80234078 <RME_X64_Layout+0x38>
             RME_X64_Layout.Kom1_Size[0]-=sizeof(rme_ptr_t);
-ffffffff80224fe6:	48 8b 05 8b d1 00 00 	mov    0xd18b(%rip),%rax        # ffffffff80232178 <RME_X64_Layout+0x138>
+ffffffff80224fe6:	48 8b 05 8b f1 00 00 	mov    0xf18b(%rip),%rax        # ffffffff80234178 <RME_X64_Layout+0x138>
 ffffffff80224fed:	48 83 e8 08          	sub    $0x8,%rax
-ffffffff80224ff1:	48 89 05 80 d1 00 00 	mov    %rax,0xd180(%rip)        # ffffffff80232178 <RME_X64_Layout+0x138>
+ffffffff80224ff1:	48 89 05 80 f1 00 00 	mov    %rax,0xf180(%rip)        # ffffffff80234178 <RME_X64_Layout+0x138>
             RME_X64_Layout.Kom2_Size+=RME_POW2(RME_PGT_SIZE_2M);
-ffffffff80224ff8:	48 8b 05 91 d2 00 00 	mov    0xd291(%rip),%rax        # ffffffff80232290 <RME_X64_Layout+0x250>
+ffffffff80224ff8:	48 8b 05 91 f2 00 00 	mov    0xf291(%rip),%rax        # ffffffff80234290 <RME_X64_Layout+0x250>
 ffffffff80224fff:	48 05 00 00 20 00    	add    $0x200000,%rax
-ffffffff80225005:	48 89 05 84 d2 00 00 	mov    %rax,0xd284(%rip)        # ffffffff80232290 <RME_X64_Layout+0x250>
+ffffffff80225005:	48 89 05 84 f2 00 00 	mov    %rax,0xf284(%rip)        # ffffffff80234290 <RME_X64_Layout+0x250>
         for(Addr_Cnt=0;Addr_Cnt<Mem->Length;Addr_Cnt+=RME_POW2(RME_PGT_SIZE_2M))
 ffffffff8022500c:	48 8b 45 e0          	mov    -0x20(%rbp),%rax
 ffffffff80225010:	48 05 00 00 20 00    	add    $0x200000,%rax
@@ -34736,7 +34738,7 @@ ffffffff8022502f:	48 8b 45 d8          	mov    -0x28(%rbp),%rax
 ffffffff80225033:	48 8b 00             	mov    (%rax),%rax
 ffffffff80225036:	48 89 45 d8          	mov    %rax,-0x28(%rbp)
     while(Mem!=(struct __RME_X64_Mem*)(&RME_X64_Phys_Mem))
-ffffffff8022503a:	48 81 7d d8 00 a0 22 	cmpq   $0xffffffff8022a000,-0x28(%rbp)
+ffffffff8022503a:	48 81 7d d8 00 c0 22 	cmpq   $0xffffffff8022c000,-0x28(%rbp)
 ffffffff80225041:	80 
 ffffffff80225042:	0f 85 1d fe ff ff    	jne    ffffffff80224e65 <__RME_Pgt_Kom_Init+0x41a>
     }
@@ -34766,46 +34768,46 @@ ffffffff8022508d:	7e c3                	jle    ffffffff80225052 <__RME_Pgt_Kom_I
 
     /* Page table allocation finished. Now need to align Kom1 to 2MB page boundary */
     RME_X64_Layout.Kom1_Start[0]=RME_ROUND_UP(RME_X64_Layout.Kom1_Start[0],RME_PGT_SIZE_2M);
-ffffffff8022508f:	48 8b 05 e2 cf 00 00 	mov    0xcfe2(%rip),%rax        # ffffffff80232078 <RME_X64_Layout+0x38>
+ffffffff8022508f:	48 8b 05 e2 ef 00 00 	mov    0xefe2(%rip),%rax        # ffffffff80234078 <RME_X64_Layout+0x38>
 ffffffff80225096:	48 05 ff ff 1f 00    	add    $0x1fffff,%rax
 ffffffff8022509c:	48 25 00 00 e0 ff    	and    $0xffffffffffe00000,%rax
-ffffffff802250a2:	48 89 05 cf cf 00 00 	mov    %rax,0xcfcf(%rip)        # ffffffff80232078 <RME_X64_Layout+0x38>
+ffffffff802250a2:	48 89 05 cf ef 00 00 	mov    %rax,0xefcf(%rip)        # ffffffff80234078 <RME_X64_Layout+0x38>
     RME_X64_Layout.Kom1_Size[0]=RME_ROUND_DOWN(RME_X64_Layout.Kom1_Size[0]-1,RME_PGT_SIZE_2M);
-ffffffff802250a9:	48 8b 05 c8 d0 00 00 	mov    0xd0c8(%rip),%rax        # ffffffff80232178 <RME_X64_Layout+0x138>
+ffffffff802250a9:	48 8b 05 c8 f0 00 00 	mov    0xf0c8(%rip),%rax        # ffffffff80234178 <RME_X64_Layout+0x138>
 ffffffff802250b0:	48 83 e8 01          	sub    $0x1,%rax
 ffffffff802250b4:	48 25 00 00 e0 ff    	and    $0xffffffffffe00000,%rax
-ffffffff802250ba:	48 89 05 b7 d0 00 00 	mov    %rax,0xd0b7(%rip)        # ffffffff80232178 <RME_X64_Layout+0x138>
+ffffffff802250ba:	48 89 05 b7 f0 00 00 	mov    %rax,0xf0b7(%rip)        # ffffffff80234178 <RME_X64_Layout+0x138>
 
     /* All memory is mapped. Now figure out the size of kernel stacks */
     RME_X64_Layout.Kpgtbl_Size=RME_X64_Layout.Kom1_Start[0]-RME_X64_Layout.Kpgtbl_Start;
-ffffffff802250c1:	48 8b 15 b0 cf 00 00 	mov    0xcfb0(%rip),%rdx        # ffffffff80232078 <RME_X64_Layout+0x38>
-ffffffff802250c8:	48 8b 05 91 cf 00 00 	mov    0xcf91(%rip),%rax        # ffffffff80232060 <RME_X64_Layout+0x20>
+ffffffff802250c1:	48 8b 15 b0 ef 00 00 	mov    0xefb0(%rip),%rdx        # ffffffff80234078 <RME_X64_Layout+0x38>
+ffffffff802250c8:	48 8b 05 91 ef 00 00 	mov    0xef91(%rip),%rax        # ffffffff80234060 <RME_X64_Layout+0x20>
 ffffffff802250cf:	48 29 c2             	sub    %rax,%rdx
-ffffffff802250d2:	48 89 15 8f cf 00 00 	mov    %rdx,0xcf8f(%rip)        # ffffffff80232068 <RME_X64_Layout+0x28>
+ffffffff802250d2:	48 89 15 8f ef 00 00 	mov    %rdx,0xef8f(%rip)        # ffffffff80234068 <RME_X64_Layout+0x28>
 
     /* See if we are allocating the stack from Kom2 or Kom1 */
     if(RME_X64_Layout.Kom2_Size==0)
-ffffffff802250d9:	48 8b 05 b0 d1 00 00 	mov    0xd1b0(%rip),%rax        # ffffffff80232290 <RME_X64_Layout+0x250>
+ffffffff802250d9:	48 8b 05 b0 f1 00 00 	mov    0xf1b0(%rip),%rax        # ffffffff80234290 <RME_X64_Layout+0x250>
 ffffffff802250e0:	48 85 c0             	test   %rax,%rax
 ffffffff802250e3:	75 54                	jne    ffffffff80225139 <__RME_Pgt_Kom_Init+0x6ee>
     {
         RME_X64_Layout.Stack_Start=RME_ROUND_DOWN(RME_X64_Layout.Kom1_Start[0]+RME_X64_Layout.Kom1_Size[0]-1,RME_X64_KSTACK_ORDER);
-ffffffff802250e5:	48 8b 15 8c cf 00 00 	mov    0xcf8c(%rip),%rdx        # ffffffff80232078 <RME_X64_Layout+0x38>
-ffffffff802250ec:	48 8b 05 85 d0 00 00 	mov    0xd085(%rip),%rax        # ffffffff80232178 <RME_X64_Layout+0x138>
+ffffffff802250e5:	48 8b 15 8c ef 00 00 	mov    0xef8c(%rip),%rdx        # ffffffff80234078 <RME_X64_Layout+0x38>
+ffffffff802250ec:	48 8b 05 85 f0 00 00 	mov    0xf085(%rip),%rax        # ffffffff80234178 <RME_X64_Layout+0x138>
 ffffffff802250f3:	48 01 d0             	add    %rdx,%rax
 ffffffff802250f6:	48 83 e8 01          	sub    $0x1,%rax
 ffffffff802250fa:	48 25 00 00 f0 ff    	and    $0xfffffffffff00000,%rax
-ffffffff80225100:	48 89 05 91 d1 00 00 	mov    %rax,0xd191(%rip)        # ffffffff80232298 <RME_X64_Layout+0x258>
+ffffffff80225100:	48 89 05 91 f1 00 00 	mov    %rax,0xf191(%rip)        # ffffffff80234298 <RME_X64_Layout+0x258>
         RME_X64_Layout.Stack_Start-=RME_X64_Layout.Stack_Size;
-ffffffff80225107:	48 8b 05 92 d1 00 00 	mov    0xd192(%rip),%rax        # ffffffff802322a0 <RME_X64_Layout+0x260>
-ffffffff8022510e:	48 8b 15 83 d1 00 00 	mov    0xd183(%rip),%rdx        # ffffffff80232298 <RME_X64_Layout+0x258>
+ffffffff80225107:	48 8b 05 92 f1 00 00 	mov    0xf192(%rip),%rax        # ffffffff802342a0 <RME_X64_Layout+0x260>
+ffffffff8022510e:	48 8b 15 83 f1 00 00 	mov    0xf183(%rip),%rdx        # ffffffff80234298 <RME_X64_Layout+0x258>
 ffffffff80225115:	48 29 c2             	sub    %rax,%rdx
-ffffffff80225118:	48 89 15 79 d1 00 00 	mov    %rdx,0xd179(%rip)        # ffffffff80232298 <RME_X64_Layout+0x258>
+ffffffff80225118:	48 89 15 79 f1 00 00 	mov    %rdx,0xf179(%rip)        # ffffffff80234298 <RME_X64_Layout+0x258>
         RME_X64_Layout.Kom1_Size[0]=RME_X64_Layout.Stack_Start-RME_X64_Layout.Kom1_Start[0];
-ffffffff8022511f:	48 8b 15 72 d1 00 00 	mov    0xd172(%rip),%rdx        # ffffffff80232298 <RME_X64_Layout+0x258>
-ffffffff80225126:	48 8b 05 4b cf 00 00 	mov    0xcf4b(%rip),%rax        # ffffffff80232078 <RME_X64_Layout+0x38>
+ffffffff8022511f:	48 8b 15 72 f1 00 00 	mov    0xf172(%rip),%rdx        # ffffffff80234298 <RME_X64_Layout+0x258>
+ffffffff80225126:	48 8b 05 4b ef 00 00 	mov    0xef4b(%rip),%rax        # ffffffff80234078 <RME_X64_Layout+0x38>
 ffffffff8022512d:	48 29 c2             	sub    %rax,%rdx
-ffffffff80225130:	48 89 15 41 d0 00 00 	mov    %rdx,0xd041(%rip)        # ffffffff80232178 <RME_X64_Layout+0x138>
+ffffffff80225130:	48 89 15 41 f0 00 00 	mov    %rdx,0xf041(%rip)        # ffffffff80234178 <RME_X64_Layout+0x138>
 ffffffff80225137:	eb 52                	jmp    ffffffff8022518b <__RME_Pgt_Kom_Init+0x740>
     }
 
@@ -34813,65 +34815,65 @@ ffffffff80225137:	eb 52                	jmp    ffffffff8022518b <__RME_Pgt_Kom_I
     else
     {
         RME_X64_Layout.Stack_Start=RME_ROUND_DOWN(RME_X64_Layout.Kom2_Start+RME_X64_Layout.Kom2_Size-1,RME_X64_KSTACK_ORDER);
-ffffffff80225139:	48 8b 15 48 d1 00 00 	mov    0xd148(%rip),%rdx        # ffffffff80232288 <RME_X64_Layout+0x248>
-ffffffff80225140:	48 8b 05 49 d1 00 00 	mov    0xd149(%rip),%rax        # ffffffff80232290 <RME_X64_Layout+0x250>
+ffffffff80225139:	48 8b 15 48 f1 00 00 	mov    0xf148(%rip),%rdx        # ffffffff80234288 <RME_X64_Layout+0x248>
+ffffffff80225140:	48 8b 05 49 f1 00 00 	mov    0xf149(%rip),%rax        # ffffffff80234290 <RME_X64_Layout+0x250>
 ffffffff80225147:	48 01 d0             	add    %rdx,%rax
 ffffffff8022514a:	48 83 e8 01          	sub    $0x1,%rax
 ffffffff8022514e:	48 25 00 00 f0 ff    	and    $0xfffffffffff00000,%rax
-ffffffff80225154:	48 89 05 3d d1 00 00 	mov    %rax,0xd13d(%rip)        # ffffffff80232298 <RME_X64_Layout+0x258>
+ffffffff80225154:	48 89 05 3d f1 00 00 	mov    %rax,0xf13d(%rip)        # ffffffff80234298 <RME_X64_Layout+0x258>
         RME_X64_Layout.Stack_Start-=RME_X64_Layout.Stack_Size;
-ffffffff8022515b:	48 8b 05 3e d1 00 00 	mov    0xd13e(%rip),%rax        # ffffffff802322a0 <RME_X64_Layout+0x260>
-ffffffff80225162:	48 8b 15 2f d1 00 00 	mov    0xd12f(%rip),%rdx        # ffffffff80232298 <RME_X64_Layout+0x258>
+ffffffff8022515b:	48 8b 05 3e f1 00 00 	mov    0xf13e(%rip),%rax        # ffffffff802342a0 <RME_X64_Layout+0x260>
+ffffffff80225162:	48 8b 15 2f f1 00 00 	mov    0xf12f(%rip),%rdx        # ffffffff80234298 <RME_X64_Layout+0x258>
 ffffffff80225169:	48 29 c2             	sub    %rax,%rdx
-ffffffff8022516c:	48 89 15 25 d1 00 00 	mov    %rdx,0xd125(%rip)        # ffffffff80232298 <RME_X64_Layout+0x258>
+ffffffff8022516c:	48 89 15 25 f1 00 00 	mov    %rdx,0xf125(%rip)        # ffffffff80234298 <RME_X64_Layout+0x258>
         RME_X64_Layout.Kom2_Size=RME_X64_Layout.Stack_Start-RME_X64_Layout.Kom2_Start;
-ffffffff80225173:	48 8b 15 1e d1 00 00 	mov    0xd11e(%rip),%rdx        # ffffffff80232298 <RME_X64_Layout+0x258>
-ffffffff8022517a:	48 8b 05 07 d1 00 00 	mov    0xd107(%rip),%rax        # ffffffff80232288 <RME_X64_Layout+0x248>
+ffffffff80225173:	48 8b 15 1e f1 00 00 	mov    0xf11e(%rip),%rdx        # ffffffff80234298 <RME_X64_Layout+0x258>
+ffffffff8022517a:	48 8b 05 07 f1 00 00 	mov    0xf107(%rip),%rax        # ffffffff80234288 <RME_X64_Layout+0x248>
 ffffffff80225181:	48 29 c2             	sub    %rax,%rdx
-ffffffff80225184:	48 89 15 05 d1 00 00 	mov    %rdx,0xd105(%rip)        # ffffffff80232290 <RME_X64_Layout+0x250>
+ffffffff80225184:	48 89 15 05 f1 00 00 	mov    %rdx,0xf105(%rip)        # ffffffff80234290 <RME_X64_Layout+0x250>
     }
 
     /* Now report all mapping info */
     RME_DBG_S("\n\r\n\rKot_Start:     0x");
-ffffffff8022518b:	48 c7 c7 8f 8f 22 80 	mov    $0xffffffff80228f8f,%rdi
+ffffffff8022518b:	48 c7 c7 9f 79 22 80 	mov    $0xffffffff8022799f,%rdi
 ffffffff80225192:	e8 96 78 fe ff       	call   ffffffff8020ca2d <RME_Str_Print>
     RME_DBG_H(RME_X64_Layout.Kot_Start);
-ffffffff80225197:	48 8b 05 a2 ce 00 00 	mov    0xcea2(%rip),%rax        # ffffffff80232040 <RME_X64_Layout>
+ffffffff80225197:	48 8b 05 a2 ee 00 00 	mov    0xeea2(%rip),%rax        # ffffffff80234040 <RME_X64_Layout>
 ffffffff8022519e:	48 89 c7             	mov    %rax,%rdi
 ffffffff802251a1:	e8 c5 77 fe ff       	call   ffffffff8020c96b <RME_Hex_Print>
     RME_DBG_S("\n\rKot_Size:      0x");
-ffffffff802251a6:	48 c7 c7 a5 8f 22 80 	mov    $0xffffffff80228fa5,%rdi
+ffffffff802251a6:	48 c7 c7 b5 79 22 80 	mov    $0xffffffff802279b5,%rdi
 ffffffff802251ad:	e8 7b 78 fe ff       	call   ffffffff8020ca2d <RME_Str_Print>
     RME_DBG_H(RME_X64_Layout.Kot_Size);
-ffffffff802251b2:	48 8b 05 8f ce 00 00 	mov    0xce8f(%rip),%rax        # ffffffff80232048 <RME_X64_Layout+0x8>
+ffffffff802251b2:	48 8b 05 8f ee 00 00 	mov    0xee8f(%rip),%rax        # ffffffff80234048 <RME_X64_Layout+0x8>
 ffffffff802251b9:	48 89 c7             	mov    %rax,%rdi
 ffffffff802251bc:	e8 aa 77 fe ff       	call   ffffffff8020c96b <RME_Hex_Print>
     RME_DBG_S("\n\rPerCPU_Start:    0x");
-ffffffff802251c1:	48 c7 c7 b9 8f 22 80 	mov    $0xffffffff80228fb9,%rdi
+ffffffff802251c1:	48 c7 c7 c9 79 22 80 	mov    $0xffffffff802279c9,%rdi
 ffffffff802251c8:	e8 60 78 fe ff       	call   ffffffff8020ca2d <RME_Str_Print>
     RME_DBG_H(RME_X64_Layout.PerCPU_Start);
-ffffffff802251cd:	48 8b 05 7c ce 00 00 	mov    0xce7c(%rip),%rax        # ffffffff80232050 <RME_X64_Layout+0x10>
+ffffffff802251cd:	48 8b 05 7c ee 00 00 	mov    0xee7c(%rip),%rax        # ffffffff80234050 <RME_X64_Layout+0x10>
 ffffffff802251d4:	48 89 c7             	mov    %rax,%rdi
 ffffffff802251d7:	e8 8f 77 fe ff       	call   ffffffff8020c96b <RME_Hex_Print>
     RME_DBG_S("\n\rPerCPU_Size:     0x");
-ffffffff802251dc:	48 c7 c7 cf 8f 22 80 	mov    $0xffffffff80228fcf,%rdi
+ffffffff802251dc:	48 c7 c7 df 79 22 80 	mov    $0xffffffff802279df,%rdi
 ffffffff802251e3:	e8 45 78 fe ff       	call   ffffffff8020ca2d <RME_Str_Print>
     RME_DBG_H(RME_X64_Layout.PerCPU_Size);
-ffffffff802251e8:	48 8b 05 69 ce 00 00 	mov    0xce69(%rip),%rax        # ffffffff80232058 <RME_X64_Layout+0x18>
+ffffffff802251e8:	48 8b 05 69 ee 00 00 	mov    0xee69(%rip),%rax        # ffffffff80234058 <RME_X64_Layout+0x18>
 ffffffff802251ef:	48 89 c7             	mov    %rax,%rdi
 ffffffff802251f2:	e8 74 77 fe ff       	call   ffffffff8020c96b <RME_Hex_Print>
     RME_DBG_S("\n\rKpgtbl_Start:    0x");
-ffffffff802251f7:	48 c7 c7 e5 8f 22 80 	mov    $0xffffffff80228fe5,%rdi
+ffffffff802251f7:	48 c7 c7 f5 79 22 80 	mov    $0xffffffff802279f5,%rdi
 ffffffff802251fe:	e8 2a 78 fe ff       	call   ffffffff8020ca2d <RME_Str_Print>
     RME_DBG_H(RME_X64_Layout.Kpgtbl_Start);
-ffffffff80225203:	48 8b 05 56 ce 00 00 	mov    0xce56(%rip),%rax        # ffffffff80232060 <RME_X64_Layout+0x20>
+ffffffff80225203:	48 8b 05 56 ee 00 00 	mov    0xee56(%rip),%rax        # ffffffff80234060 <RME_X64_Layout+0x20>
 ffffffff8022520a:	48 89 c7             	mov    %rax,%rdi
 ffffffff8022520d:	e8 59 77 fe ff       	call   ffffffff8020c96b <RME_Hex_Print>
     RME_DBG_S("\n\rKpgtbl_Size:     0x");
-ffffffff80225212:	48 c7 c7 fb 8f 22 80 	mov    $0xffffffff80228ffb,%rdi
+ffffffff80225212:	48 c7 c7 0b 7a 22 80 	mov    $0xffffffff80227a0b,%rdi
 ffffffff80225219:	e8 0f 78 fe ff       	call   ffffffff8020ca2d <RME_Str_Print>
     RME_DBG_H(RME_X64_Layout.Kpgtbl_Size);
-ffffffff8022521e:	48 8b 05 43 ce 00 00 	mov    0xce43(%rip),%rax        # ffffffff80232068 <RME_X64_Layout+0x28>
+ffffffff8022521e:	48 8b 05 43 ee 00 00 	mov    0xee43(%rip),%rax        # ffffffff80234068 <RME_X64_Layout+0x28>
 ffffffff80225225:	48 89 c7             	mov    %rax,%rdi
 ffffffff80225228:	e8 3e 77 fe ff       	call   ffffffff8020c96b <RME_Hex_Print>
     for(Addr_Cnt=0;Addr_Cnt<RME_X64_Layout.Kom1_Trunks;Addr_Cnt++)
@@ -34880,86 +34882,86 @@ ffffffff80225234:	00
 ffffffff80225235:	eb 7d                	jmp    ffffffff802252b4 <__RME_Pgt_Kom_Init+0x869>
     {
         RME_DBG_S("\n\rKom1_Start[");
-ffffffff80225237:	48 c7 c7 11 90 22 80 	mov    $0xffffffff80229011,%rdi
+ffffffff80225237:	48 c7 c7 21 7a 22 80 	mov    $0xffffffff80227a21,%rdi
 ffffffff8022523e:	e8 ea 77 fe ff       	call   ffffffff8020ca2d <RME_Str_Print>
         RME_DBG_I(Addr_Cnt);
 ffffffff80225243:	48 8b 45 e0          	mov    -0x20(%rbp),%rax
 ffffffff80225247:	48 89 c7             	mov    %rax,%rdi
 ffffffff8022524a:	e8 e4 75 fe ff       	call   ffffffff8020c833 <RME_Int_Print>
         RME_DBG_S("]:  0x");
-ffffffff8022524f:	48 c7 c7 1f 90 22 80 	mov    $0xffffffff8022901f,%rdi
+ffffffff8022524f:	48 c7 c7 2f 7a 22 80 	mov    $0xffffffff80227a2f,%rdi
 ffffffff80225256:	e8 d2 77 fe ff       	call   ffffffff8020ca2d <RME_Str_Print>
         RME_DBG_H(RME_X64_Layout.Kom1_Start[Addr_Cnt]);
 ffffffff8022525b:	48 8b 45 e0          	mov    -0x20(%rbp),%rax
 ffffffff8022525f:	48 83 c0 06          	add    $0x6,%rax
-ffffffff80225263:	48 8b 04 c5 48 20 23 	mov    -0x7fdcdfb8(,%rax,8),%rax
+ffffffff80225263:	48 8b 04 c5 48 40 23 	mov    -0x7fdcbfb8(,%rax,8),%rax
 ffffffff8022526a:	80 
 ffffffff8022526b:	48 89 c7             	mov    %rax,%rdi
 ffffffff8022526e:	e8 f8 76 fe ff       	call   ffffffff8020c96b <RME_Hex_Print>
         RME_DBG_S("\n\rKom1_Size[");
-ffffffff80225273:	48 c7 c7 26 90 22 80 	mov    $0xffffffff80229026,%rdi
+ffffffff80225273:	48 c7 c7 36 7a 22 80 	mov    $0xffffffff80227a36,%rdi
 ffffffff8022527a:	e8 ae 77 fe ff       	call   ffffffff8020ca2d <RME_Str_Print>
         RME_DBG_I(Addr_Cnt);
 ffffffff8022527f:	48 8b 45 e0          	mov    -0x20(%rbp),%rax
 ffffffff80225283:	48 89 c7             	mov    %rax,%rdi
 ffffffff80225286:	e8 a8 75 fe ff       	call   ffffffff8020c833 <RME_Int_Print>
         RME_DBG_S("]:   0x");
-ffffffff8022528b:	48 c7 c7 33 90 22 80 	mov    $0xffffffff80229033,%rdi
+ffffffff8022528b:	48 c7 c7 43 7a 22 80 	mov    $0xffffffff80227a43,%rdi
 ffffffff80225292:	e8 96 77 fe ff       	call   ffffffff8020ca2d <RME_Str_Print>
         RME_DBG_H(RME_X64_Layout.Kom1_Size[Addr_Cnt]);
 ffffffff80225297:	48 8b 45 e0          	mov    -0x20(%rbp),%rax
 ffffffff8022529b:	48 83 c0 26          	add    $0x26,%rax
-ffffffff8022529f:	48 8b 04 c5 48 20 23 	mov    -0x7fdcdfb8(,%rax,8),%rax
+ffffffff8022529f:	48 8b 04 c5 48 40 23 	mov    -0x7fdcbfb8(,%rax,8),%rax
 ffffffff802252a6:	80 
 ffffffff802252a7:	48 89 c7             	mov    %rax,%rdi
 ffffffff802252aa:	e8 bc 76 fe ff       	call   ffffffff8020c96b <RME_Hex_Print>
     for(Addr_Cnt=0;Addr_Cnt<RME_X64_Layout.Kom1_Trunks;Addr_Cnt++)
 ffffffff802252af:	48 83 45 e0 01       	addq   $0x1,-0x20(%rbp)
-ffffffff802252b4:	48 8b 05 b5 cd 00 00 	mov    0xcdb5(%rip),%rax        # ffffffff80232070 <RME_X64_Layout+0x30>
+ffffffff802252b4:	48 8b 05 b5 ed 00 00 	mov    0xedb5(%rip),%rax        # ffffffff80234070 <RME_X64_Layout+0x30>
 ffffffff802252bb:	48 8b 55 e0          	mov    -0x20(%rbp),%rdx
 ffffffff802252bf:	48 39 c2             	cmp    %rax,%rdx
 ffffffff802252c2:	0f 82 6f ff ff ff    	jb     ffffffff80225237 <__RME_Pgt_Kom_Init+0x7ec>
     }
     RME_DBG_S("\n\rHole_Start:      0x");
-ffffffff802252c8:	48 c7 c7 3b 90 22 80 	mov    $0xffffffff8022903b,%rdi
+ffffffff802252c8:	48 c7 c7 4b 7a 22 80 	mov    $0xffffffff80227a4b,%rdi
 ffffffff802252cf:	e8 59 77 fe ff       	call   ffffffff8020ca2d <RME_Str_Print>
     RME_DBG_H(RME_X64_Layout.Hole_Start);
-ffffffff802252d4:	48 8b 05 9d cf 00 00 	mov    0xcf9d(%rip),%rax        # ffffffff80232278 <RME_X64_Layout+0x238>
+ffffffff802252d4:	48 8b 05 9d ef 00 00 	mov    0xef9d(%rip),%rax        # ffffffff80234278 <RME_X64_Layout+0x238>
 ffffffff802252db:	48 89 c7             	mov    %rax,%rdi
 ffffffff802252de:	e8 88 76 fe ff       	call   ffffffff8020c96b <RME_Hex_Print>
     RME_DBG_S("\n\rHole_Size:       0x");
-ffffffff802252e3:	48 c7 c7 51 90 22 80 	mov    $0xffffffff80229051,%rdi
+ffffffff802252e3:	48 c7 c7 61 7a 22 80 	mov    $0xffffffff80227a61,%rdi
 ffffffff802252ea:	e8 3e 77 fe ff       	call   ffffffff8020ca2d <RME_Str_Print>
     RME_DBG_H(RME_X64_Layout.Hole_Size);
-ffffffff802252ef:	48 8b 05 8a cf 00 00 	mov    0xcf8a(%rip),%rax        # ffffffff80232280 <RME_X64_Layout+0x240>
+ffffffff802252ef:	48 8b 05 8a ef 00 00 	mov    0xef8a(%rip),%rax        # ffffffff80234280 <RME_X64_Layout+0x240>
 ffffffff802252f6:	48 89 c7             	mov    %rax,%rdi
 ffffffff802252f9:	e8 6d 76 fe ff       	call   ffffffff8020c96b <RME_Hex_Print>
     RME_DBG_S("\n\rKom2_Start:     0x");
-ffffffff802252fe:	48 c7 c7 67 90 22 80 	mov    $0xffffffff80229067,%rdi
+ffffffff802252fe:	48 c7 c7 77 7a 22 80 	mov    $0xffffffff80227a77,%rdi
 ffffffff80225305:	e8 23 77 fe ff       	call   ffffffff8020ca2d <RME_Str_Print>
     RME_DBG_H(RME_X64_Layout.Kom2_Start);
-ffffffff8022530a:	48 8b 05 77 cf 00 00 	mov    0xcf77(%rip),%rax        # ffffffff80232288 <RME_X64_Layout+0x248>
+ffffffff8022530a:	48 8b 05 77 ef 00 00 	mov    0xef77(%rip),%rax        # ffffffff80234288 <RME_X64_Layout+0x248>
 ffffffff80225311:	48 89 c7             	mov    %rax,%rdi
 ffffffff80225314:	e8 52 76 fe ff       	call   ffffffff8020c96b <RME_Hex_Print>
     RME_DBG_S("\n\rKom2_Size:      0x");
-ffffffff80225319:	48 c7 c7 7c 90 22 80 	mov    $0xffffffff8022907c,%rdi
+ffffffff80225319:	48 c7 c7 8c 7a 22 80 	mov    $0xffffffff80227a8c,%rdi
 ffffffff80225320:	e8 08 77 fe ff       	call   ffffffff8020ca2d <RME_Str_Print>
     RME_DBG_H(RME_X64_Layout.Kom2_Size);
-ffffffff80225325:	48 8b 05 64 cf 00 00 	mov    0xcf64(%rip),%rax        # ffffffff80232290 <RME_X64_Layout+0x250>
+ffffffff80225325:	48 8b 05 64 ef 00 00 	mov    0xef64(%rip),%rax        # ffffffff80234290 <RME_X64_Layout+0x250>
 ffffffff8022532c:	48 89 c7             	mov    %rax,%rdi
 ffffffff8022532f:	e8 37 76 fe ff       	call   ffffffff8020c96b <RME_Hex_Print>
     RME_DBG_S("\n\rStack_Start:     0x");
-ffffffff80225334:	48 c7 c7 91 90 22 80 	mov    $0xffffffff80229091,%rdi
+ffffffff80225334:	48 c7 c7 a1 7a 22 80 	mov    $0xffffffff80227aa1,%rdi
 ffffffff8022533b:	e8 ed 76 fe ff       	call   ffffffff8020ca2d <RME_Str_Print>
     RME_DBG_H(RME_X64_Layout.Stack_Start);
-ffffffff80225340:	48 8b 05 51 cf 00 00 	mov    0xcf51(%rip),%rax        # ffffffff80232298 <RME_X64_Layout+0x258>
+ffffffff80225340:	48 8b 05 51 ef 00 00 	mov    0xef51(%rip),%rax        # ffffffff80234298 <RME_X64_Layout+0x258>
 ffffffff80225347:	48 89 c7             	mov    %rax,%rdi
 ffffffff8022534a:	e8 1c 76 fe ff       	call   ffffffff8020c96b <RME_Hex_Print>
     RME_DBG_S("\n\rStack_Size:      0x");
-ffffffff8022534f:	48 c7 c7 a7 90 22 80 	mov    $0xffffffff802290a7,%rdi
+ffffffff8022534f:	48 c7 c7 b7 7a 22 80 	mov    $0xffffffff80227ab7,%rdi
 ffffffff80225356:	e8 d2 76 fe ff       	call   ffffffff8020ca2d <RME_Str_Print>
     RME_DBG_H(RME_X64_Layout.Stack_Size);
-ffffffff8022535b:	48 8b 05 3e cf 00 00 	mov    0xcf3e(%rip),%rax        # ffffffff802322a0 <RME_X64_Layout+0x260>
+ffffffff8022535b:	48 8b 05 3e ef 00 00 	mov    0xef3e(%rip),%rax        # ffffffff802342a0 <RME_X64_Layout+0x260>
 ffffffff80225362:	48 89 c7             	mov    %rax,%rdi
 ffffffff80225365:	e8 01 76 fe ff       	call   ffffffff8020c96b <RME_Hex_Print>
 
@@ -34994,18 +34996,18 @@ ffffffff80225382:	e8 c2 ef ff ff       	call   ffffffff80224349 <__RME_X64_LAPIC
 ffffffff80225387:	e8 b3 64 fe ff       	call   ffffffff8020b83f <__RME_X64_CPU_Local_Get>
 ffffffff8022538c:	48 89 45 f8          	mov    %rax,-0x8(%rbp)
     RME_ASSERT(CPU_Local->CPUID==RME_X64_CPU_Cnt);
-ffffffff80225390:	48 8b 05 19 cf 00 00 	mov    0xcf19(%rip),%rax        # ffffffff802322b0 <RME_X64_CPU_Cnt>
+ffffffff80225390:	48 8b 05 19 ef 00 00 	mov    0xef19(%rip),%rax        # ffffffff802342b0 <RME_X64_CPU_Cnt>
 
     RME_X64_CPU_Info[RME_X64_CPU_Cnt].Boot_Done=1;
-ffffffff80225397:	48 8b 05 12 cf 00 00 	mov    0xcf12(%rip),%rax        # ffffffff802322b0 <RME_X64_CPU_Cnt>
+ffffffff80225397:	48 8b 05 12 ef 00 00 	mov    0xef12(%rip),%rax        # ffffffff802342b0 <RME_X64_CPU_Cnt>
 ffffffff8022539e:	48 c1 e0 04          	shl    $0x4,%rax
-ffffffff802253a2:	48 05 c8 22 23 80    	add    $0xffffffff802322c8,%rax
+ffffffff802253a2:	48 05 c8 42 23 80    	add    $0xffffffff802342c8,%rax
 ffffffff802253a8:	48 c7 00 01 00 00 00 	movq   $0x1,(%rax)
     /* Spin until the global CPU counter is zero again, which means the booting
      * processor has done booting and we can proceed now */
     while(RME_X64_CPU_Cnt!=0);
 ffffffff802253af:	90                   	nop
-ffffffff802253b0:	48 8b 05 f9 ce 00 00 	mov    0xcef9(%rip),%rax        # ffffffff802322b0 <RME_X64_CPU_Cnt>
+ffffffff802253b0:	48 8b 05 f9 ee 00 00 	mov    0xeef9(%rip),%rax        # ffffffff802342b0 <RME_X64_CPU_Cnt>
 ffffffff802253b7:	48 85 c0             	test   %rax,%rax
 ffffffff802253ba:	75 f4                	jne    ffffffff802253b0 <__RME_SMP_Low_Level_Init+0x3f>
     RME_ASSERT(CPU_Local->Thd_Cur!=0);
@@ -35057,27 +35059,27 @@ ffffffff80225413:	48 83 ec 40          	sub    $0x40,%rsp
     struct RME_Cap_Cpt* Cpt;
     struct RME_CPU_Local* CPU_Local;
     /* Initialize our own CPU-local data structures */
-    RME_X64_CPU_Cnt=0;
-ffffffff80225417:	48 c7 05 8e ce 00 00 	movq   $0x0,0xce8e(%rip)        # ffffffff802322b0 <RME_X64_CPU_Cnt>
+    RME_X64_CPU_Cnt = 0;
+ffffffff80225417:	48 c7 05 8e ee 00 00 	movq   $0x0,0xee8e(%rip)        # ffffffff802342b0 <RME_X64_CPU_Cnt>
 ffffffff8022541e:	00 00 00 00 
     RME_DBG_S("\r\nCPU 0 local IDT/GDT init");
-ffffffff80225422:	48 c7 c7 bd 90 22 80 	mov    $0xffffffff802290bd,%rdi
+ffffffff80225422:	48 c7 c7 cd 7a 22 80 	mov    $0xffffffff80227acd,%rdi
 ffffffff80225429:	e8 ff 75 fe ff       	call   ffffffff8020ca2d <RME_Str_Print>
     __RME_X64_CPU_Local_Init();
 ffffffff8022542e:	e8 47 69 ff ff       	call   ffffffff8021bd7a <__RME_X64_CPU_Local_Init>
     /* Initialize interrupt controllers (PIC, LAPIC, IOAPIC) */
     RME_DBG_S("\r\nCPU 0 LAPIC init");
-ffffffff80225433:	48 c7 c7 d8 90 22 80 	mov    $0xffffffff802290d8,%rdi
+ffffffff80225433:	48 c7 c7 e8 7a 22 80 	mov    $0xffffffff80227ae8,%rdi
 ffffffff8022543a:	e8 ee 75 fe ff       	call   ffffffff8020ca2d <RME_Str_Print>
     __RME_X64_LAPIC_Init();
 ffffffff8022543f:	e8 05 ef ff ff       	call   ffffffff80224349 <__RME_X64_LAPIC_Init>
     RME_DBG_S("\r\nPIC init");
-ffffffff80225444:	48 c7 c7 eb 90 22 80 	mov    $0xffffffff802290eb,%rdi
+ffffffff80225444:	48 c7 c7 fb 7a 22 80 	mov    $0xffffffff80227afb,%rdi
 ffffffff8022544b:	e8 dd 75 fe ff       	call   ffffffff8020ca2d <RME_Str_Print>
     __RME_X64_PIC_Init();
 ffffffff80225450:	e8 4e f0 ff ff       	call   ffffffff802244a3 <__RME_X64_PIC_Init>
     RME_DBG_S("\r\nIOAPIC init");
-ffffffff80225455:	48 c7 c7 f6 90 22 80 	mov    $0xffffffff802290f6,%rdi
+ffffffff80225455:	48 c7 c7 06 7b 22 80 	mov    $0xffffffff80227b06,%rdi
 ffffffff8022545c:	e8 cc 75 fe ff       	call   ffffffff8020ca2d <RME_Str_Print>
     __RME_X64_IOAPIC_Init();
 ffffffff80225461:	e8 11 f2 ff ff       	call   ffffffff80224677 <__RME_X64_IOAPIC_Init>
@@ -35089,11 +35091,11 @@ ffffffff80225466:	e8 cd f2 ff ff       	call   ffffffff80224738 <__RME_X64_SMP_I
     /* Create all initial tables in Kom1, which is sure to be present. We reserve 16
      * pages at the start to load the init process */
     Cur_Addr=RME_X64_Layout.Kom1_Start[0]+16*RME_POW2(RME_PGT_SIZE_2M);
-ffffffff8022546b:	48 8b 05 06 cc 00 00 	mov    0xcc06(%rip),%rax        # ffffffff80232078 <RME_X64_Layout+0x38>
+ffffffff8022546b:	48 8b 05 06 ec 00 00 	mov    0xec06(%rip),%rax        # ffffffff80234078 <RME_X64_Layout+0x38>
 ffffffff80225472:	48 05 00 00 00 02    	add    $0x2000000,%rax
 ffffffff80225478:	48 89 45 f8          	mov    %rax,-0x8(%rbp)
     RME_DBG_S("\r\nKot registration start offset: 0x");
-ffffffff8022547c:	48 c7 c7 08 91 22 80 	mov    $0xffffffff80229108,%rdi
+ffffffff8022547c:	48 c7 c7 18 7b 22 80 	mov    $0xffffffff80227b18,%rdi
 ffffffff80225483:	e8 a5 75 fe ff       	call   ffffffff8020ca2d <RME_Str_Print>
     RME_DBG_H(((Cur_Addr-RME_KOM_VA_BASE)>>RME_KOM_SLOT_ORDER)/8);
 ffffffff80225488:	48 ba 00 00 00 00 00 	movabs $0x800000000000,%rdx
@@ -35273,7 +35275,7 @@ ffffffff80225691:	eb 75                	jmp    ffffffff80225708 <__RME_Boot+0x2f
             Phys_Addr=RME_X64_VA2PA(RME_X64_Layout.Kom1_Start[Kom1_Cnt])+Count;
 ffffffff80225693:	48 8b 45 e8          	mov    -0x18(%rbp),%rax
 ffffffff80225697:	48 83 c0 06          	add    $0x6,%rax
-ffffffff8022569b:	48 8b 14 c5 48 20 23 	mov    -0x7fdcdfb8(,%rax,8),%rdx
+ffffffff8022569b:	48 8b 14 c5 48 40 23 	mov    -0x7fdcbfb8(,%rax,8),%rdx
 ffffffff802256a2:	80 
 ffffffff802256a3:	48 8b 45 f0          	mov    -0x10(%rbp),%rax
 ffffffff802256a7:	48 01 c2             	add    %rax,%rdx
@@ -35305,28 +35307,28 @@ ffffffff802256fe:	48 05 00 00 20 00    	add    $0x200000,%rax
 ffffffff80225704:	48 89 45 f0          	mov    %rax,-0x10(%rbp)
 ffffffff80225708:	48 8b 45 e8          	mov    -0x18(%rbp),%rax
 ffffffff8022570c:	48 83 c0 26          	add    $0x26,%rax
-ffffffff80225710:	48 8b 04 c5 48 20 23 	mov    -0x7fdcdfb8(,%rax,8),%rax
+ffffffff80225710:	48 8b 04 c5 48 40 23 	mov    -0x7fdcbfb8(,%rax,8),%rax
 ffffffff80225717:	80 
 ffffffff80225718:	48 8b 55 f0          	mov    -0x10(%rbp),%rdx
 ffffffff8022571c:	48 39 c2             	cmp    %rax,%rdx
 ffffffff8022571f:	0f 82 6e ff ff ff    	jb     ffffffff80225693 <__RME_Boot+0x288>
     for(Kom1_Cnt=0;Kom1_Cnt<RME_X64_Layout.Kom1_Trunks;Kom1_Cnt++)
 ffffffff80225725:	48 83 45 e8 01       	addq   $0x1,-0x18(%rbp)
-ffffffff8022572a:	48 8b 05 3f c9 00 00 	mov    0xc93f(%rip),%rax        # ffffffff80232070 <RME_X64_Layout+0x30>
+ffffffff8022572a:	48 8b 05 3f e9 00 00 	mov    0xe93f(%rip),%rax        # ffffffff80234070 <RME_X64_Layout+0x30>
 ffffffff80225731:	48 8b 55 e8          	mov    -0x18(%rbp),%rdx
 ffffffff80225735:	48 39 c2             	cmp    %rax,%rdx
 ffffffff80225738:	0f 82 4b ff ff ff    	jb     ffffffff80225689 <__RME_Boot+0x27e>
         }
     }
     RME_DBG_S("\r\nKom1 pages: 0x");
-ffffffff8022573e:	48 c7 c7 2c 91 22 80 	mov    $0xffffffff8022912c,%rdi
+ffffffff8022573e:	48 c7 c7 3c 7b 22 80 	mov    $0xffffffff80227b3c,%rdi
 ffffffff80225745:	e8 e3 72 fe ff       	call   ffffffff8020ca2d <RME_Str_Print>
     RME_DBG_H(Page_Ptr);
 ffffffff8022574a:	48 8b 45 e0          	mov    -0x20(%rbp),%rax
 ffffffff8022574e:	48 89 c7             	mov    %rax,%rdi
 ffffffff80225751:	e8 15 72 fe ff       	call   ffffffff8020c96b <RME_Hex_Print>
     RME_DBG_S(", [0x0, 0x");
-ffffffff80225756:	48 c7 c7 3d 91 22 80 	mov    $0xffffffff8022913d,%rdi
+ffffffff80225756:	48 c7 c7 4d 7b 22 80 	mov    $0xffffffff80227b4d,%rdi
 ffffffff8022575d:	e8 cb 72 fe ff       	call   ffffffff8020ca2d <RME_Str_Print>
     RME_DBG_H(Page_Ptr*RME_POW2(RME_PGT_SIZE_2M)+RME_POW2(RME_PGT_SIZE_2M)-1);
 ffffffff80225762:	48 8b 45 e0          	mov    -0x20(%rbp),%rax
@@ -35335,20 +35337,20 @@ ffffffff8022576a:	48 05 ff ff 1f 00    	add    $0x1fffff,%rax
 ffffffff80225770:	48 89 c7             	mov    %rax,%rdi
 ffffffff80225773:	e8 f3 71 fe ff       	call   ffffffff8020c96b <RME_Hex_Print>
     RME_DBG_S("]");
-ffffffff80225778:	48 c7 c7 48 91 22 80 	mov    $0xffffffff80229148,%rdi
+ffffffff80225778:	48 c7 c7 58 7b 22 80 	mov    $0xffffffff80227b58,%rdi
 ffffffff8022577f:	e8 a9 72 fe ff       	call   ffffffff8020ca2d <RME_Str_Print>
 
     /* Map the Kom2 in - don't want lookups, we know where they are. Offset by 2048 because they are mapped above 4G */
     RME_DBG_S("\r\nKom2 pages: 0x");
-ffffffff80225784:	48 c7 c7 4a 91 22 80 	mov    $0xffffffff8022914a,%rdi
+ffffffff80225784:	48 c7 c7 5a 7b 22 80 	mov    $0xffffffff80227b5a,%rdi
 ffffffff8022578b:	e8 9d 72 fe ff       	call   ffffffff8020ca2d <RME_Str_Print>
     RME_DBG_H(RME_X64_Layout.Kom2_Size/RME_POW2(RME_PGT_SIZE_2M));
-ffffffff80225790:	48 8b 05 f9 ca 00 00 	mov    0xcaf9(%rip),%rax        # ffffffff80232290 <RME_X64_Layout+0x250>
+ffffffff80225790:	48 8b 05 f9 ea 00 00 	mov    0xeaf9(%rip),%rax        # ffffffff80234290 <RME_X64_Layout+0x250>
 ffffffff80225797:	48 c1 e8 15          	shr    $0x15,%rax
 ffffffff8022579b:	48 89 c7             	mov    %rax,%rdi
 ffffffff8022579e:	e8 c8 71 fe ff       	call   ffffffff8020c96b <RME_Hex_Print>
     RME_DBG_S(", [0x");
-ffffffff802257a3:	48 c7 c7 5b 91 22 80 	mov    $0xffffffff8022915b,%rdi
+ffffffff802257a3:	48 c7 c7 6b 7b 22 80 	mov    $0xffffffff80227b6b,%rdi
 ffffffff802257aa:	e8 7e 72 fe ff       	call   ffffffff8020ca2d <RME_Str_Print>
     RME_DBG_H(Page_Ptr*RME_POW2(RME_PGT_SIZE_2M)+RME_POW2(RME_PGT_SIZE_2M));
 ffffffff802257af:	48 8b 45 e0          	mov    -0x20(%rbp),%rax
@@ -35357,7 +35359,7 @@ ffffffff802257b7:	48 c1 e0 15          	shl    $0x15,%rax
 ffffffff802257bb:	48 89 c7             	mov    %rax,%rdi
 ffffffff802257be:	e8 a8 71 fe ff       	call   ffffffff8020c96b <RME_Hex_Print>
     RME_DBG_S(", 0x");
-ffffffff802257c3:	48 c7 c7 3d 8e 22 80 	mov    $0xffffffff80228e3d,%rdi
+ffffffff802257c3:	48 c7 c7 3d 78 22 80 	mov    $0xffffffff8022783d,%rdi
 ffffffff802257ca:	e8 5e 72 fe ff       	call   ffffffff8020ca2d <RME_Str_Print>
     for(Count=2048;Count<(RME_X64_Layout.Kom2_Size/RME_POW2(RME_PGT_SIZE_2M)+2048);Count++)
 ffffffff802257cf:	48 c7 45 f0 00 08 00 	movq   $0x800,-0x10(%rbp)
@@ -35415,7 +35417,7 @@ ffffffff80225888:	e8 15 a5 fe ff       	call   ffffffff8020fda2 <_RME_Pgt_Boot_A
 ffffffff8022588d:	48 83 45 e0 01       	addq   $0x1,-0x20(%rbp)
     for(Count=2048;Count<(RME_X64_Layout.Kom2_Size/RME_POW2(RME_PGT_SIZE_2M)+2048);Count++)
 ffffffff80225892:	48 83 45 f0 01       	addq   $0x1,-0x10(%rbp)
-ffffffff80225897:	48 8b 05 f2 c9 00 00 	mov    0xc9f2(%rip),%rax        # ffffffff80232290 <RME_X64_Layout+0x250>
+ffffffff80225897:	48 8b 05 f2 e9 00 00 	mov    0xe9f2(%rip),%rax        # ffffffff80234290 <RME_X64_Layout+0x250>
 ffffffff8022589e:	48 c1 e8 15          	shr    $0x15,%rax
 ffffffff802258a2:	48 05 00 08 00 00    	add    $0x800,%rax
 ffffffff802258a8:	48 8b 55 f0          	mov    -0x10(%rbp),%rdx
@@ -35429,7 +35431,7 @@ ffffffff802258bd:	48 05 ff ff 1f 00    	add    $0x1fffff,%rax
 ffffffff802258c3:	48 89 c7             	mov    %rax,%rdi
 ffffffff802258c6:	e8 a0 70 fe ff       	call   ffffffff8020c96b <RME_Hex_Print>
     RME_DBG_S("]");
-ffffffff802258cb:	48 c7 c7 48 91 22 80 	mov    $0xffffffff80229148,%rdi
+ffffffff802258cb:	48 c7 c7 58 7b 22 80 	mov    $0xffffffff80227b58,%rdi
 ffffffff802258d2:	e8 56 71 fe ff       	call   ffffffff8020ca2d <RME_Str_Print>
 
     /* Activate the first process - This process cannot be deleted */
@@ -35473,16 +35475,16 @@ ffffffff80225941:	eb 57                	jmp    ffffffff8022599a <__RME_Boot+0x58
         RME_ASSERT(_RME_Kom_Boot_Crt(RME_X64_CPT,
 ffffffff80225943:	48 8b 45 f0          	mov    -0x10(%rbp),%rax
 ffffffff80225947:	48 83 c0 06          	add    $0x6,%rax
-ffffffff8022594b:	48 8b 14 c5 48 20 23 	mov    -0x7fdcdfb8(,%rax,8),%rdx
+ffffffff8022594b:	48 8b 14 c5 48 40 23 	mov    -0x7fdcbfb8(,%rax,8),%rdx
 ffffffff80225952:	80 
 ffffffff80225953:	48 8b 45 f0          	mov    -0x10(%rbp),%rax
 ffffffff80225957:	48 83 c0 26          	add    $0x26,%rax
-ffffffff8022595b:	48 8b 04 c5 48 20 23 	mov    -0x7fdcdfb8(,%rax,8),%rax
+ffffffff8022595b:	48 8b 04 c5 48 40 23 	mov    -0x7fdcbfb8(,%rax,8),%rax
 ffffffff80225962:	80 
 ffffffff80225963:	48 8d 34 02          	lea    (%rdx,%rax,1),%rsi
 ffffffff80225967:	48 8b 45 f0          	mov    -0x10(%rbp),%rax
 ffffffff8022596b:	48 83 c0 06          	add    $0x6,%rax
-ffffffff8022596f:	48 8b 0c c5 48 20 23 	mov    -0x7fdcdfb8(,%rax,8),%rcx
+ffffffff8022596f:	48 8b 0c c5 48 40 23 	mov    -0x7fdcbfb8(,%rax,8),%rcx
 ffffffff80225976:	80 
 ffffffff80225977:	48 8b 55 f0          	mov    -0x10(%rbp),%rdx
 ffffffff8022597b:	48 8b 45 d8          	mov    -0x28(%rbp),%rax
@@ -35493,7 +35495,7 @@ ffffffff8022598d:	48 89 c7             	mov    %rax,%rdi
 ffffffff80225990:	e8 71 cf fe ff       	call   ffffffff80212906 <_RME_Kom_Boot_Crt>
     for(Count=0;Count<RME_X64_Layout.Kom1_Trunks;Count++)
 ffffffff80225995:	48 83 45 f0 01       	addq   $0x1,-0x10(%rbp)
-ffffffff8022599a:	48 8b 05 cf c6 00 00 	mov    0xc6cf(%rip),%rax        # ffffffff80232070 <RME_X64_Layout+0x30>
+ffffffff8022599a:	48 8b 05 cf e6 00 00 	mov    0xe6cf(%rip),%rax        # ffffffff80234070 <RME_X64_Layout+0x30>
 ffffffff802259a1:	48 8b 55 f0          	mov    -0x10(%rbp),%rdx
 ffffffff802259a5:	48 39 c2             	cmp    %rax,%rdx
 ffffffff802259a8:	72 99                	jb     ffffffff80225943 <__RME_Boot+0x538>
@@ -35503,10 +35505,10 @@ ffffffff802259a8:	72 99                	jb     ffffffff80225943 <__RME_Boot+0x53
     }
     /* Create Kom2 capability - cannot create page tables here */
     RME_ASSERT(_RME_Kom_Boot_Crt(RME_X64_CPT,
-ffffffff802259aa:	48 8b 15 d7 c8 00 00 	mov    0xc8d7(%rip),%rdx        # ffffffff80232288 <RME_X64_Layout+0x248>
-ffffffff802259b1:	48 8b 05 d8 c8 00 00 	mov    0xc8d8(%rip),%rax        # ffffffff80232290 <RME_X64_Layout+0x250>
+ffffffff802259aa:	48 8b 15 d7 e8 00 00 	mov    0xe8d7(%rip),%rdx        # ffffffff80234288 <RME_X64_Layout+0x248>
+ffffffff802259b1:	48 8b 05 d8 e8 00 00 	mov    0xe8d8(%rip),%rax        # ffffffff80234290 <RME_X64_Layout+0x250>
 ffffffff802259b8:	48 8d 0c 02          	lea    (%rdx,%rax,1),%rcx
-ffffffff802259bc:	48 8b 15 c5 c8 00 00 	mov    0xc8c5(%rip),%rdx        # ffffffff80232288 <RME_X64_Layout+0x248>
+ffffffff802259bc:	48 8b 15 c5 e8 00 00 	mov    0xe8c5(%rip),%rdx        # ffffffff80234288 <RME_X64_Layout+0x248>
 ffffffff802259c3:	48 8b 45 d8          	mov    -0x28(%rbp),%rax
 ffffffff802259c7:	41 b9 0d 00 00 00    	mov    $0xd,%r9d
 ffffffff802259cd:	49 89 c8             	mov    %rcx,%r8
@@ -35521,7 +35523,7 @@ ffffffff802259e0:	e8 21 cf fe ff       	call   ffffffff80212906 <_RME_Kom_Boot_C
 
     /* Create the initial kernel endpoints for timer ticks */
     RME_ASSERT(_RME_Cpt_Boot_Crt(RME_X64_CPT, RME_BOOT_INIT_CPT, RME_BOOT_TBL_TIMER, Cur_Addr, RME_X64_Num_CPU)==0);
-ffffffff802259e5:	48 8b 0d bc c8 00 00 	mov    0xc8bc(%rip),%rcx        # ffffffff802322a8 <RME_X64_Num_CPU>
+ffffffff802259e5:	48 8b 0d bc e8 00 00 	mov    0xe8bc(%rip),%rcx        # ffffffff802342a8 <RME_X64_Num_CPU>
 ffffffff802259ec:	48 8b 55 f8          	mov    -0x8(%rbp),%rdx
 ffffffff802259f0:	48 8b 45 d8          	mov    -0x28(%rbp),%rax
 ffffffff802259f4:	49 89 c8             	mov    %rcx,%r8
@@ -35531,7 +35533,7 @@ ffffffff802259ff:	be 00 00 00 00       	mov    $0x0,%esi
 ffffffff80225a04:	48 89 c7             	mov    %rax,%rdi
 ffffffff80225a07:	e8 6a 81 fe ff       	call   ffffffff8020db76 <_RME_Cpt_Boot_Crt>
     Cur_Addr+=RME_KOT_VA_BASE_ROUND(RME_CPT_SIZE(RME_X64_Num_CPU));
-ffffffff80225a0c:	48 8b 05 95 c8 00 00 	mov    0xc895(%rip),%rax        # ffffffff802322a8 <RME_X64_Num_CPU>
+ffffffff80225a0c:	48 8b 05 95 e8 00 00 	mov    0xe895(%rip),%rax        # ffffffff802342a8 <RME_X64_Num_CPU>
 ffffffff80225a13:	48 c1 e0 06          	shl    $0x6,%rax
 ffffffff80225a17:	48 05 ff 0f 00 00    	add    $0xfff,%rax
 ffffffff80225a1d:	48 25 00 f0 ff ff    	and    $0xfffffffffffff000,%rax
@@ -35566,14 +35568,14 @@ ffffffff80225a78:	e8 ed 29 ff ff       	call   ffffffff8021846a <_RME_Sig_Boot_C
     for(Count=0;Count<RME_X64_Num_CPU;Count++)
 ffffffff80225a7d:	48 83 45 f0 01       	addq   $0x1,-0x10(%rbp)
 ffffffff80225a82:	48 8b 55 f0          	mov    -0x10(%rbp),%rdx
-ffffffff80225a86:	48 8b 05 1b c8 00 00 	mov    0xc81b(%rip),%rax        # ffffffff802322a8 <RME_X64_Num_CPU>
+ffffffff80225a86:	48 8b 05 1b e8 00 00 	mov    0xe81b(%rip),%rax        # ffffffff802342a8 <RME_X64_Num_CPU>
 ffffffff80225a8d:	48 39 c2             	cmp    %rax,%rdx
 ffffffff80225a90:	72 9f                	jb     ffffffff80225a31 <__RME_Boot+0x626>
     }
 
     /* Create the initial kernel endpoints for all other interrupts */
     RME_ASSERT(_RME_Cpt_Boot_Crt(RME_X64_CPT, RME_BOOT_INIT_CPT, RME_BOOT_TBL_INT, Cur_Addr, RME_X64_Num_CPU)==0);
-ffffffff80225a92:	48 8b 0d 0f c8 00 00 	mov    0xc80f(%rip),%rcx        # ffffffff802322a8 <RME_X64_Num_CPU>
+ffffffff80225a92:	48 8b 0d 0f e8 00 00 	mov    0xe80f(%rip),%rcx        # ffffffff802342a8 <RME_X64_Num_CPU>
 ffffffff80225a99:	48 8b 55 f8          	mov    -0x8(%rbp),%rdx
 ffffffff80225a9d:	48 8b 45 d8          	mov    -0x28(%rbp),%rax
 ffffffff80225aa1:	49 89 c8             	mov    %rcx,%r8
@@ -35583,7 +35585,7 @@ ffffffff80225aac:	be 00 00 00 00       	mov    $0x0,%esi
 ffffffff80225ab1:	48 89 c7             	mov    %rax,%rdi
 ffffffff80225ab4:	e8 bd 80 fe ff       	call   ffffffff8020db76 <_RME_Cpt_Boot_Crt>
     Cur_Addr+=RME_KOT_VA_BASE_ROUND(RME_CPT_SIZE(RME_X64_Num_CPU));
-ffffffff80225ab9:	48 8b 05 e8 c7 00 00 	mov    0xc7e8(%rip),%rax        # ffffffff802322a8 <RME_X64_Num_CPU>
+ffffffff80225ab9:	48 8b 05 e8 e7 00 00 	mov    0xe7e8(%rip),%rax        # ffffffff802342a8 <RME_X64_Num_CPU>
 ffffffff80225ac0:	48 c1 e0 06          	shl    $0x6,%rax
 ffffffff80225ac4:	48 05 ff 0f 00 00    	add    $0xfff,%rax
 ffffffff80225aca:	48 25 00 f0 ff ff    	and    $0xfffffffffffff000,%rax
@@ -35618,14 +35620,14 @@ ffffffff80225b25:	e8 40 29 ff ff       	call   ffffffff8021846a <_RME_Sig_Boot_C
     for(Count=0;Count<RME_X64_Num_CPU;Count++)
 ffffffff80225b2a:	48 83 45 f0 01       	addq   $0x1,-0x10(%rbp)
 ffffffff80225b2f:	48 8b 55 f0          	mov    -0x10(%rbp),%rdx
-ffffffff80225b33:	48 8b 05 6e c7 00 00 	mov    0xc76e(%rip),%rax        # ffffffff802322a8 <RME_X64_Num_CPU>
+ffffffff80225b33:	48 8b 05 6e e7 00 00 	mov    0xe76e(%rip),%rax        # ffffffff802342a8 <RME_X64_Num_CPU>
 ffffffff80225b3a:	48 39 c2             	cmp    %rax,%rdx
 ffffffff80225b3d:	72 9f                	jb     ffffffff80225ade <__RME_Boot+0x6d3>
     }
 
     /* Activate the first thread, and set its priority */
     RME_ASSERT(_RME_Cpt_Boot_Crt(RME_X64_CPT, RME_BOOT_INIT_CPT, RME_BOOT_TBL_THD, Cur_Addr, RME_X64_Num_CPU)==0);
-ffffffff80225b3f:	48 8b 0d 62 c7 00 00 	mov    0xc762(%rip),%rcx        # ffffffff802322a8 <RME_X64_Num_CPU>
+ffffffff80225b3f:	48 8b 0d 62 e7 00 00 	mov    0xe762(%rip),%rcx        # ffffffff802342a8 <RME_X64_Num_CPU>
 ffffffff80225b46:	48 8b 55 f8          	mov    -0x8(%rbp),%rdx
 ffffffff80225b4a:	48 8b 45 d8          	mov    -0x28(%rbp),%rax
 ffffffff80225b4e:	49 89 c8             	mov    %rcx,%r8
@@ -35635,7 +35637,7 @@ ffffffff80225b59:	be 00 00 00 00       	mov    $0x0,%esi
 ffffffff80225b5e:	48 89 c7             	mov    %rax,%rdi
 ffffffff80225b61:	e8 10 80 fe ff       	call   ffffffff8020db76 <_RME_Cpt_Boot_Crt>
     Cur_Addr+=RME_KOT_VA_BASE_ROUND(RME_CPT_SIZE(RME_X64_Num_CPU));
-ffffffff80225b66:	48 8b 05 3b c7 00 00 	mov    0xc73b(%rip),%rax        # ffffffff802322a8 <RME_X64_Num_CPU>
+ffffffff80225b66:	48 8b 05 3b e7 00 00 	mov    0xe73b(%rip),%rax        # ffffffff802342a8 <RME_X64_Num_CPU>
 ffffffff80225b6d:	48 c1 e0 06          	shl    $0x6,%rax
 ffffffff80225b71:	48 05 ff 0f 00 00    	add    $0xfff,%rax
 ffffffff80225b77:	48 25 00 f0 ff ff    	and    $0xfffffffffffff000,%rax
@@ -35669,13 +35671,13 @@ ffffffff80225bd4:	00
     for(Count=0;Count<RME_X64_Num_CPU;Count++)
 ffffffff80225bd5:	48 83 45 f0 01       	addq   $0x1,-0x10(%rbp)
 ffffffff80225bda:	48 8b 55 f0          	mov    -0x10(%rbp),%rdx
-ffffffff80225bde:	48 8b 05 c3 c6 00 00 	mov    0xc6c3(%rip),%rax        # ffffffff802322a8 <RME_X64_Num_CPU>
+ffffffff80225bde:	48 8b 05 c3 e6 00 00 	mov    0xe6c3(%rip),%rax        # ffffffff802342a8 <RME_X64_Num_CPU>
 ffffffff80225be5:	48 39 c2             	cmp    %rax,%rdx
 ffffffff80225be8:	72 a1                	jb     ffffffff80225b8b <__RME_Boot+0x780>
     }
 
     RME_DBG_S("\r\nKot registration end offset: 0x");
-ffffffff80225bea:	48 c7 c7 68 91 22 80 	mov    $0xffffffff80229168,%rdi
+ffffffff80225bea:	48 c7 c7 78 7b 22 80 	mov    $0xffffffff80227b78,%rdi
 ffffffff80225bf1:	e8 37 6e fe ff       	call   ffffffff8020ca2d <RME_Str_Print>
     RME_DBG_H(((Cur_Addr-RME_KOM_VA_BASE)>>RME_KOM_SLOT_ORDER)/8);
 ffffffff80225bf6:	48 ba 00 00 00 00 00 	movabs $0x800000000000,%rdx
@@ -35687,7 +35689,7 @@ ffffffff80225c0b:	48 c1 e8 03          	shr    $0x3,%rax
 ffffffff80225c0f:	48 89 c7             	mov    %rax,%rdi
 ffffffff80225c12:	e8 54 6d fe ff       	call   ffffffff8020c96b <RME_Hex_Print>
     RME_DBG_S("\r\nKom1 frontier: 0x");
-ffffffff80225c17:	48 c7 c7 8a 91 22 80 	mov    $0xffffffff8022918a,%rdi
+ffffffff80225c17:	48 c7 c7 9a 7b 22 80 	mov    $0xffffffff80227b9a,%rdi
 ffffffff80225c1e:	e8 0a 6e fe ff       	call   ffffffff8020ca2d <RME_Str_Print>
     RME_DBG_H(Cur_Addr);
 ffffffff80225c23:	48 8b 45 f8          	mov    -0x8(%rbp),%rax
@@ -35696,13 +35698,13 @@ ffffffff80225c2a:	e8 3c 6d fe ff       	call   ffffffff8020c96b <RME_Hex_Print>
 
     /* Print sizes and halt */
     RME_DBG_S("\r\nThread object size: ");
-ffffffff80225c2f:	48 c7 c7 9e 91 22 80 	mov    $0xffffffff8022919e,%rdi
+ffffffff80225c2f:	48 c7 c7 ae 7b 22 80 	mov    $0xffffffff80227bae,%rdi
 ffffffff80225c36:	e8 f2 6d fe ff       	call   ffffffff8020ca2d <RME_Str_Print>
     RME_DBG_I(sizeof(struct RME_Thd_Struct)/sizeof(rme_ptr_t));
 ffffffff80225c3b:	bf 16 00 00 00       	mov    $0x16,%edi
 ffffffff80225c40:	e8 ee 6b fe ff       	call   ffffffff8020c833 <RME_Int_Print>
     RME_DBG_S("\r\nInvocation object size: ");
-ffffffff80225c45:	48 c7 c7 b5 91 22 80 	mov    $0xffffffff802291b5,%rdi
+ffffffff80225c45:	48 c7 c7 c5 7b 22 80 	mov    $0xffffffff80227bc5,%rdi
 ffffffff80225c4c:	e8 dc 6d fe ff       	call   ffffffff8020ca2d <RME_Str_Print>
     RME_DBG_I(sizeof(struct RME_Inv_Struct)/sizeof(rme_ptr_t));
 ffffffff80225c51:	bf 09 00 00 00       	mov    $0x9,%edi
@@ -35710,7 +35712,7 @@ ffffffff80225c56:	e8 d8 6b fe ff       	call   ffffffff8020c833 <RME_Int_Print>
 
     /* Initialize the timer and start its interrupt routing */
     RME_DBG_S("\r\nTimer init\r\n");
-ffffffff80225c5b:	48 c7 c7 d0 91 22 80 	mov    $0xffffffff802291d0,%rdi
+ffffffff80225c5b:	48 c7 c7 e0 7b 22 80 	mov    $0xffffffff80227be0,%rdi
 ffffffff80225c62:	e8 c6 6d fe ff       	call   ffffffff8020ca2d <RME_Str_Print>
     __RME_X64_Timer_Init();
 ffffffff80225c67:	e8 66 ed ff ff       	call   ffffffff802249d2 <__RME_X64_Timer_Init>
@@ -35728,18 +35730,17 @@ ffffffff80225c8c:	48 8b 40 18          	mov    0x18(%rax),%rax
 ffffffff80225c90:	48 89 c7             	mov    %rax,%rdi
 ffffffff80225c93:	e8 2c 0b 00 00       	call   ffffffff802267c4 <__RME_Pgt_Set>
 
-
     /* Load the init process to address 0x00 - It should be smaller than 2MB */
     extern const unsigned char UVM_Init[];
     _RME_Memcpy(0,(void*)UVM_Init,RME_POW2(RME_PGT_SIZE_2M));
 ffffffff80225c98:	ba 00 00 20 00       	mov    $0x200000,%edx
-ffffffff80225c9d:	48 c7 c6 60 71 22 80 	mov    $0xffffffff80227160,%rsi
+ffffffff80225c9d:	48 c7 c6 00 90 22 80 	mov    $0xffffffff80229000,%rsi
 ffffffff80225ca4:	bf 00 00 00 00       	mov    $0x0,%edi
 ffffffff80225ca9:	e8 3f 72 fe ff       	call   ffffffff8020ceed <_RME_Memcpy>
 
     /* Now other non-booting processors may proceed and go into their threads */
     RME_X64_CPU_Cnt=0;
-ffffffff80225cae:	48 c7 05 f7 c5 00 00 	movq   $0x0,0xc5f7(%rip)        # ffffffff802322b0 <RME_X64_CPU_Cnt>
+ffffffff80225cae:	48 c7 05 f7 e5 00 00 	movq   $0x0,0xe5f7(%rip)        # ffffffff802342b0 <RME_X64_CPU_Cnt>
 ffffffff80225cb5:	00 00 00 00 
     /* Boot into the init thread */
     __RME_Enter_User_Mode(0, RME_X64_USTACK(0), 0);
@@ -36241,7 +36242,7 @@ ffffffff80226104:	55                   	push   %rbp
 ffffffff80226105:	48 89 e5             	mov    %rsp,%rbp
     write_string( 0x07, "Here", 0);
 ffffffff80226108:	ba 00 00 00 00       	mov    $0x0,%edx
-ffffffff8022610d:	48 c7 c6 df 91 22 80 	mov    $0xffffffff802291df,%rsi
+ffffffff8022610d:	48 c7 c6 ef 7b 22 80 	mov    $0xffffffff80227bef,%rsi
 ffffffff80226114:	bf 07 00 00 00       	mov    $0x7,%edi
 ffffffff80226119:	e8 77 ff ff ff       	call   ffffffff80226095 <write_string>
 }
@@ -36456,12 +36457,12 @@ ffffffff8022637b:	48 89 7d f8          	mov    %rdi,-0x8(%rbp)
 ffffffff8022637f:	48 89 75 f0          	mov    %rsi,-0x10(%rbp)
     /* Not handling faults */
     RME_DBG_S("\n\r\n\r*** Fault: ");RME_DBG_I(Reason);RME_DBG_S(" - ");
-ffffffff80226383:	48 c7 c7 e4 91 22 80 	mov    $0xffffffff802291e4,%rdi
+ffffffff80226383:	48 c7 c7 f4 7b 22 80 	mov    $0xffffffff80227bf4,%rdi
 ffffffff8022638a:	e8 9e 66 fe ff       	call   ffffffff8020ca2d <RME_Str_Print>
 ffffffff8022638f:	48 8b 45 f0          	mov    -0x10(%rbp),%rax
 ffffffff80226393:	48 89 c7             	mov    %rax,%rdi
 ffffffff80226396:	e8 98 64 fe ff       	call   ffffffff8020c833 <RME_Int_Print>
-ffffffff8022639b:	48 c7 c7 f4 91 22 80 	mov    $0xffffffff802291f4,%rdi
+ffffffff8022639b:	48 c7 c7 04 7c 22 80 	mov    $0xffffffff80227c04,%rdi
 ffffffff802263a2:	e8 86 66 fe ff       	call   ffffffff8020ca2d <RME_Str_Print>
     /* When handling debug exceptions, note CVE 2018-8897, we may get something at
      * kernel level - If this is what we have, the user must have touched SS + INT */
@@ -36471,252 +36472,252 @@ ffffffff802263a7:	48 83 7d f0 14       	cmpq   $0x14,-0x10(%rbp)
 ffffffff802263ac:	0f 87 4d 01 00 00    	ja     ffffffff802264ff <__RME_X64_Fault_Handler+0x190>
 ffffffff802263b2:	48 8b 45 f0          	mov    -0x10(%rbp),%rax
 ffffffff802263b6:	48 c1 e0 03          	shl    $0x3,%rax
-ffffffff802263ba:	48 05 58 95 22 80    	add    $0xffffffff80229558,%rax
+ffffffff802263ba:	48 05 68 7f 22 80    	add    $0xffffffff80227f68,%rax
 ffffffff802263c0:	48 8b 00             	mov    (%rax),%rax
 ffffffff802263c3:	3e ff e0             	notrack jmp *%rax
     {
         case RME_X64_FAULT_DE:RME_DBG_S("Divide error");break;
-ffffffff802263c6:	48 c7 c7 f8 91 22 80 	mov    $0xffffffff802291f8,%rdi
+ffffffff802263c6:	48 c7 c7 08 7c 22 80 	mov    $0xffffffff80227c08,%rdi
 ffffffff802263cd:	e8 5b 66 fe ff       	call   ffffffff8020ca2d <RME_Str_Print>
 ffffffff802263d2:	e9 35 01 00 00       	jmp    ffffffff8022650c <__RME_X64_Fault_Handler+0x19d>
         case RME_X64_TRAP_DB:RME_DBG_S("Debug exception");break;
-ffffffff802263d7:	48 c7 c7 05 92 22 80 	mov    $0xffffffff80229205,%rdi
+ffffffff802263d7:	48 c7 c7 15 7c 22 80 	mov    $0xffffffff80227c15,%rdi
 ffffffff802263de:	e8 4a 66 fe ff       	call   ffffffff8020ca2d <RME_Str_Print>
 ffffffff802263e3:	e9 24 01 00 00       	jmp    ffffffff8022650c <__RME_X64_Fault_Handler+0x19d>
         case RME_X64_INT_NMI:RME_DBG_S("NMI error");break;
-ffffffff802263e8:	48 c7 c7 15 92 22 80 	mov    $0xffffffff80229215,%rdi
+ffffffff802263e8:	48 c7 c7 25 7c 22 80 	mov    $0xffffffff80227c25,%rdi
 ffffffff802263ef:	e8 39 66 fe ff       	call   ffffffff8020ca2d <RME_Str_Print>
 ffffffff802263f4:	e9 13 01 00 00       	jmp    ffffffff8022650c <__RME_X64_Fault_Handler+0x19d>
         case RME_X64_TRAP_BP:RME_DBG_S("Debug breakpoint");break;
-ffffffff802263f9:	48 c7 c7 1f 92 22 80 	mov    $0xffffffff8022921f,%rdi
+ffffffff802263f9:	48 c7 c7 2f 7c 22 80 	mov    $0xffffffff80227c2f,%rdi
 ffffffff80226400:	e8 28 66 fe ff       	call   ffffffff8020ca2d <RME_Str_Print>
 ffffffff80226405:	e9 02 01 00 00       	jmp    ffffffff8022650c <__RME_X64_Fault_Handler+0x19d>
         case RME_X64_TRAP_OF:RME_DBG_S("Overflow exception");break;
-ffffffff8022640a:	48 c7 c7 30 92 22 80 	mov    $0xffffffff80229230,%rdi
+ffffffff8022640a:	48 c7 c7 40 7c 22 80 	mov    $0xffffffff80227c40,%rdi
 ffffffff80226411:	e8 17 66 fe ff       	call   ffffffff8020ca2d <RME_Str_Print>
 ffffffff80226416:	e9 f1 00 00 00       	jmp    ffffffff8022650c <__RME_X64_Fault_Handler+0x19d>
         case RME_X64_FAULT_BR:RME_DBG_S("Bound range exception");break;
-ffffffff8022641b:	48 c7 c7 43 92 22 80 	mov    $0xffffffff80229243,%rdi
+ffffffff8022641b:	48 c7 c7 53 7c 22 80 	mov    $0xffffffff80227c53,%rdi
 ffffffff80226422:	e8 06 66 fe ff       	call   ffffffff8020ca2d <RME_Str_Print>
 ffffffff80226427:	e9 e0 00 00 00       	jmp    ffffffff8022650c <__RME_X64_Fault_Handler+0x19d>
         case RME_X64_FAULT_UD:RME_DBG_S("Undefined instruction");break;
-ffffffff8022642c:	48 c7 c7 59 92 22 80 	mov    $0xffffffff80229259,%rdi
+ffffffff8022642c:	48 c7 c7 69 7c 22 80 	mov    $0xffffffff80227c69,%rdi
 ffffffff80226433:	e8 f5 65 fe ff       	call   ffffffff8020ca2d <RME_Str_Print>
 ffffffff80226438:	e9 cf 00 00 00       	jmp    ffffffff8022650c <__RME_X64_Fault_Handler+0x19d>
         case RME_X64_FAULT_NM:RME_DBG_S("Device not available");break;
-ffffffff8022643d:	48 c7 c7 6f 92 22 80 	mov    $0xffffffff8022926f,%rdi
+ffffffff8022643d:	48 c7 c7 7f 7c 22 80 	mov    $0xffffffff80227c7f,%rdi
 ffffffff80226444:	e8 e4 65 fe ff       	call   ffffffff8020ca2d <RME_Str_Print>
 ffffffff80226449:	e9 be 00 00 00       	jmp    ffffffff8022650c <__RME_X64_Fault_Handler+0x19d>
         case RME_X64_ABORT_DF:RME_DBG_S("Double(nested) fault exception");break;
-ffffffff8022644e:	48 c7 c7 88 92 22 80 	mov    $0xffffffff80229288,%rdi
+ffffffff8022644e:	48 c7 c7 98 7c 22 80 	mov    $0xffffffff80227c98,%rdi
 ffffffff80226455:	e8 d3 65 fe ff       	call   ffffffff8020ca2d <RME_Str_Print>
 ffffffff8022645a:	e9 ad 00 00 00       	jmp    ffffffff8022650c <__RME_X64_Fault_Handler+0x19d>
         case RME_X64_ABORT_OLD_MF:RME_DBG_S("Coprocessor overrun - not used later on");break;
-ffffffff8022645f:	48 c7 c7 a8 92 22 80 	mov    $0xffffffff802292a8,%rdi
+ffffffff8022645f:	48 c7 c7 b8 7c 22 80 	mov    $0xffffffff80227cb8,%rdi
 ffffffff80226466:	e8 c2 65 fe ff       	call   ffffffff8020ca2d <RME_Str_Print>
 ffffffff8022646b:	e9 9c 00 00 00       	jmp    ffffffff8022650c <__RME_X64_Fault_Handler+0x19d>
         case RME_X64_FAULT_TS:RME_DBG_S("Invalid TSS exception");break;
-ffffffff80226470:	48 c7 c7 d0 92 22 80 	mov    $0xffffffff802292d0,%rdi
+ffffffff80226470:	48 c7 c7 e0 7c 22 80 	mov    $0xffffffff80227ce0,%rdi
 ffffffff80226477:	e8 b1 65 fe ff       	call   ffffffff8020ca2d <RME_Str_Print>
 ffffffff8022647c:	e9 8b 00 00 00       	jmp    ffffffff8022650c <__RME_X64_Fault_Handler+0x19d>
         case RME_X64_FAULT_NP:RME_DBG_S("Segment not present");break;
-ffffffff80226481:	48 c7 c7 e6 92 22 80 	mov    $0xffffffff802292e6,%rdi
+ffffffff80226481:	48 c7 c7 f6 7c 22 80 	mov    $0xffffffff80227cf6,%rdi
 ffffffff80226488:	e8 a0 65 fe ff       	call   ffffffff8020ca2d <RME_Str_Print>
 ffffffff8022648d:	eb 7d                	jmp    ffffffff8022650c <__RME_X64_Fault_Handler+0x19d>
         case RME_X64_FAULT_SS:RME_DBG_S("Stack fault exception");break;
-ffffffff8022648f:	48 c7 c7 fa 92 22 80 	mov    $0xffffffff802292fa,%rdi
+ffffffff8022648f:	48 c7 c7 0a 7d 22 80 	mov    $0xffffffff80227d0a,%rdi
 ffffffff80226496:	e8 92 65 fe ff       	call   ffffffff8020ca2d <RME_Str_Print>
 ffffffff8022649b:	eb 6f                	jmp    ffffffff8022650c <__RME_X64_Fault_Handler+0x19d>
         case RME_X64_FAULT_GP:RME_DBG_S("General protection exception");break;
-ffffffff8022649d:	48 c7 c7 10 93 22 80 	mov    $0xffffffff80229310,%rdi
+ffffffff8022649d:	48 c7 c7 20 7d 22 80 	mov    $0xffffffff80227d20,%rdi
 ffffffff802264a4:	e8 84 65 fe ff       	call   ffffffff8020ca2d <RME_Str_Print>
 ffffffff802264a9:	eb 61                	jmp    ffffffff8022650c <__RME_X64_Fault_Handler+0x19d>
         case RME_X64_FAULT_PF:RME_DBG_S("Page fault exception");break;
-ffffffff802264ab:	48 c7 c7 2d 93 22 80 	mov    $0xffffffff8022932d,%rdi
+ffffffff802264ab:	48 c7 c7 3d 7d 22 80 	mov    $0xffffffff80227d3d,%rdi
 ffffffff802264b2:	e8 76 65 fe ff       	call   ffffffff8020ca2d <RME_Str_Print>
 ffffffff802264b7:	eb 53                	jmp    ffffffff8022650c <__RME_X64_Fault_Handler+0x19d>
         case RME_X64_FAULT_MF:RME_DBG_S("X87 FPU floating-point error:");break;
-ffffffff802264b9:	48 c7 c7 42 93 22 80 	mov    $0xffffffff80229342,%rdi
+ffffffff802264b9:	48 c7 c7 52 7d 22 80 	mov    $0xffffffff80227d52,%rdi
 ffffffff802264c0:	e8 68 65 fe ff       	call   ffffffff8020ca2d <RME_Str_Print>
 ffffffff802264c5:	eb 45                	jmp    ffffffff8022650c <__RME_X64_Fault_Handler+0x19d>
         case RME_X64_FAULT_AC:RME_DBG_S("Alignment check exception");break;
-ffffffff802264c7:	48 c7 c7 60 93 22 80 	mov    $0xffffffff80229360,%rdi
+ffffffff802264c7:	48 c7 c7 70 7d 22 80 	mov    $0xffffffff80227d70,%rdi
 ffffffff802264ce:	e8 5a 65 fe ff       	call   ffffffff8020ca2d <RME_Str_Print>
 ffffffff802264d3:	eb 37                	jmp    ffffffff8022650c <__RME_X64_Fault_Handler+0x19d>
         case RME_X64_ABORT_MC:RME_DBG_S("Machine check exception");break;
-ffffffff802264d5:	48 c7 c7 7a 93 22 80 	mov    $0xffffffff8022937a,%rdi
+ffffffff802264d5:	48 c7 c7 8a 7d 22 80 	mov    $0xffffffff80227d8a,%rdi
 ffffffff802264dc:	e8 4c 65 fe ff       	call   ffffffff8020ca2d <RME_Str_Print>
 ffffffff802264e1:	eb 29                	jmp    ffffffff8022650c <__RME_X64_Fault_Handler+0x19d>
         case RME_X64_FAULT_XM:RME_DBG_S("SIMD floating-point exception");break;
-ffffffff802264e3:	48 c7 c7 92 93 22 80 	mov    $0xffffffff80229392,%rdi
+ffffffff802264e3:	48 c7 c7 a2 7d 22 80 	mov    $0xffffffff80227da2,%rdi
 ffffffff802264ea:	e8 3e 65 fe ff       	call   ffffffff8020ca2d <RME_Str_Print>
 ffffffff802264ef:	eb 1b                	jmp    ffffffff8022650c <__RME_X64_Fault_Handler+0x19d>
         case RME_X64_FAULT_VE:RME_DBG_S("Virtualization exception");break;
-ffffffff802264f1:	48 c7 c7 b0 93 22 80 	mov    $0xffffffff802293b0,%rdi
+ffffffff802264f1:	48 c7 c7 c0 7d 22 80 	mov    $0xffffffff80227dc0,%rdi
 ffffffff802264f8:	e8 30 65 fe ff       	call   ffffffff8020ca2d <RME_Str_Print>
 ffffffff802264fd:	eb 0d                	jmp    ffffffff8022650c <__RME_X64_Fault_Handler+0x19d>
         default:RME_DBG_S("Unknown exception");break;
-ffffffff802264ff:	48 c7 c7 c9 93 22 80 	mov    $0xffffffff802293c9,%rdi
+ffffffff802264ff:	48 c7 c7 d9 7d 22 80 	mov    $0xffffffff80227dd9,%rdi
 ffffffff80226506:	e8 22 65 fe ff       	call   ffffffff8020ca2d <RME_Str_Print>
 ffffffff8022650b:	90                   	nop
     }
     /* Print all registers */
     RME_DBG_S("\n\rRAX:        0x");RME_DBG_H(Reg->RAX);
-ffffffff8022650c:	48 c7 c7 db 93 22 80 	mov    $0xffffffff802293db,%rdi
+ffffffff8022650c:	48 c7 c7 eb 7d 22 80 	mov    $0xffffffff80227deb,%rdi
 ffffffff80226513:	e8 15 65 fe ff       	call   ffffffff8020ca2d <RME_Str_Print>
 ffffffff80226518:	48 8b 45 f8          	mov    -0x8(%rbp),%rax
 ffffffff8022651c:	48 8b 00             	mov    (%rax),%rax
 ffffffff8022651f:	48 89 c7             	mov    %rax,%rdi
 ffffffff80226522:	e8 44 64 fe ff       	call   ffffffff8020c96b <RME_Hex_Print>
     RME_DBG_S("\n\rRBX:        0x");RME_DBG_H(Reg->RBX);
-ffffffff80226527:	48 c7 c7 ec 93 22 80 	mov    $0xffffffff802293ec,%rdi
+ffffffff80226527:	48 c7 c7 fc 7d 22 80 	mov    $0xffffffff80227dfc,%rdi
 ffffffff8022652e:	e8 fa 64 fe ff       	call   ffffffff8020ca2d <RME_Str_Print>
 ffffffff80226533:	48 8b 45 f8          	mov    -0x8(%rbp),%rax
 ffffffff80226537:	48 8b 40 08          	mov    0x8(%rax),%rax
 ffffffff8022653b:	48 89 c7             	mov    %rax,%rdi
 ffffffff8022653e:	e8 28 64 fe ff       	call   ffffffff8020c96b <RME_Hex_Print>
     RME_DBG_S("\n\rRCX:        0x");RME_DBG_H(Reg->RCX);
-ffffffff80226543:	48 c7 c7 fd 93 22 80 	mov    $0xffffffff802293fd,%rdi
+ffffffff80226543:	48 c7 c7 0d 7e 22 80 	mov    $0xffffffff80227e0d,%rdi
 ffffffff8022654a:	e8 de 64 fe ff       	call   ffffffff8020ca2d <RME_Str_Print>
 ffffffff8022654f:	48 8b 45 f8          	mov    -0x8(%rbp),%rax
 ffffffff80226553:	48 8b 40 10          	mov    0x10(%rax),%rax
 ffffffff80226557:	48 89 c7             	mov    %rax,%rdi
 ffffffff8022655a:	e8 0c 64 fe ff       	call   ffffffff8020c96b <RME_Hex_Print>
     RME_DBG_S("\n\rRDX:        0x");RME_DBG_H(Reg->RDX);
-ffffffff8022655f:	48 c7 c7 0e 94 22 80 	mov    $0xffffffff8022940e,%rdi
+ffffffff8022655f:	48 c7 c7 1e 7e 22 80 	mov    $0xffffffff80227e1e,%rdi
 ffffffff80226566:	e8 c2 64 fe ff       	call   ffffffff8020ca2d <RME_Str_Print>
 ffffffff8022656b:	48 8b 45 f8          	mov    -0x8(%rbp),%rax
 ffffffff8022656f:	48 8b 40 18          	mov    0x18(%rax),%rax
 ffffffff80226573:	48 89 c7             	mov    %rax,%rdi
 ffffffff80226576:	e8 f0 63 fe ff       	call   ffffffff8020c96b <RME_Hex_Print>
     RME_DBG_S("\n\rRSI:        0x");RME_DBG_H(Reg->RSI);
-ffffffff8022657b:	48 c7 c7 1f 94 22 80 	mov    $0xffffffff8022941f,%rdi
+ffffffff8022657b:	48 c7 c7 2f 7e 22 80 	mov    $0xffffffff80227e2f,%rdi
 ffffffff80226582:	e8 a6 64 fe ff       	call   ffffffff8020ca2d <RME_Str_Print>
 ffffffff80226587:	48 8b 45 f8          	mov    -0x8(%rbp),%rax
 ffffffff8022658b:	48 8b 40 20          	mov    0x20(%rax),%rax
 ffffffff8022658f:	48 89 c7             	mov    %rax,%rdi
 ffffffff80226592:	e8 d4 63 fe ff       	call   ffffffff8020c96b <RME_Hex_Print>
     RME_DBG_S("\n\rRDI:        0x");RME_DBG_H(Reg->RDI);
-ffffffff80226597:	48 c7 c7 30 94 22 80 	mov    $0xffffffff80229430,%rdi
+ffffffff80226597:	48 c7 c7 40 7e 22 80 	mov    $0xffffffff80227e40,%rdi
 ffffffff8022659e:	e8 8a 64 fe ff       	call   ffffffff8020ca2d <RME_Str_Print>
 ffffffff802265a3:	48 8b 45 f8          	mov    -0x8(%rbp),%rax
 ffffffff802265a7:	48 8b 40 28          	mov    0x28(%rax),%rax
 ffffffff802265ab:	48 89 c7             	mov    %rax,%rdi
 ffffffff802265ae:	e8 b8 63 fe ff       	call   ffffffff8020c96b <RME_Hex_Print>
     RME_DBG_S("\n\rRBP:        0x");RME_DBG_H(Reg->RBP);
-ffffffff802265b3:	48 c7 c7 41 94 22 80 	mov    $0xffffffff80229441,%rdi
+ffffffff802265b3:	48 c7 c7 51 7e 22 80 	mov    $0xffffffff80227e51,%rdi
 ffffffff802265ba:	e8 6e 64 fe ff       	call   ffffffff8020ca2d <RME_Str_Print>
 ffffffff802265bf:	48 8b 45 f8          	mov    -0x8(%rbp),%rax
 ffffffff802265c3:	48 8b 40 30          	mov    0x30(%rax),%rax
 ffffffff802265c7:	48 89 c7             	mov    %rax,%rdi
 ffffffff802265ca:	e8 9c 63 fe ff       	call   ffffffff8020c96b <RME_Hex_Print>
     RME_DBG_S("\n\rR8:         0x");RME_DBG_H(Reg->R8);
-ffffffff802265cf:	48 c7 c7 52 94 22 80 	mov    $0xffffffff80229452,%rdi
+ffffffff802265cf:	48 c7 c7 62 7e 22 80 	mov    $0xffffffff80227e62,%rdi
 ffffffff802265d6:	e8 52 64 fe ff       	call   ffffffff8020ca2d <RME_Str_Print>
 ffffffff802265db:	48 8b 45 f8          	mov    -0x8(%rbp),%rax
 ffffffff802265df:	48 8b 40 38          	mov    0x38(%rax),%rax
 ffffffff802265e3:	48 89 c7             	mov    %rax,%rdi
 ffffffff802265e6:	e8 80 63 fe ff       	call   ffffffff8020c96b <RME_Hex_Print>
     RME_DBG_S("\n\rR9:         0x");RME_DBG_H(Reg->R9);
-ffffffff802265eb:	48 c7 c7 63 94 22 80 	mov    $0xffffffff80229463,%rdi
+ffffffff802265eb:	48 c7 c7 73 7e 22 80 	mov    $0xffffffff80227e73,%rdi
 ffffffff802265f2:	e8 36 64 fe ff       	call   ffffffff8020ca2d <RME_Str_Print>
 ffffffff802265f7:	48 8b 45 f8          	mov    -0x8(%rbp),%rax
 ffffffff802265fb:	48 8b 40 40          	mov    0x40(%rax),%rax
 ffffffff802265ff:	48 89 c7             	mov    %rax,%rdi
 ffffffff80226602:	e8 64 63 fe ff       	call   ffffffff8020c96b <RME_Hex_Print>
     RME_DBG_S("\n\rR10:        0x");RME_DBG_H(Reg->R10);
-ffffffff80226607:	48 c7 c7 74 94 22 80 	mov    $0xffffffff80229474,%rdi
+ffffffff80226607:	48 c7 c7 84 7e 22 80 	mov    $0xffffffff80227e84,%rdi
 ffffffff8022660e:	e8 1a 64 fe ff       	call   ffffffff8020ca2d <RME_Str_Print>
 ffffffff80226613:	48 8b 45 f8          	mov    -0x8(%rbp),%rax
 ffffffff80226617:	48 8b 40 48          	mov    0x48(%rax),%rax
 ffffffff8022661b:	48 89 c7             	mov    %rax,%rdi
 ffffffff8022661e:	e8 48 63 fe ff       	call   ffffffff8020c96b <RME_Hex_Print>
     RME_DBG_S("\n\rR11:        0x");RME_DBG_H(Reg->R11);
-ffffffff80226623:	48 c7 c7 85 94 22 80 	mov    $0xffffffff80229485,%rdi
+ffffffff80226623:	48 c7 c7 95 7e 22 80 	mov    $0xffffffff80227e95,%rdi
 ffffffff8022662a:	e8 fe 63 fe ff       	call   ffffffff8020ca2d <RME_Str_Print>
 ffffffff8022662f:	48 8b 45 f8          	mov    -0x8(%rbp),%rax
 ffffffff80226633:	48 8b 40 50          	mov    0x50(%rax),%rax
 ffffffff80226637:	48 89 c7             	mov    %rax,%rdi
 ffffffff8022663a:	e8 2c 63 fe ff       	call   ffffffff8020c96b <RME_Hex_Print>
     RME_DBG_S("\n\rR12:        0x");RME_DBG_H(Reg->R12);
-ffffffff8022663f:	48 c7 c7 96 94 22 80 	mov    $0xffffffff80229496,%rdi
+ffffffff8022663f:	48 c7 c7 a6 7e 22 80 	mov    $0xffffffff80227ea6,%rdi
 ffffffff80226646:	e8 e2 63 fe ff       	call   ffffffff8020ca2d <RME_Str_Print>
 ffffffff8022664b:	48 8b 45 f8          	mov    -0x8(%rbp),%rax
 ffffffff8022664f:	48 8b 40 58          	mov    0x58(%rax),%rax
 ffffffff80226653:	48 89 c7             	mov    %rax,%rdi
 ffffffff80226656:	e8 10 63 fe ff       	call   ffffffff8020c96b <RME_Hex_Print>
     RME_DBG_S("\n\rR13:        0x");RME_DBG_H(Reg->R13);
-ffffffff8022665b:	48 c7 c7 a7 94 22 80 	mov    $0xffffffff802294a7,%rdi
+ffffffff8022665b:	48 c7 c7 b7 7e 22 80 	mov    $0xffffffff80227eb7,%rdi
 ffffffff80226662:	e8 c6 63 fe ff       	call   ffffffff8020ca2d <RME_Str_Print>
 ffffffff80226667:	48 8b 45 f8          	mov    -0x8(%rbp),%rax
 ffffffff8022666b:	48 8b 40 60          	mov    0x60(%rax),%rax
 ffffffff8022666f:	48 89 c7             	mov    %rax,%rdi
 ffffffff80226672:	e8 f4 62 fe ff       	call   ffffffff8020c96b <RME_Hex_Print>
     RME_DBG_S("\n\rR14:        0x");RME_DBG_H(Reg->R14);
-ffffffff80226677:	48 c7 c7 b8 94 22 80 	mov    $0xffffffff802294b8,%rdi
+ffffffff80226677:	48 c7 c7 c8 7e 22 80 	mov    $0xffffffff80227ec8,%rdi
 ffffffff8022667e:	e8 aa 63 fe ff       	call   ffffffff8020ca2d <RME_Str_Print>
 ffffffff80226683:	48 8b 45 f8          	mov    -0x8(%rbp),%rax
 ffffffff80226687:	48 8b 40 68          	mov    0x68(%rax),%rax
 ffffffff8022668b:	48 89 c7             	mov    %rax,%rdi
 ffffffff8022668e:	e8 d8 62 fe ff       	call   ffffffff8020c96b <RME_Hex_Print>
     RME_DBG_S("\n\rR15:        0x");RME_DBG_H(Reg->R15);
-ffffffff80226693:	48 c7 c7 c9 94 22 80 	mov    $0xffffffff802294c9,%rdi
+ffffffff80226693:	48 c7 c7 d9 7e 22 80 	mov    $0xffffffff80227ed9,%rdi
 ffffffff8022669a:	e8 8e 63 fe ff       	call   ffffffff8020ca2d <RME_Str_Print>
 ffffffff8022669f:	48 8b 45 f8          	mov    -0x8(%rbp),%rax
 ffffffff802266a3:	48 8b 40 70          	mov    0x70(%rax),%rax
 ffffffff802266a7:	48 89 c7             	mov    %rax,%rdi
 ffffffff802266aa:	e8 bc 62 fe ff       	call   ffffffff8020c96b <RME_Hex_Print>
     RME_DBG_S("\n\rINT_NUM:    0x");RME_DBG_H(Reg->INT_NUM);
-ffffffff802266af:	48 c7 c7 da 94 22 80 	mov    $0xffffffff802294da,%rdi
+ffffffff802266af:	48 c7 c7 ea 7e 22 80 	mov    $0xffffffff80227eea,%rdi
 ffffffff802266b6:	e8 72 63 fe ff       	call   ffffffff8020ca2d <RME_Str_Print>
 ffffffff802266bb:	48 8b 45 f8          	mov    -0x8(%rbp),%rax
 ffffffff802266bf:	48 8b 40 78          	mov    0x78(%rax),%rax
 ffffffff802266c3:	48 89 c7             	mov    %rax,%rdi
 ffffffff802266c6:	e8 a0 62 fe ff       	call   ffffffff8020c96b <RME_Hex_Print>
     RME_DBG_S("\n\rERROR_CODE: 0x");RME_DBG_H(Reg->ERROR_CODE);
-ffffffff802266cb:	48 c7 c7 eb 94 22 80 	mov    $0xffffffff802294eb,%rdi
+ffffffff802266cb:	48 c7 c7 fb 7e 22 80 	mov    $0xffffffff80227efb,%rdi
 ffffffff802266d2:	e8 56 63 fe ff       	call   ffffffff8020ca2d <RME_Str_Print>
 ffffffff802266d7:	48 8b 45 f8          	mov    -0x8(%rbp),%rax
 ffffffff802266db:	48 8b 80 80 00 00 00 	mov    0x80(%rax),%rax
 ffffffff802266e2:	48 89 c7             	mov    %rax,%rdi
 ffffffff802266e5:	e8 81 62 fe ff       	call   ffffffff8020c96b <RME_Hex_Print>
     RME_DBG_S("\n\rRIP:        0x");RME_DBG_H(Reg->RIP);
-ffffffff802266ea:	48 c7 c7 fc 94 22 80 	mov    $0xffffffff802294fc,%rdi
+ffffffff802266ea:	48 c7 c7 0c 7f 22 80 	mov    $0xffffffff80227f0c,%rdi
 ffffffff802266f1:	e8 37 63 fe ff       	call   ffffffff8020ca2d <RME_Str_Print>
 ffffffff802266f6:	48 8b 45 f8          	mov    -0x8(%rbp),%rax
 ffffffff802266fa:	48 8b 80 88 00 00 00 	mov    0x88(%rax),%rax
 ffffffff80226701:	48 89 c7             	mov    %rax,%rdi
 ffffffff80226704:	e8 62 62 fe ff       	call   ffffffff8020c96b <RME_Hex_Print>
     RME_DBG_S("\n\rCS:         0x");RME_DBG_H(Reg->CS);
-ffffffff80226709:	48 c7 c7 0d 95 22 80 	mov    $0xffffffff8022950d,%rdi
+ffffffff80226709:	48 c7 c7 1d 7f 22 80 	mov    $0xffffffff80227f1d,%rdi
 ffffffff80226710:	e8 18 63 fe ff       	call   ffffffff8020ca2d <RME_Str_Print>
 ffffffff80226715:	48 8b 45 f8          	mov    -0x8(%rbp),%rax
 ffffffff80226719:	48 8b 80 90 00 00 00 	mov    0x90(%rax),%rax
 ffffffff80226720:	48 89 c7             	mov    %rax,%rdi
 ffffffff80226723:	e8 43 62 fe ff       	call   ffffffff8020c96b <RME_Hex_Print>
     RME_DBG_S("\n\rRFLAGS:     0x");RME_DBG_H(Reg->RFLAGS);
-ffffffff80226728:	48 c7 c7 1e 95 22 80 	mov    $0xffffffff8022951e,%rdi
+ffffffff80226728:	48 c7 c7 2e 7f 22 80 	mov    $0xffffffff80227f2e,%rdi
 ffffffff8022672f:	e8 f9 62 fe ff       	call   ffffffff8020ca2d <RME_Str_Print>
 ffffffff80226734:	48 8b 45 f8          	mov    -0x8(%rbp),%rax
 ffffffff80226738:	48 8b 80 98 00 00 00 	mov    0x98(%rax),%rax
 ffffffff8022673f:	48 89 c7             	mov    %rax,%rdi
 ffffffff80226742:	e8 24 62 fe ff       	call   ffffffff8020c96b <RME_Hex_Print>
     RME_DBG_S("\n\rRSP:        0x");RME_DBG_H(Reg->RSP);
-ffffffff80226747:	48 c7 c7 2f 95 22 80 	mov    $0xffffffff8022952f,%rdi
+ffffffff80226747:	48 c7 c7 3f 7f 22 80 	mov    $0xffffffff80227f3f,%rdi
 ffffffff8022674e:	e8 da 62 fe ff       	call   ffffffff8020ca2d <RME_Str_Print>
 ffffffff80226753:	48 8b 45 f8          	mov    -0x8(%rbp),%rax
 ffffffff80226757:	48 8b 80 a0 00 00 00 	mov    0xa0(%rax),%rax
 ffffffff8022675e:	48 89 c7             	mov    %rax,%rdi
 ffffffff80226761:	e8 05 62 fe ff       	call   ffffffff8020c96b <RME_Hex_Print>
     RME_DBG_S("\n\rSS:         0x");RME_DBG_H(Reg->SS);
-ffffffff80226766:	48 c7 c7 40 95 22 80 	mov    $0xffffffff80229540,%rdi
+ffffffff80226766:	48 c7 c7 50 7f 22 80 	mov    $0xffffffff80227f50,%rdi
 ffffffff8022676d:	e8 bb 62 fe ff       	call   ffffffff8020ca2d <RME_Str_Print>
 ffffffff80226772:	48 8b 45 f8          	mov    -0x8(%rbp),%rax
 ffffffff80226776:	48 8b 80 a8 00 00 00 	mov    0xa8(%rax),%rax
 ffffffff8022677d:	48 89 c7             	mov    %rax,%rdi
 ffffffff80226780:	e8 e6 61 fe ff       	call   ffffffff8020c96b <RME_Hex_Print>
     RME_DBG_S("\n\rHang");
-ffffffff80226785:	48 c7 c7 51 95 22 80 	mov    $0xffffffff80229551,%rdi
+ffffffff80226785:	48 c7 c7 61 7f 22 80 	mov    $0xffffffff80227f61,%rdi
 ffffffff8022678c:	e8 9c 62 fe ff       	call   ffffffff8020ca2d <RME_Str_Print>
 
     while(1);
@@ -36738,7 +36739,7 @@ ffffffff802267a0:	48 89 7d f8          	mov    %rdi,-0x8(%rbp)
 ffffffff802267a4:	48 89 75 f0          	mov    %rsi,-0x10(%rbp)
     /* Not handling interrupts */
     RME_DBG_S("\r\nGeneral int:");
-ffffffff802267a8:	48 c7 c7 00 96 22 80 	mov    $0xffffffff80229600,%rdi
+ffffffff802267a8:	48 c7 c7 10 80 22 80 	mov    $0xffffffff80228010,%rdi
 ffffffff802267af:	e8 79 62 fe ff       	call   ffffffff8020ca2d <RME_Str_Print>
     RME_DBG_I(Int_Num);
 ffffffff802267b4:	48 8b 45 f0          	mov    -0x10(%rbp),%rax
@@ -37022,7 +37023,7 @@ ffffffff802269ed:	48 23 45 e0          	and    -0x20(%rbp),%rax
 ffffffff802269f1:	48 89 c2             	mov    %rax,%rdx
 ffffffff802269f4:	48 8b 45 d0          	mov    -0x30(%rbp),%rax
 ffffffff802269f8:	83 e0 df             	and    $0xffffffdf,%eax
-ffffffff802269fb:	48 8b 04 c5 40 8b 22 	mov    -0x7fdd74c0(,%rax,8),%rax
+ffffffff802269fb:	48 8b 04 c5 40 75 22 	mov    -0x7fdd8ac0(,%rax,8),%rax
 ffffffff80226a02:	80 
 ffffffff80226a03:	48 09 d0             	or     %rdx,%rax
 ffffffff80226a06:	48 83 c8 04          	or     $0x4,%rax
@@ -37036,7 +37037,7 @@ ffffffff80226a1a:	48 23 45 e0          	and    -0x20(%rbp),%rax
 ffffffff80226a1e:	48 89 c2             	mov    %rax,%rdx
 ffffffff80226a21:	48 8b 45 d0          	mov    -0x30(%rbp),%rax
 ffffffff80226a25:	83 e0 df             	and    $0xffffffdf,%eax
-ffffffff80226a28:	48 8b 04 c5 40 8b 22 	mov    -0x7fdd74c0(,%rax,8),%rax
+ffffffff80226a28:	48 8b 04 c5 40 75 22 	mov    -0x7fdd8ac0(,%rax,8),%rax
 ffffffff80226a2f:	80 
 ffffffff80226a30:	48 09 d0             	or     %rdx,%rax
 ffffffff80226a33:	0c 84                	or     $0x84,%al
@@ -37221,7 +37222,7 @@ ffffffff80226bd6:	ff 0f 00
 ffffffff80226bd9:	48 21 c2             	and    %rax,%rdx
 ffffffff80226bdc:	48 8b 45 c0          	mov    -0x40(%rbp),%rax
 ffffffff80226be0:	83 e0 df             	and    $0xffffffdf,%eax
-ffffffff80226be3:	48 8b 04 c5 40 8b 22 	mov    -0x7fdd74c0(,%rax,8),%rax
+ffffffff80226be3:	48 8b 04 c5 40 75 22 	mov    -0x7fdd8ac0(,%rax,8),%rax
 ffffffff80226bea:	80 
 ffffffff80226beb:	48 09 d0             	or     %rdx,%rax
 ffffffff80226bee:	48 83 c8 04          	or     $0x4,%rax
@@ -37468,7 +37469,7 @@ ffffffff80226e2e:	48 8b 45 f0          	mov    -0x10(%rbp),%rax
 ffffffff80226e32:	48 d1 e8             	shr    $1,%rax
 ffffffff80226e35:	83 e0 01             	and    $0x1,%eax
 ffffffff80226e38:	48 09 d0             	or     %rdx,%rax
-ffffffff80226e3b:	48 8b 14 c5 40 8c 22 	mov    -0x7fdd73c0(,%rax,8),%rdx
+ffffffff80226e3b:	48 8b 14 c5 40 76 22 	mov    -0x7fdd89c0(,%rax,8),%rdx
 ffffffff80226e42:	80 
 ffffffff80226e43:	48 8b 45 d0          	mov    -0x30(%rbp),%rax
 ffffffff80226e47:	48 89 10             	mov    %rdx,(%rax)
@@ -37640,7 +37641,7 @@ ffffffff80226ff2:	48 0b 45 e0          	or     -0x20(%rbp),%rax
 ffffffff80226ff6:	48 d1 e8             	shr    $1,%rax
 ffffffff80226ff9:	83 e0 01             	and    $0x1,%eax
 ffffffff80226ffc:	48 09 d0             	or     %rdx,%rax
-ffffffff80226fff:	48 8b 14 c5 40 8c 22 	mov    -0x7fdd73c0(,%rax,8),%rdx
+ffffffff80226fff:	48 8b 14 c5 40 76 22 	mov    -0x7fdd89c0(,%rax,8),%rdx
 ffffffff80227006:	80 
 ffffffff80227007:	48 8b 45 18          	mov    0x18(%rbp),%rax
 ffffffff8022700b:	48 89 10             	mov    %rdx,(%rax)
@@ -37685,7 +37686,6 @@ ffffffff80227059:	c9                   	leave
 ffffffff8022705a:	c3                   	ret
 
 ffffffff8022705b <__RME_Svc_Param_Get>:
-/* End Function:__RME_X64_Pgt_Set*/
 
 /*Function:__RME_Svc_Param_Get*/
 
@@ -37699,122 +37699,157 @@ ffffffff80227067:	48 89 7d f8          	mov    %rdi,-0x8(%rbp)
 ffffffff8022706b:	48 89 75 f0          	mov    %rsi,-0x10(%rbp)
 ffffffff8022706f:	48 89 55 e8          	mov    %rdx,-0x18(%rbp)
 ffffffff80227073:	48 89 4d e0          	mov    %rcx,-0x20(%rbp)
-
+    *Svc=(Reg->RDI)>>32;
+ffffffff80227077:	48 8b 45 f8          	mov    -0x8(%rbp),%rax
+ffffffff8022707b:	48 8b 40 28          	mov    0x28(%rax),%rax
+ffffffff8022707f:	48 c1 e8 20          	shr    $0x20,%rax
+ffffffff80227083:	48 89 c2             	mov    %rax,%rdx
+ffffffff80227086:	48 8b 45 f0          	mov    -0x10(%rbp),%rax
+ffffffff8022708a:	48 89 10             	mov    %rdx,(%rax)
+    *Cid=(Reg->RDI)&0xFFFFFFFF;
+ffffffff8022708d:	48 8b 45 f8          	mov    -0x8(%rbp),%rax
+ffffffff80227091:	48 8b 40 28          	mov    0x28(%rax),%rax
+ffffffff80227095:	89 c2                	mov    %eax,%edx
+ffffffff80227097:	48 8b 45 e8          	mov    -0x18(%rbp),%rax
+ffffffff8022709b:	48 89 10             	mov    %rdx,(%rax)
+    Param[0]=Reg->RSI;
+ffffffff8022709e:	48 8b 45 f8          	mov    -0x8(%rbp),%rax
+ffffffff802270a2:	48 8b 50 20          	mov    0x20(%rax),%rdx
+ffffffff802270a6:	48 8b 45 e0          	mov    -0x20(%rbp),%rax
+ffffffff802270aa:	48 89 10             	mov    %rdx,(%rax)
+    Param[1]=Reg->RDX;
+ffffffff802270ad:	48 8b 45 e0          	mov    -0x20(%rbp),%rax
+ffffffff802270b1:	48 8d 50 08          	lea    0x8(%rax),%rdx
+ffffffff802270b5:	48 8b 45 f8          	mov    -0x8(%rbp),%rax
+ffffffff802270b9:	48 8b 40 18          	mov    0x18(%rax),%rax
+ffffffff802270bd:	48 89 02             	mov    %rax,(%rdx)
+    Param[2]=Reg->R8;
+ffffffff802270c0:	48 8b 45 e0          	mov    -0x20(%rbp),%rax
+ffffffff802270c4:	48 8d 50 10          	lea    0x10(%rax),%rdx
+ffffffff802270c8:	48 8b 45 f8          	mov    -0x8(%rbp),%rax
+ffffffff802270cc:	48 8b 40 38          	mov    0x38(%rax),%rax
+ffffffff802270d0:	48 89 02             	mov    %rax,(%rdx)
 }
-ffffffff80227077:	90                   	nop
-ffffffff80227078:	c9                   	leave
-ffffffff80227079:	c3                   	ret
+ffffffff802270d3:	90                   	nop
+ffffffff802270d4:	c9                   	leave
+ffffffff802270d5:	c3                   	ret
 
-ffffffff8022707a <__RME_Svc_Retval_Set>:
+ffffffff802270d6 <__RME_Svc_Retval_Set>:
 /*End Function:__RME_Svc_Param_Get*/
 
 /*Function:__RME_Svc_Retval_Set*/
 
 void __RME_Svc_Retval_Set(struct RME_Reg_Struct* Reg,rme_ret_t Retval)
 {
-ffffffff8022707a:	f3 0f 1e fa          	endbr64
-ffffffff8022707e:	55                   	push   %rbp
-ffffffff8022707f:	48 89 e5             	mov    %rsp,%rbp
-ffffffff80227082:	48 83 ec 10          	sub    $0x10,%rsp
-ffffffff80227086:	48 89 7d f8          	mov    %rdi,-0x8(%rbp)
-ffffffff8022708a:	48 89 75 f0          	mov    %rsi,-0x10(%rbp)
-
+ffffffff802270d6:	f3 0f 1e fa          	endbr64
+ffffffff802270da:	55                   	push   %rbp
+ffffffff802270db:	48 89 e5             	mov    %rsp,%rbp
+ffffffff802270de:	48 83 ec 10          	sub    $0x10,%rsp
+ffffffff802270e2:	48 89 7d f8          	mov    %rdi,-0x8(%rbp)
+ffffffff802270e6:	48 89 75 f0          	mov    %rsi,-0x10(%rbp)
+    Reg->RAX=(rme_ptr_t)Retval;
+ffffffff802270ea:	48 8b 55 f0          	mov    -0x10(%rbp),%rdx
+ffffffff802270ee:	48 8b 45 f8          	mov    -0x8(%rbp),%rax
+ffffffff802270f2:	48 89 10             	mov    %rdx,(%rax)
 }
-ffffffff8022708e:	90                   	nop
-ffffffff8022708f:	c9                   	leave
-ffffffff80227090:	c3                   	ret
+ffffffff802270f5:	90                   	nop
+ffffffff802270f6:	c9                   	leave
+ffffffff802270f7:	c3                   	ret
 
-ffffffff80227091 <__RME_Inv_Retval_Set>:
+ffffffff802270f8 <__RME_Inv_Retval_Set>:
 
 /*End Function:__RME_Svc_Retval_Set*/
 
 void __RME_Inv_Retval_Set(struct RME_Reg_Struct* Reg,rme_ret_t Retval)
 {
-ffffffff80227091:	f3 0f 1e fa          	endbr64
-ffffffff80227095:	55                   	push   %rbp
-ffffffff80227096:	48 89 e5             	mov    %rsp,%rbp
-ffffffff80227099:	48 83 ec 10          	sub    $0x10,%rsp
-ffffffff8022709d:	48 89 7d f8          	mov    %rdi,-0x8(%rbp)
-ffffffff802270a1:	48 89 75 f0          	mov    %rsi,-0x10(%rbp)
-
-}
-ffffffff802270a5:	90                   	nop
-ffffffff802270a6:	c9                   	leave
-ffffffff802270a7:	c3                   	ret
-
-ffffffff802270a8 <__RME_List_Crt>:
-
-void __RME_List_Crt(volatile struct RME_List* Head)
-{
-ffffffff802270a8:	f3 0f 1e fa          	endbr64
-ffffffff802270ac:	55                   	push   %rbp
-ffffffff802270ad:	48 89 e5             	mov    %rsp,%rbp
-ffffffff802270b0:	48 83 ec 08          	sub    $0x8,%rsp
-ffffffff802270b4:	48 89 7d f8          	mov    %rdi,-0x8(%rbp)
-    Head->Next=Head;
-ffffffff802270b8:	48 8b 45 f8          	mov    -0x8(%rbp),%rax
-ffffffff802270bc:	48 8b 55 f8          	mov    -0x8(%rbp),%rdx
-ffffffff802270c0:	48 89 10             	mov    %rdx,(%rax)
-    Head->Prev=Head;
-ffffffff802270c3:	48 8b 45 f8          	mov    -0x8(%rbp),%rax
-ffffffff802270c7:	48 8b 55 f8          	mov    -0x8(%rbp),%rdx
-ffffffff802270cb:	48 89 50 08          	mov    %rdx,0x8(%rax)
-}
-ffffffff802270cf:	90                   	nop
-ffffffff802270d0:	c9                   	leave
-ffffffff802270d1:	c3                   	ret
-
-ffffffff802270d2 <__RME_List_Ins>:
-
-void __RME_List_Ins(volatile struct RME_List* New,volatile struct RME_List* Prev,volatile struct RME_List* Next)
-{
-ffffffff802270d2:	f3 0f 1e fa          	endbr64
-ffffffff802270d6:	55                   	push   %rbp
-ffffffff802270d7:	48 89 e5             	mov    %rsp,%rbp
-ffffffff802270da:	48 83 ec 18          	sub    $0x18,%rsp
-ffffffff802270de:	48 89 7d f8          	mov    %rdi,-0x8(%rbp)
-ffffffff802270e2:	48 89 75 f0          	mov    %rsi,-0x10(%rbp)
-ffffffff802270e6:	48 89 55 e8          	mov    %rdx,-0x18(%rbp)
-    New->Prev=Prev;
-ffffffff802270ea:	48 8b 45 f8          	mov    -0x8(%rbp),%rax
-ffffffff802270ee:	48 8b 55 f0          	mov    -0x10(%rbp),%rdx
-ffffffff802270f2:	48 89 50 08          	mov    %rdx,0x8(%rax)
-    Prev->Next=New;
-ffffffff802270f6:	48 8b 45 f0          	mov    -0x10(%rbp),%rax
-ffffffff802270fa:	48 8b 55 f8          	mov    -0x8(%rbp),%rdx
-ffffffff802270fe:	48 89 10             	mov    %rdx,(%rax)
-    New->Next=Next;
-ffffffff80227101:	48 8b 45 f8          	mov    -0x8(%rbp),%rax
-ffffffff80227105:	48 8b 55 e8          	mov    -0x18(%rbp),%rdx
-ffffffff80227109:	48 89 10             	mov    %rdx,(%rax)
-    Next->Prev=New;
-ffffffff8022710c:	48 8b 45 e8          	mov    -0x18(%rbp),%rax
-ffffffff80227110:	48 8b 55 f8          	mov    -0x8(%rbp),%rdx
-ffffffff80227114:	48 89 50 08          	mov    %rdx,0x8(%rax)
+ffffffff802270f8:	f3 0f 1e fa          	endbr64
+ffffffff802270fc:	55                   	push   %rbp
+ffffffff802270fd:	48 89 e5             	mov    %rsp,%rbp
+ffffffff80227100:	48 83 ec 10          	sub    $0x10,%rsp
+ffffffff80227104:	48 89 7d f8          	mov    %rdi,-0x8(%rbp)
+ffffffff80227108:	48 89 75 f0          	mov    %rsi,-0x10(%rbp)
+    Reg->RDI=(rme_ptr_t)Retval;
+ffffffff8022710c:	48 8b 55 f0          	mov    -0x10(%rbp),%rdx
+ffffffff80227110:	48 8b 45 f8          	mov    -0x8(%rbp),%rax
+ffffffff80227114:	48 89 50 28          	mov    %rdx,0x28(%rax)
 }
 ffffffff80227118:	90                   	nop
 ffffffff80227119:	c9                   	leave
 ffffffff8022711a:	c3                   	ret
 
-ffffffff8022711b <__RME_List_Del>:
+ffffffff8022711b <__RME_List_Crt>:
 
-void __RME_List_Del(volatile struct RME_List* Prev,volatile struct RME_List* Next)
+void __RME_List_Crt(volatile struct RME_List* Head)
 {
 ffffffff8022711b:	f3 0f 1e fa          	endbr64
 ffffffff8022711f:	55                   	push   %rbp
 ffffffff80227120:	48 89 e5             	mov    %rsp,%rbp
-ffffffff80227123:	48 83 ec 10          	sub    $0x10,%rsp
+ffffffff80227123:	48 83 ec 08          	sub    $0x8,%rsp
 ffffffff80227127:	48 89 7d f8          	mov    %rdi,-0x8(%rbp)
-ffffffff8022712b:	48 89 75 f0          	mov    %rsi,-0x10(%rbp)
-    Prev->Next = Next;
-ffffffff8022712f:	48 8b 45 f8          	mov    -0x8(%rbp),%rax
-ffffffff80227133:	48 8b 55 f0          	mov    -0x10(%rbp),%rdx
-ffffffff80227137:	48 89 10             	mov    %rdx,(%rax)
-    Next->Prev = Prev;
-ffffffff8022713a:	48 8b 45 f0          	mov    -0x10(%rbp),%rax
-ffffffff8022713e:	48 8b 55 f8          	mov    -0x8(%rbp),%rdx
-ffffffff80227142:	48 89 50 08          	mov    %rdx,0x8(%rax)
+    Head->Next=Head;
+ffffffff8022712b:	48 8b 45 f8          	mov    -0x8(%rbp),%rax
+ffffffff8022712f:	48 8b 55 f8          	mov    -0x8(%rbp),%rdx
+ffffffff80227133:	48 89 10             	mov    %rdx,(%rax)
+    Head->Prev=Head;
+ffffffff80227136:	48 8b 45 f8          	mov    -0x8(%rbp),%rax
+ffffffff8022713a:	48 8b 55 f8          	mov    -0x8(%rbp),%rdx
+ffffffff8022713e:	48 89 50 08          	mov    %rdx,0x8(%rax)
 }
-ffffffff80227146:	90                   	nop
-ffffffff80227147:	c9                   	leave
-ffffffff80227148:	c3                   	ret
+ffffffff80227142:	90                   	nop
+ffffffff80227143:	c9                   	leave
+ffffffff80227144:	c3                   	ret
+
+ffffffff80227145 <__RME_List_Ins>:
+
+void __RME_List_Ins(volatile struct RME_List* New,volatile struct RME_List* Prev,volatile struct RME_List* Next)
+{
+ffffffff80227145:	f3 0f 1e fa          	endbr64
+ffffffff80227149:	55                   	push   %rbp
+ffffffff8022714a:	48 89 e5             	mov    %rsp,%rbp
+ffffffff8022714d:	48 83 ec 18          	sub    $0x18,%rsp
+ffffffff80227151:	48 89 7d f8          	mov    %rdi,-0x8(%rbp)
+ffffffff80227155:	48 89 75 f0          	mov    %rsi,-0x10(%rbp)
+ffffffff80227159:	48 89 55 e8          	mov    %rdx,-0x18(%rbp)
+    New->Prev=Prev;
+ffffffff8022715d:	48 8b 45 f8          	mov    -0x8(%rbp),%rax
+ffffffff80227161:	48 8b 55 f0          	mov    -0x10(%rbp),%rdx
+ffffffff80227165:	48 89 50 08          	mov    %rdx,0x8(%rax)
+    Prev->Next=New;
+ffffffff80227169:	48 8b 45 f0          	mov    -0x10(%rbp),%rax
+ffffffff8022716d:	48 8b 55 f8          	mov    -0x8(%rbp),%rdx
+ffffffff80227171:	48 89 10             	mov    %rdx,(%rax)
+    New->Next=Next;
+ffffffff80227174:	48 8b 45 f8          	mov    -0x8(%rbp),%rax
+ffffffff80227178:	48 8b 55 e8          	mov    -0x18(%rbp),%rdx
+ffffffff8022717c:	48 89 10             	mov    %rdx,(%rax)
+    Next->Prev=New;
+ffffffff8022717f:	48 8b 45 e8          	mov    -0x18(%rbp),%rax
+ffffffff80227183:	48 8b 55 f8          	mov    -0x8(%rbp),%rdx
+ffffffff80227187:	48 89 50 08          	mov    %rdx,0x8(%rax)
+}
+ffffffff8022718b:	90                   	nop
+ffffffff8022718c:	c9                   	leave
+ffffffff8022718d:	c3                   	ret
+
+ffffffff8022718e <__RME_List_Del>:
+
+void __RME_List_Del(volatile struct RME_List* Prev,volatile struct RME_List* Next)
+{
+ffffffff8022718e:	f3 0f 1e fa          	endbr64
+ffffffff80227192:	55                   	push   %rbp
+ffffffff80227193:	48 89 e5             	mov    %rsp,%rbp
+ffffffff80227196:	48 83 ec 10          	sub    $0x10,%rsp
+ffffffff8022719a:	48 89 7d f8          	mov    %rdi,-0x8(%rbp)
+ffffffff8022719e:	48 89 75 f0          	mov    %rsi,-0x10(%rbp)
+    Prev->Next = Next;
+ffffffff802271a2:	48 8b 45 f8          	mov    -0x8(%rbp),%rax
+ffffffff802271a6:	48 8b 55 f0          	mov    -0x10(%rbp),%rdx
+ffffffff802271aa:	48 89 10             	mov    %rdx,(%rax)
+    Next->Prev = Prev;
+ffffffff802271ad:	48 8b 45 f0          	mov    -0x10(%rbp),%rax
+ffffffff802271b1:	48 8b 55 f8          	mov    -0x8(%rbp),%rdx
+ffffffff802271b5:	48 89 50 08          	mov    %rdx,0x8(%rax)
+}
+ffffffff802271b9:	90                   	nop
+ffffffff802271ba:	c9                   	leave
+ffffffff802271bb:	c3                   	ret

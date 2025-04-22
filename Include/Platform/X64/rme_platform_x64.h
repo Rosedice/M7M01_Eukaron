@@ -135,7 +135,7 @@ typedef rme_s64_t rme_ret_t;
 #define RME_WORD_BITS                   		(64U)
 #define RME_PREEMPT_PRIO_NUM         			(64U)
 #define RME_TIMESTAMP() 						RME_X64_RDTSC()
-#define RME_KOT_VA_BASE_ROUND(x)        (((x) + 0xFFF) & ~0xFFF)
+#define RME_KOT_VA_BASE_ROUND(x)				RME_ROUND_UP(x,12)
 #define RME_CAPID(table, index) 	(((table) << 16) | (1 << 15) | ((index) & 0x7FFF))
 /* Atomic instructions - The oficial release replaces all these with inline
  * assembly to boost speed. Sometimes this can harm compiler compatibility. If

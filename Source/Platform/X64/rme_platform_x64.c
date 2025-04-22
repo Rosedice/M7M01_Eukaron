@@ -971,7 +971,7 @@ void __RME_X64_IOAPIC_Init(void)
     /* IOAPIC initialization */
     RME_X64_IOAPIC_READ(RME_X64_IOAPIC_REG_VER,Max_Int);
     Max_Int=((Max_Int>>16)&0xFF);
-    RME_DBG_S("\n\rMax int is: ");
+    RME_DBG_S("\n\rMax interupt number is: ");
     RME_DBG_I(Max_Int);
     RME_X64_IOAPIC_READ(RME_X64_IOAPIC_REG_ID,IOAPIC_ID);
     IOAPIC_ID>>=24;
@@ -1396,7 +1396,7 @@ rme_ptr_t __RME_Boot(void)
     struct RME_Cap_Cpt* Cpt;
     struct RME_CPU_Local* CPU_Local;
     /* Initialize our own CPU-local data structures */
-    RME_X64_CPU_Cnt=0;
+    RME_X64_CPU_Cnt = 0;
     RME_DBG_S("\r\nCPU 0 local IDT/GDT init");
     __RME_X64_CPU_Local_Init();
     /* Initialize interrupt controllers (PIC, LAPIC, IOAPIC) */
@@ -1563,7 +1563,6 @@ rme_ptr_t __RME_Boot(void)
     __RME_X64_IOAPIC_Int_Enable(2,0);
     /* Change page tables */
     __RME_Pgt_Set(RME_CAP_GETOBJ((RME_CPU_LOCAL()->Thd_Cur)->Sched.Prc->Pgt,rme_ptr_t));
-
 
     /* Load the init process to address 0x00 - It should be smaller than 2MB */
     extern const unsigned char UVM_Init[];
@@ -2300,21 +2299,16 @@ rme_ptr_t __RME_Pgt_Walk(struct RME_Cap_Pgt* Pgt_Op, rme_ptr_t Vaddr, rme_ptr_t*
 
     return 0;
 }
-/* End Function:__RME_Pgt_Walk *********************************************/
-
-/*Function:__RME_X64_Pgt_Set*/
-
-/*void __RME_X64_Pgt_Set(rme_ptr_t Pgt)
-{
-
-}*/
-/* End Function:__RME_X64_Pgt_Set*/
 
 /*Function:__RME_Svc_Param_Get*/
 
 void __RME_Svc_Param_Get(struct RME_Reg_Struct* Reg,rme_ptr_t* Svc,rme_ptr_t* Cid,rme_ptr_t* Param)
 {
-
+    *Svc=(Reg->RDI)>>32;
+    *Cid=(Reg->RDI)&0xFFFFFFFF;
+    Param[0]=Reg->RSI;
+    Param[1]=Reg->RDX;
+    Param[2]=Reg->R8;
 }
 
 /*End Function:__RME_Svc_Param_Get*/
@@ -2323,14 +2317,14 @@ void __RME_Svc_Param_Get(struct RME_Reg_Struct* Reg,rme_ptr_t* Svc,rme_ptr_t* Ci
 
 void __RME_Svc_Retval_Set(struct RME_Reg_Struct* Reg,rme_ret_t Retval)
 {
-
+    Reg->RAX=(rme_ptr_t)Retval;
 }
 
 /*End Function:__RME_Svc_Retval_Set*/
 
 void __RME_Inv_Retval_Set(struct RME_Reg_Struct* Reg,rme_ret_t Retval)
 {
-
+    Reg->RDI=(rme_ptr_t)Retval;
 }
 
 void __RME_List_Crt(volatile struct RME_List* Head)
