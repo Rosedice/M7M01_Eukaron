@@ -1545,7 +1545,7 @@ rme_ptr_t __RME_Boot(void)
     	CPU_Local=__RME_X64_CPU_Local_Get_By_CPUID(Count);
         RME_ASSERT(_RME_Thd_Boot_Crt(RME_X64_CPT, RME_BOOT_TBL_THD, Count, RME_BOOT_INIT_PRC, Cur_Addr, 0, CPU_Local)>=0);
         Cur_Addr+=RME_KOT_VA_BASE_ROUND(RME_THD_SIZE(Count));
-    }git
+    }
 
     RME_DBG_S("\r\nKot registration end offset: 0x");
     RME_DBG_H(((Cur_Addr-RME_KOM_VA_BASE)>>RME_KOM_SLOT_ORDER)/8);
