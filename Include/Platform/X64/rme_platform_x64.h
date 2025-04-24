@@ -134,7 +134,7 @@ typedef rme_s64_t rme_ret_t;
 #define RME_HYP_VA_SIZE                 		0
 #define RME_WORD_BITS                   		(64U)
 #define RME_PREEMPT_PRIO_NUM         			(64U)
-#define RME_TIMESTAMP() 						RME_X64_RDTSC()
+#define RME_TIMESTAMP() 						RME_x64_timestamp
 #define RME_KOT_VA_BASE_ROUND(x)				RME_ROUND_UP(x,12)
 #define RME_CAPID(table, index) 	(((table) << 16) | (1 << 15) | ((index) & 0x7FFF))
 /* Atomic instructions - The oficial release replaces all these with inline
@@ -215,7 +215,6 @@ static INLINE rme_ptr_t __RME_User_Enter()
 );
 	return Ret;
 }
-
 #define RME_COMP_SWAP(PTR,OLD,NEW)           _RME_X64_Comp_Swap(PTR,OLD,NEW)
 #define RME_FETCH_ADD(PTR,ADDEND)            _RME_X64_Fetch_Add(PTR,ADDEND)
 #define RME_FETCH_AND(PTR,OPERAND)           _RME_X64_Fetch_And(PTR,OPERAND)
@@ -1185,6 +1184,7 @@ static void __RME_X64_Timer_Init(void);
 #endif
 
 /*****************************************************************************/
+EXTERN rme_ptr_t RME_x64_timestamp;
 EXTERN struct RME_X64_IDT_Entry RME_X64_IDT_Table[256];
 EXTERN struct __RME_X64_Kern_Pgt RME_X64_Kpgt;
 EXTERN rme_ptr_t __RME_X64_Kern_Boot_Stack[0];

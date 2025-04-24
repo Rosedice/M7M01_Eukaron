@@ -47,6 +47,9 @@ Description : The hardware abstraction layer for ACPI compliant x86-64 machines.
 #undef __HDR_PUBLIC__
 /* End Include ***************************************************************/
 
+/*RME_x64_timestamp *********************************************************/
+rme_ptr_t RME_x64_timestamp;
+
 /* Function:main **************************************************************
 Description : The entrance of the operating system.
 Input       : rme_ptr_t MBInfo - The multiboot information structure's physical address.
@@ -66,7 +69,7 @@ int main(rme_ptr_t MBInfo)
 /* Function: __RME_Kfn_Handler ************************************************/
 rme_ret_t __RME_Kfn_Handler(struct RME_Cap_Cpt* Cpt, struct RME_Reg_Struct* Reg,rme_ptr_t FuncID, rme_ptr_t SubID,rme_ptr_t Param1, rme_ptr_t Param2)
 {
-    RME_DBG_S("System call successfully processed! Hello World!");
+    RME_DBG_S("\nSystem call successfully processed!");
     return 0;
 }
 /* End Function: __RME_Kfn_Handler ********************************************/

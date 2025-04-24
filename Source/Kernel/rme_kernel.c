@@ -1619,6 +1619,7 @@ Return      : None.
 void _RME_Tim_Handler(struct RME_Reg_Struct* Reg,
                       rme_ptr_t Slice)
 {
+    RME_x64_timestamp++;
     struct RME_CPU_Local* Local;
     struct RME_Thd_Struct* Thd_Cur;
     
@@ -7389,7 +7390,6 @@ static rme_ret_t _RME_Inv_Crt(struct RME_Cap_Cpt* Cpt,
     struct RME_Inv_Struct* Invocation;
     rme_ptr_t Type_Stat;
     rme_ptr_t Vaddr;
-    
     /* Get the capability slots */
     RME_CPT_GETCAP(Cpt,Cap_Cpt,RME_CAP_TYPE_CPT,
                    struct RME_Cap_Cpt*,Cpt_Op,Type_Stat);
@@ -7402,17 +7402,14 @@ static rme_ret_t _RME_Inv_Crt(struct RME_Cap_Cpt* Cpt,
     RME_CAP_CHECK(Prc_Op,RME_PRC_FLAG_INV);
     /* See if the creation is valid for this kmem range */
     RME_KOM_CHECK(Kom_Op,RME_KOM_FLAG_INV,Raddr,Vaddr,RME_INV_SIZE);
-    
     /* Get the cap slot */
     RME_CPT_GETSLOT(Cpt_Op,Cap_Inv,struct RME_Cap_Inv*,Inv_Crt);
     /* Take the slot if possible */
     RME_CPT_OCCUPY(Inv_Crt);
-    
     /* Try to populate the area */
     if(_RME_Kot_Mark(Vaddr,RME_INV_SIZE)!=0)
     {
         RME_COV_MARKER();
-
         RME_WRITE_RELEASE(&(Inv_Crt->Head.Type_Stat),0U);
         return RME_ERR_CPT_KOT;
     }
@@ -7421,7 +7418,6 @@ static rme_ret_t _RME_Inv_Crt(struct RME_Cap_Cpt* Cpt,
         RME_COV_MARKER();
         /* No action required */
     }
-    
     /* Object init */
     Invocation=(struct RME_Inv_Struct*)Vaddr;
     Prc_Root=RME_CAP_CONV_ROOT(Prc_Op,struct RME_Cap_Prc*);
@@ -7756,7 +7752,6 @@ static rme_ret_t _RME_Inv_Ret(struct RME_Reg_Struct* Reg,
     return 0;
 }
 /* End Function:_RME_Inv_Ret *************************************************/
-
 /* Function:_RME_Kfn_Boot_Crt *************************************************
 Description : This function is used to create boot-time kernel call capability.
               This kind of capability that does not have a kernel object.

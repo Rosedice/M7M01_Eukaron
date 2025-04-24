@@ -338,20 +338,27 @@ while(0)
 do \
 { \
     /* See if the creation of such capability is allowed */ \
-    if(RME_UNLIKELY(((CAP)->Head.Flag&(FLAG))!=(FLAG))) \
-        return RME_ERR_CPT_FLAG; \
+    if(RME_UNLIKELY(((CAP)->Head.Flag&(FLAG))!=(FLAG))){ \
+        RME_DBG_S("\nINV_CRT RME_KOM_CHECK ERROR 1");      \
+        return RME_ERR_CPT_FLAG;} \
     /* Convert relative address to virtual address */ \
     (VADDR)=(RADDR)+(CAP)->Begin; \
     /* Check begin boundary and its possible wraparound */ \
-    if(RME_UNLIKELY((VADDR)<(RADDR))) \
-        return RME_ERR_CPT_FLAG; \
-    if(RME_UNLIKELY(((CAP)->Begin>(VADDR)))) \
-        return RME_ERR_CPT_FLAG; \
+    if(RME_UNLIKELY((VADDR)<(RADDR))){ \
+        RME_DBG_S("\nINV_CRT RME_KOM_CHECK ERROR 2");     \
+        RME_DBG_S("\ncap addr: 0x");       \
+        RME_DBG_H((CAP)->Begin);             \
+        return RME_ERR_CPT_FLAG;} \
+    if(RME_UNLIKELY(((CAP)->Begin>(VADDR)))){ \
+        RME_DBG_S("\nINV_CRT RME_KOM_CHECK ERROR 3");     \
+        return RME_ERR_CPT_FLAG;} \
     /* Check end boundary and its possible wraparound */ \
-    if(RME_UNLIKELY((((VADDR)+(SIZE))<(VADDR)))) \
-        return RME_ERR_CPT_FLAG; \
-    if(RME_UNLIKELY((CAP)->End<((VADDR)+(SIZE)-1U))) \
-        return RME_ERR_CPT_FLAG; \
+    if(RME_UNLIKELY((((VADDR)+(SIZE))<(VADDR)))){ \
+        RME_DBG_S("\nINV_CRT RME_KOM_CHECK ERROR 4");     \
+        return RME_ERR_CPT_FLAG;} \
+    if(RME_UNLIKELY((CAP)->End<((VADDR)+(SIZE)-1U))){ \
+        RME_DBG_S("\nINV_CRT RME_KOM_CHECK ERROR 5");     \
+        return RME_ERR_CPT_FLAG;} \
 } \
 while(0)
 

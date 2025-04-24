@@ -121,7 +121,7 @@ int main(ptr_t CPUID)
 
     ptr_t Cur_Addr;
     cnt_t Count;
-    
+
     UVM_LOG_I(CPUID);
     /* We only print information on the first CPU */
     if(CPUID==0)
