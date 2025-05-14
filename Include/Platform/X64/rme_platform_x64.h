@@ -129,7 +129,7 @@ typedef rme_s64_t rme_ret_t;
 /* The size of the hypervisor reserved virtual memory */
 //#define RME_HYP_SIZE                         0
 /* The kernel object allocation table address - relocated */
-#define RME_KOT_VA_BASE                  ((rme_ptr_t*)0xFFFF800001000000)
+#define RME_KOT_VA_BASE							((rme_ptr_t*)0xFFFF800001000000)
 #define RME_HYP_VA_BASE                 		0
 #define RME_HYP_VA_SIZE                 		0
 #define RME_WORD_BITS                   		(64U)

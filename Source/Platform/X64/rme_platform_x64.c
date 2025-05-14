@@ -1414,8 +1414,7 @@ rme_ptr_t __RME_Boot(void)
      * the booting processor finish all its work. */
     __RME_X64_SMP_Init();
 
-    /* Create all initial tables in Kom1, which is sure to be present. We reserve 16
-     * pages at the start to load the init process */
+    /* Create all initial tables in Kom1, which is sure to be present */
     Cur_Addr=RME_X64_Layout.Kom1_Start[0]+16*RME_POW2(RME_PGT_SIZE_2M);
     RME_DBG_S("\r\nKot registration start offset: 0x");
     RME_DBG_H(((Cur_Addr-RME_KOM_VA_BASE)>>RME_KOM_SLOT_ORDER)/8);
@@ -1423,7 +1422,7 @@ rme_ptr_t __RME_Boot(void)
     /* Create the capability table for the init process - always 16 */
     Cpt=(struct RME_Cap_Cpt*)Cur_Addr;
     RME_ASSERT(_RME_Cpt_Boot_Init(RME_BOOT_INIT_CPT,Cur_Addr,16)==RME_BOOT_INIT_CPT);
-    Cur_Addr+=RME_KOT_VA_BASE_ROUND(RME_CPT_SIZE(16));
+    Cur_Addr+=RME_KOM_ROUND(RME_CPT_SIZE(16));
 
     /* Create the capability table for initial page tables - now we are only
      * adding 2MB pages. There will be 1 PML4, 16 PDP, and 16*512=8192 PGD.
@@ -1431,20 +1430,20 @@ rme_ptr_t __RME_Boot(void)
      * for at least a decade. These data structures will eat 32MB of memory, which
      * is fine */
     RME_ASSERT(_RME_Cpt_Boot_Crt(RME_X64_CPT, RME_BOOT_INIT_CPT, RME_BOOT_TBL_PGT, Cur_Addr, 1+16+8192)==0);
-    Cur_Addr+=RME_KOT_VA_BASE_ROUND(RME_CPT_SIZE(1+16+8192));
+    Cur_Addr+=RME_KOM_ROUND(RME_CPT_SIZE(1+16+8192));
 
     /* Align the address to 4096 to prepare for page table creation */
     Cur_Addr=RME_ROUND_UP(Cur_Addr,12);
     /* Create PML4 */
     RME_ASSERT(_RME_Pgt_Boot_Crt(RME_X64_CPT, RME_BOOT_TBL_PGT, RME_BOOT_PML4,
                                    Cur_Addr, 0, RME_PGT_TOP, RME_PGT_SIZE_512G, RME_PGT_NUM_512)==0);
-    Cur_Addr+=RME_KOT_VA_BASE_ROUND(RME_PGT_SIZE_TOP(RME_PGT_NUM_512));
+    Cur_Addr+=RME_KOM_ROUND(RME_PGT_SIZE_TOP(RME_PGT_NUM_512));
     /* Create all our 16 PDPs, and cons them into the PML4 */
     for(Count=0;Count<16;Count++)
     {
         RME_ASSERT(_RME_Pgt_Boot_Crt(RME_X64_CPT, RME_BOOT_TBL_PGT, RME_BOOT_PDP(Count),
                                        Cur_Addr, 0, RME_PGT_NOM, RME_PGT_SIZE_1G, RME_PGT_NUM_512)==0);
-        Cur_Addr+=RME_KOT_VA_BASE_ROUND(RME_PGT_SIZE_NOM(RME_PGT_NUM_512));
+        Cur_Addr+=RME_KOM_ROUND(RME_PGT_SIZE_NOM(RME_PGT_NUM_512));
         RME_ASSERT(_RME_Pgt_Boot_Con(RME_X64_CPT, RME_CAPID(RME_BOOT_TBL_PGT,RME_BOOT_PML4), Count,
                                        RME_CAPID(RME_BOOT_TBL_PGT,RME_BOOT_PDP(Count)), RME_PGT_ALL_PERM)==0);
     }
@@ -1454,7 +1453,7 @@ rme_ptr_t __RME_Boot(void)
     {
         RME_ASSERT(_RME_Pgt_Boot_Crt(RME_X64_CPT, RME_BOOT_TBL_PGT, RME_BOOT_PDE(Count),
                                        Cur_Addr, 0, RME_PGT_NOM, RME_PGT_SIZE_2M, RME_PGT_NUM_512)==0);
-        Cur_Addr+=RME_KOT_VA_BASE_ROUND(RME_PGT_SIZE_NOM(RME_PGT_NUM_512));
+        Cur_Addr+=RME_KOM_ROUND(RME_PGT_SIZE_NOM(RME_PGT_NUM_512));
         RME_ASSERT(_RME_Pgt_Boot_Con(RME_X64_CPT, RME_CAPID(RME_BOOT_TBL_PGT,RME_BOOT_PDP(Count>>9)), Count&0x1FF,
                                        RME_CAPID(RME_BOOT_TBL_PGT,RME_BOOT_PDE(Count)), RME_PGT_ALL_PERM)==0);
     }
@@ -1503,7 +1502,7 @@ rme_ptr_t __RME_Boot(void)
 
     /* Create a capability table for initial kernel memory capabilities. We need a few for Kom1, and another one for Kom2 */
     RME_ASSERT(_RME_Cpt_Boot_Crt(RME_X64_CPT, RME_BOOT_INIT_CPT, RME_BOOT_TBL_KOM, Cur_Addr, RME_X64_KOM1_MAXSEGS+1)==0);
-    Cur_Addr+=RME_KOT_VA_BASE_ROUND(RME_CPT_SIZE(RME_X64_KOM1_MAXSEGS+1));
+    Cur_Addr+=RME_KOM_ROUND(RME_CPT_SIZE(RME_X64_KOM1_MAXSEGS+1));
     /* Create Kom1 capabilities - can create page tables here */
     for(Count=0;Count<RME_X64_Layout.Kom1_Trunks;Count++)
     {
@@ -1522,7 +1521,7 @@ rme_ptr_t __RME_Boot(void)
 
     /* Create the initial kernel endpoints for timer ticks */
     RME_ASSERT(_RME_Cpt_Boot_Crt(RME_X64_CPT, RME_BOOT_INIT_CPT, RME_BOOT_TBL_TIMER, Cur_Addr, RME_X64_Num_CPU)==0);
-    Cur_Addr+=RME_KOT_VA_BASE_ROUND(RME_CPT_SIZE(RME_X64_Num_CPU));
+    Cur_Addr+=RME_KOM_ROUND(RME_CPT_SIZE(RME_X64_Num_CPU));
     for(Count=0;Count<RME_X64_Num_CPU;Count++)
     {
     	CPU_Local=__RME_X64_CPU_Local_Get_By_CPUID(Count);
@@ -1542,12 +1541,12 @@ rme_ptr_t __RME_Boot(void)
 
     /* Activate the first thread, and set its priority */
     RME_ASSERT(_RME_Cpt_Boot_Crt(RME_X64_CPT, RME_BOOT_INIT_CPT, RME_BOOT_TBL_THD, Cur_Addr, RME_X64_Num_CPU)==0);
-    Cur_Addr+=RME_KOT_VA_BASE_ROUND(RME_CPT_SIZE(RME_X64_Num_CPU));
+    Cur_Addr+=RME_KOM_ROUND(RME_CPT_SIZE(RME_X64_Num_CPU));
     for(Count=0;Count<RME_X64_Num_CPU;Count++)
     {
     	CPU_Local=__RME_X64_CPU_Local_Get_By_CPUID(Count);
         RME_ASSERT(_RME_Thd_Boot_Crt(RME_X64_CPT, RME_BOOT_TBL_THD, Count, RME_BOOT_INIT_PRC, Cur_Addr, 0, CPU_Local)>=0);
-        Cur_Addr+=RME_KOT_VA_BASE_ROUND(RME_THD_SIZE(Count));
+        Cur_Addr+=RME_KOM_ROUND(RME_THD_SIZE(Count));
     }
 
     RME_DBG_S("\r\nKot registration end offset: 0x");
@@ -1570,12 +1569,12 @@ rme_ptr_t __RME_Boot(void)
 
     /* Load the init process to address 0x00 - It should be smaller than 2MB */
     extern const unsigned char UVM_Init[];
-    _RME_Memcpy(0,(void*)UVM_Init,RME_POW2(RME_PGT_SIZE_2M));
+    _RME_Memcpy(0x20000000,(void*)UVM_Init,RME_POW2(RME_PGT_SIZE_2M));
 
     /* Now other non-booting processors may proceed and go into their threads */
     RME_X64_CPU_Cnt=0;
     /* Boot into the init thread */
-    __RME_Enter_User_Mode(0, RME_X64_USTACK(0), 0);
+    __RME_Enter_User_Mode(0x200 00000, RME_X64_USTACK(0), 0);
     return 0;
 }
 /* End Function:__RME_Boot ***************************************************/

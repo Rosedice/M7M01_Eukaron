@@ -1,0 +1,192 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="SELECTIVE" />
+  </component>
+  <component name="BackendCodeEditorMiscSettings">
+    <option name="/Default/Housekeeping/FeatureSuggestion/FeatureSuggestionManager/DisabledSuggesters/=SwitchToGoToActionSuggester/@EntryIndexedValue" value="true" type="bool" />
+    <option name="/Default/Housekeeping/GlobalSettingsUpgraded/IsUpgraded/@EntryValue" value="true" type="bool" />
+    <option name="/Default/RiderDebugger/RiderRestoreDecompile/RestoreDecompileSetting/@EntryValue" value="false" type="bool" />
+  </component>
+  <component name="CMakeProjectFlavorService">
+    <option name="flavorId" value="CMakePlainProjectFlavor" />
+  </component>
+  <component name="CMakeRunConfigurationManager">
+    <generated>
+      <config projectName="MRex" targetName="mkdir" />
+      <config projectName="MRex" targetName="UVM" />
+      <config projectName="MRex" targetName="user" />
+      <config projectName="MRex" targetName="all" />
+    </generated>
+  </component>
+  <component name="CMakeSettings">
+    <configurations>
+      <configuration PROFILE_NAME="Debug" ENABLED="true" CONFIG_NAME="Debug" />
+    </configurations>
+  </component>
+  <component name="ChangeListManager">
+    <list default="true" id="6325f417-13e6-4af5-b8d7-2d5af7a23565" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/../CODE_OF_CONDUCT.md" beforeDir="false" afterPath="$PROJECT_DIR$/../CODE_OF_CONDUCT.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../CONTRIBUTING.md" beforeDir="false" afterPath="$PROJECT_DIR$/../CONTRIBUTING.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Include/Platform/X64/rme_platform_x64.h" beforeDir="false" afterPath="$PROJECT_DIR$/../Include/Platform/X64/rme_platform_x64.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Include/Platform/X64/rme_platform_x64.ld" beforeDir="false" afterPath="$PROJECT_DIR$/../Include/Platform/X64/rme_platform_x64.ld" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../LICENSE.md" beforeDir="false" afterPath="$PROJECT_DIR$/../LICENSE.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/.gitignore" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/dictionaries/project.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/editor.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/editor.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/material_theme_project_new.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Include/Platform/X64/uvmlib_x64.ld" beforeDir="false" afterPath="$PROJECT_DIR$/Include/Platform/X64/uvmlib_x64.ld" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Init/init.c" beforeDir="false" afterPath="$PROJECT_DIR$/Init/init.c" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Object/UVM" beforeDir="false" afterPath="$PROJECT_DIR$/Object/UVM" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/UVM.asm" beforeDir="false" afterPath="$PROJECT_DIR$/UVM.asm" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/UVM.bin" beforeDir="false" afterPath="$PROJECT_DIR$/UVM.bin" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/UVM.c" beforeDir="false" afterPath="$PROJECT_DIR$/UVM.c" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../PULL_REQUEST_TEMPLATE.md" beforeDir="false" afterPath="$PROJECT_DIR$/../PULL_REQUEST_TEMPLATE.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Project/GCC-X64/.idea/.gitignore" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Project/GCC-X64/.idea/.name" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Project/GCC-X64/.idea/GCC-X64.iml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Project/GCC-X64/.idea/dictionaries/kevin.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Project/GCC-X64/.idea/editor.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../Project/GCC-X64/.idea/editor.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Project/GCC-X64/.idea/inspectionProfiles/Project_Default.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Project/GCC-X64/.idea/material_theme_project_new.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Project/GCC-X64/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../Project/GCC-X64/.idea/misc.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Project/GCC-X64/.idea/modules.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Project/GCC-X64/Makefile" beforeDir="false" afterPath="$PROJECT_DIR$/../Project/GCC-X64/Makefile" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Project/GCC-X64/Object/RME" beforeDir="false" afterPath="$PROJECT_DIR$/../Project/GCC-X64/Object/RME" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Project/GCC-X64/RME.asm" beforeDir="false" afterPath="$PROJECT_DIR$/../Project/GCC-X64/RME.asm" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Project/GCC-X64/RME.iso" beforeDir="false" afterPath="$PROJECT_DIR$/../Project/GCC-X64/RME.iso" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Project/GCC-X64/UVM.c" beforeDir="false" afterPath="$PROJECT_DIR$/../Project/GCC-X64/UVM.c" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Project/GCC-X64/isofiles/boot/RME" beforeDir="false" afterPath="$PROJECT_DIR$/../Project/GCC-X64/isofiles/boot/RME" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../README.md" beforeDir="false" afterPath="$PROJECT_DIR$/../README.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../README_CN.md" beforeDir="false" afterPath="$PROJECT_DIR$/../README_CN.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Source/Platform/X64/rme_platform_x64.c" beforeDir="false" afterPath="$PROJECT_DIR$/../Source/Platform/X64/rme_platform_x64.c" afterDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="ClangdSettings">
+    <option name="formatViaClangd" value="false" />
+  </component>
+  <component name="ExternalProjectsData">
+    <projectState path="$PROJECT_DIR$">
+      <ProjectState />
+    </projectState>
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/.." />
+  </component>
+  <component name="MakefileLocalSettings">
+    <option name="availableProjects">
+      <map>
+        <entry>
+          <key>
+            <ExternalProjectPojo>
+              <option name="name" value="MRex" />
+              <option name="path" value="$PROJECT_DIR$" />
+            </ExternalProjectPojo>
+          </key>
+          <value>
+            <list>
+              <ExternalProjectPojo>
+                <option name="name" value="MRex" />
+                <option name="path" value="$PROJECT_DIR$" />
+              </ExternalProjectPojo>
+            </list>
+          </value>
+        </entry>
+      </map>
+    </option>
+    <option name="projectSyncType">
+      <map>
+        <entry key="$PROJECT_DIR$" value="RE_IMPORT" />
+      </map>
+    </option>
+  </component>
+  <component name="ProjectApplicationVersion">
+    <option name="ide" value="CLion" />
+    <option name="majorVersion" value="2025" />
+    <option name="minorVersion" value="1.1" />
+    <option name="productBranch" value="Classic" />
+  </component>
+  <component name="ProjectColorInfo">{
+  &quot;associatedIndex&quot;: 5
+}</component>
+  <component name="ProjectId" id="2x4Zqf4jONkxJQMiTmf2pHVTYT4" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "ModuleVcsDetector.initialDetectionPerformed": "true",
+    "RunOnceActivity.RadMigrateCodeStyle": "true",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "RunOnceActivity.cidr.known.project.marker": "true",
+    "RunOnceActivity.git.unshallow": "true",
+    "RunOnceActivity.readMode.enableVisualFormatting": "true",
+    "SHELLCHECK.PATH": "I do mind",
+    "cf.first.check.clang-format": "false",
+    "cidr.known.project.marker": "true",
+    "git-widget-placeholder": "main",
+    "last_opened_file_path": "/home/kevin/M7M01_Eukaron/MRex/Makefile",
+    "node.js.detected.package.eslint": "true",
+    "node.js.detected.package.tslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "node.js.selected.package.tslint": "(autodetect)",
+    "nodejs_package_manager_path": "npm",
+    "settings.editor.selected.configurable": "configurable.group.language",
+    "vue.rearranger.settings.migration": "true"
+  }
+}]]></component>
+  <component name="RunManager" selected="Native Application.all">
+    <configuration name="UVM" type="CLionNativeAppRunConfigurationType" REDIRECT_INPUT="false" ELEVATE="false" USE_EXTERNAL_CONSOLE="false" EMULATE_TERMINAL="false" PASS_PARENT_ENVS_2="true" PROJECT_NAME="MRex" TARGET_NAME="UVM" CONFIG_NAME="UVM" version="1">
+      <method v="2">
+        <option name="CLION.COMPOUND.BUILD" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="all" type="CLionNativeAppRunConfigurationType" REDIRECT_INPUT="false" ELEVATE="false" USE_EXTERNAL_CONSOLE="false" EMULATE_TERMINAL="false" PASS_PARENT_ENVS_2="true" PROJECT_NAME="MRex" TARGET_NAME="all" CONFIG_NAME="all" version="1">
+      <method v="2">
+        <option name="CLION.COMPOUND.BUILD" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="mkdir" type="CLionNativeAppRunConfigurationType" REDIRECT_INPUT="false" ELEVATE="false" USE_EXTERNAL_CONSOLE="false" EMULATE_TERMINAL="false" PASS_PARENT_ENVS_2="true" PROJECT_NAME="MRex" TARGET_NAME="mkdir" CONFIG_NAME="mkdir" version="1">
+      <method v="2">
+        <option name="CLION.COMPOUND.BUILD" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="user" type="CLionNativeAppRunConfigurationType" REDIRECT_INPUT="false" ELEVATE="false" USE_EXTERNAL_CONSOLE="false" EMULATE_TERMINAL="false" PASS_PARENT_ENVS_2="true" PROJECT_NAME="MRex" TARGET_NAME="user" CONFIG_NAME="user" version="1">
+      <method v="2">
+        <option name="CLION.COMPOUND.BUILD" enabled="true" />
+      </method>
+    </configuration>
+    <configuration default="true" type="CMakeRunConfiguration" factoryName="Application" REDIRECT_INPUT="false" ELEVATE="false" USE_EXTERNAL_CONSOLE="false" EMULATE_TERMINAL="false" PASS_PARENT_ENVS_2="true">
+      <method v="2">
+        <option name="com.jetbrains.cidr.execution.CidrBuildBeforeRunTaskProvider$BuildBeforeRunTask" enabled="true" />
+      </method>
+    </configuration>
+    <list>
+      <item itemvalue="Native Application.all" />
+      <item itemvalue="Native Application.mkdir" />
+      <item itemvalue="Native Application.user" />
+      <item itemvalue="Native Application.UVM" />
+    </list>
+  </component>
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="6325f417-13e6-4af5-b8d7-2d5af7a23565" name="Changes" comment="" />
+      <created>1747199499124</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1747199499124</updated>
+      <workItem from="1747199500559" duration="1372000" />
+      <workItem from="1747203409966" duration="10853000" />
+    </task>
+    <servers />
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="3" />
+  </component>
+</project>

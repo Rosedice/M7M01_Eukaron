@@ -12,7 +12,14 @@ ENTRY(_start)
 __RME_X64_Mboot_Load_Addr = 0x00100000;
 
 SECTIONS
-{   
+{
+/*
+    . = 0xFFFFFFFF20000000;
+    .rodata : AT(0x10000000) {
+               *UVM.o(.rodata .rodata.*)
+              }
+*/
+
 	/* Link the kernel at this address: "." means the current address */
     /* Must be equal to KERNLINK */
 	. = 0xFFFFFFFF80100000;
