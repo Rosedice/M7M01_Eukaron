@@ -121,7 +121,7 @@ typedef rme_s64_t rme_ret_t;
 /* Initial stack size and address */
 #define RME_KOM_STACK_ADDR                  ((rme_ptr_t)__RME_X64_Kern_Boot_Stack)
 /* The virtual memory start address for the kernel objects */
-#define RME_KOM_VA_BASE                    0xFFFF800000000000ULL
+#define RME_KOM_VA_BASE                    0xFFFF800001600000ULL
 /* The size of the kernel object virtual memory - dummy, we will detect the actual values */
 #define RME_KOM_VA_SIZE                        0x1000
 /* The virtual memory start address for the virtual machines - If no virtual machines is used, set to 0 */
@@ -129,6 +129,7 @@ typedef rme_s64_t rme_ret_t;
 /* The size of the hypervisor reserved virtual memory */
 //#define RME_HYP_SIZE                         0
 /* The kernel object allocation table address - relocated */
+#define RME_PGT_RAW_ENABLE                      0U
 #define RME_KOT_VA_BASE							((rme_ptr_t*)0xFFFF800001000000)
 #define RME_HYP_VA_BASE                 		0
 #define RME_HYP_VA_SIZE                 		0

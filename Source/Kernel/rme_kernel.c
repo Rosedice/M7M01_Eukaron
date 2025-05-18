@@ -1544,7 +1544,6 @@ void _RME_Svc_Handler(struct RME_Reg_Struct* Reg)
         case RME_SVC_SIG_CRT:
         {
             RME_COV_MARKER();
-            
             Retval=_RME_Sig_Crt(Cpt,
                                 (rme_cid_t)Cid,                             /* rme_cid_t Cap_Cpt */
                                 (rme_cid_t)Param[0]);                       /* rme_cid_t Cap_Sig */
@@ -6560,7 +6559,6 @@ static rme_ret_t _RME_Thd_Swt(struct RME_Cap_Cpt* Cpt,
 
     Local=RME_CPU_LOCAL();
     Thd_Cur=Local->Thd_Cur;
-    
     /* The caller have picked a thread to switch to */
     if(Cap_Thd<RME_CID_NULL)
     {
@@ -6771,25 +6769,22 @@ Input       : struct RME_Cap_Cpt* Cpt - The master capability table.
 Output      : None.
 Return      : rme_ret_t - If successful, 0; or an error code.
 ******************************************************************************/
-static rme_ret_t _RME_Sig_Crt(struct RME_Cap_Cpt* Cpt,
+static rme_ret_t _RME_Sig_Crt(struct RME_Cap_Cpt *Cpt,
                               rme_cid_t Cap_Cpt,
                               rme_cid_t Cap_Sig)
 {
     struct RME_Cap_Cpt* Cpt_Op;
     volatile struct RME_Cap_Sig* Sig_Crt;
     rme_ptr_t Type_Stat;
-    
     /* Get the capability slots */
     RME_CPT_GETCAP(Cpt,Cap_Cpt,RME_CAP_TYPE_CPT,
                    struct RME_Cap_Cpt*,Cpt_Op,Type_Stat);
     /* Check if the captbl is not frozen and allows such operations */
     RME_CAP_CHECK(Cpt_Op,RME_CPT_FLAG_CRT);
-    
     /* Get the cap slot */
     RME_CPT_GETSLOT(Cpt_Op,Cap_Sig,struct RME_Cap_Sig*,Sig_Crt);
     /* Take the slot if possible */
     RME_CPT_OCCUPY(Sig_Crt);
-
     /* Header init */
     Sig_Crt->Head.Root_Ref=0U;
     Sig_Crt->Head.Object=0U;
@@ -7409,6 +7404,7 @@ static rme_ret_t _RME_Inv_Crt(struct RME_Cap_Cpt* Cpt,
     /* Try to populate the area */
     if(_RME_Kot_Mark(Vaddr,RME_INV_SIZE)!=0)
     {
+        RME_DBG_S("\nKOT_MARK didn't pass!!");
         RME_COV_MARKER();
         RME_WRITE_RELEASE(&(Inv_Crt->Head.Type_Stat),0U);
         return RME_ERR_CPT_KOT;
@@ -7590,7 +7586,6 @@ static rme_ret_t _RME_Inv_Act(struct RME_Cap_Cpt* Cpt,
                    struct RME_Cap_Inv*,Inv_Op,Type_Stat);
     /* Check if the target cap is not frozen and allows such operations */
     RME_CAP_CHECK(Inv_Op,RME_INV_FLAG_ACT);
-
     /* Get the invocation struct */
     Invocation=RME_CAP_GETOBJ(Inv_Op,struct RME_Inv_Struct*);
     /* Check if this invocation port is already active */
@@ -7610,7 +7605,6 @@ static rme_ret_t _RME_Inv_Act(struct RME_Cap_Cpt* Cpt,
 #if(RME_CPT_ENTRY_MAX==0U)
     Thd_Cur=RME_CPU_LOCAL()->Thd_Cur;
 #endif
-    
     /* Try to do CAS and activate this port */
     if(RME_UNLIKELY(RME_COMP_SWAP((volatile rme_ptr_t*)&(Invocation->Thd_Act),
                                   (rme_ptr_t)Thd_Act,

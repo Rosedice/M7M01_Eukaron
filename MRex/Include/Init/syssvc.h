@@ -359,7 +359,7 @@ __EXTERN__ ret_t UVM_Proc_Pgt(cid_t Cap_Proc, cid_t Cap_Pgtbl);
 __EXTERN__ ret_t UVM_Thd_Crt(cid_t Cap_Captbl, cid_t Cap_Kmem, cid_t Cap_Thd,
                              cid_t Cap_Proc, ptr_t Max_Prio, ptr_t Vaddr);
 __EXTERN__ ret_t UVM_Thd_Del(cid_t Cap_Captbl, cid_t Cap_Thd);
-__EXTERN__ ret_t UVM_Thd_Exec_Set(cid_t Cap_Thd, ptr_t Entry, ptr_t Param, ptr_t Stack);
+__EXTERN__ ret_t UVM_Thd_Exec_Set(cid_t Cap_Thd, ptr_t Entry, ptr_t Stack, ptr_t Param);
 __EXTERN__ ret_t UVM_Thd_Hyp_Set(cid_t Cap_Thd, ptr_t Kaddr);
 __EXTERN__ ret_t UVM_Thd_Sched_Bind(cid_t Cap_Thd, cid_t Cap_Thd_Sched, cid_t Cap_Sig, tid_t TID, ptr_t Prio);
 __EXTERN__ ret_t UVM_Thd_Sched_Rcv(cid_t Cap_Thd);

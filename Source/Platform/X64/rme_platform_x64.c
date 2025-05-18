@@ -1561,20 +1561,20 @@ rme_ptr_t __RME_Boot(void)
     RME_DBG_I(sizeof(struct RME_Inv_Struct)/sizeof(rme_ptr_t));
 
     /* Initialize the timer and start its interrupt routing */
-    RME_DBG_S("\r\nTimer init\r\n");
+    RME_DBG_S("\r\nTimer init");
     __RME_X64_Timer_Init();
     __RME_X64_IOAPIC_Int_Enable(2,0);
     /* Change page tables */
     __RME_Pgt_Set(RME_CAP_GETOBJ((RME_CPU_LOCAL()->Thd_Cur)->Sched.Prc->Pgt,rme_ptr_t));
 
-    /* Load the init process to address 0x00 - It should be smaller than 2MB */
+    /* Load the init process to address 0x20000000 - It should be smaller than 2MB */
     extern const unsigned char UVM_Init[];
-    _RME_Memcpy(0x20000000,(void*)UVM_Init,RME_POW2(RME_PGT_SIZE_2M));
+    _RME_Memcpy((void*)0x20000000,(void*)UVM_Init,RME_POW2(RME_PGT_SIZE_2M));
 
     /* Now other non-booting processors may proceed and go into their threads */
     RME_X64_CPU_Cnt=0;
     /* Boot into the init thread */
-    __RME_Enter_User_Mode(0x200 00000, RME_X64_USTACK(0), 0);
+    __RME_Enter_User_Mode(0x20000000ULL, RME_X64_USTACK(0)+0x20000000ULL, 0);
     return 0;
 }
 /* End Function:__RME_Boot ***************************************************/

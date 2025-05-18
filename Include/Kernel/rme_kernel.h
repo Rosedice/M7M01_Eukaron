@@ -500,8 +500,8 @@ do \
     if((((rme_ptr_t)(CAP_NUM))&RME_CID_2L)==0U) \
     { \
         /* Check if the captbl is over range */ \
-        if(RME_UNLIKELY(((rme_ptr_t)(CAP_NUM))>=((CPT)->Entry_Num))) \
-            return RME_ERR_CPT_RANGE; \
+        if(RME_UNLIKELY(((rme_ptr_t)(CAP_NUM))>=((CPT)->Entry_Num)))\
+            return RME_ERR_CPT_RANGE;\
         /* Get the cap slot and check the type */ \
         (PARAM)=(TYPE)(&RME_CAP_GETOBJ(CPT,struct RME_Cap_Struct*)[(CAP_NUM)]); \
         /* Atomic read - Need a read acquire barrier here to avoid stale reads below */ \

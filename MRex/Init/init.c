@@ -69,7 +69,7 @@ void UVM_Clear(void* Addr, ptr_t Size)
 #define TEST_THD1        9
 #define TEST_THD2        10
 #define TEST_INV1        11
-
+#define TEST_SIG1        12
 volatile ptr_t start;
 volatile ptr_t middle;
 volatile ptr_t end;
@@ -77,7 +77,7 @@ ptr_t sum;
 ptr_t sumin;
 ptr_t sumout;
 
-void test(void)
+void TEST_THD1_FUNC(void)
 {
     cnt_t Count;
     sum=0;
@@ -89,14 +89,12 @@ void test(void)
         end=__UVM_X64_Read_TSC();
         sum+=end-start;
     }
-
-    UVM_LOG_S("\r\nswtch ");
+    UVM_LOG_S("\r\nThread Switching takes clock cycles:");
     UVM_LOG_I(sum/1000000);
-    UVM_Kern_Act(UVM_BOOT_INIT_KERN, 0x07, 0xa0*8, sum/1000000, 0);
-    while(1);
+    UVM_Thd_Swt(UVM_BOOT_TBL_THD,0);
 }
 
-void test2(void)
+void TEST_THD2_FUNC(void)
 {
     while(1)
     {
@@ -104,11 +102,7 @@ void test2(void)
     }
 }
 
-void sinvtest(ptr_t Param)
-{
-    middle=__UVM_X64_Read_TSC();
-    UVM_Svc(0,0,0,0);
-}
+void TEST_INV1_FUNC(void){}
 
 /* Begin Function:main ********************************************************
 Description : The entry of the VMM's init thread. 
@@ -118,52 +112,27 @@ Return      : int - This function shall never return.
 ******************************************************************************/
 int main(ptr_t CPUID)
 {
-
     ptr_t Cur_Addr;
     cnt_t Count;
-
+    UVM_LOG_S("\r\nEnter user mode success!Welcome to RME system!");
+    UVM_LOG_S("\r\nNow we are running init thread on cpu:");
     UVM_LOG_I(CPUID);
-    /* We only print information on the first CPU */
     if(CPUID==0)
     {
-        UVM_Kern_Act(UVM_BOOT_INIT_KERN, 0x07, 0, 1234, 0);
-/*
-        UVM_LOG_S("\r\n\r\n-------------------------------------------------------------------------------\r\n");
-        UVM_LOG_S("                               Welcome to the\r\n");
-        UVM_LOG_S("\r\n");
-        UVM_LOG_S("                        ######    ###  ###  ########\r\n");
-        UVM_LOG_S("                        #######   ###  ###  ########\r\n");
-        UVM_LOG_S("                        ##    ##  ###  ###  ##\r\n");
-        UVM_LOG_S("                        ##    ##  ###  ###  ##\r\n");
-        UVM_LOG_S("                        ##    ##  ## ## ##  ##\r\n");
-        UVM_LOG_S("                        #######   ## ## ##  #######\r\n");
-        UVM_LOG_S("                        ######    ## ## ##  #######\r\n");
-        UVM_LOG_S("                        ##   ##   ## ## ##  ##\r\n");
-        UVM_LOG_S("                        ##   ##   ##    ##  ##\r\n");
-        UVM_LOG_S("                        ##    ##  ##    ##  ##\r\n");
-        UVM_LOG_S("                        ##    ##  ##    ##  ########\r\n");
-        UVM_LOG_S("                        ##    ### ##    ##  ########\r\n");
-        UVM_LOG_S("\r\n");
-        UVM_LOG_S("                  Application Processor User-level Platform!\r\n");
-        UVM_LOG_S("-------------------------------------------------------------------------------\r\n");
-    UVM_LOG_U(__UVM_X64_Read_TSC());
-    UVM_LOG_U(__UVM_X64_Read_TSC());*/
+        /*Empty test begins here*/
         sum=0;
-
-        /* Run a raw test before we run anything else */
         for(Count=0;Count<1000000;Count++)
         {
             start=__UVM_X64_Read_TSC();
             end=__UVM_X64_Read_TSC();
             sum+=end-start;
         }
-        UVM_LOG_S("\r\nempty");
+        UVM_LOG_S("\r\nEmpty test takes clock cycles:");
         UVM_LOG_I(sum/1000000);
-        UVM_Kern_Act(UVM_BOOT_INIT_KERN, 0x07, 0xa0, sum/1000000, 0);
+        /*Empty test ends here*/
 
+        /*Empty system call test begins here*/
         sum=0;
-
-        /* Run a raw test before we run anything else */
         for(Count=0;Count<1000000;Count++)
         {
             start=__UVM_X64_Read_TSC();
@@ -171,30 +140,50 @@ int main(ptr_t CPUID)
             end=__UVM_X64_Read_TSC();
             sum+=end-start;
         }
-        UVM_LOG_S("\r\nraw");
+        UVM_LOG_S("\r\nEmpty system call takes clock cycles:");
         UVM_LOG_I(sum/1000000);
-        UVM_Kern_Act(UVM_BOOT_INIT_KERN, 0x07, 0xa0*2, sum/1000000, 0);
+        /*Empty system call test ends here*/
 
-        Cur_Addr=0xFFFF800010000000ULL;//0xFFFF800007000000ULL on phani
-        /* We create this in Kmem1 */
+        /*Now we begin to place kernel objects at this address,It must be a relative address*/
+        Cur_Addr=0xFFFF800010000000ULL-0xFFFF800001600000ULL;
+
+        /*Thread switching test begins here*/
         UVM_ASSERT(UVM_Thd_Crt(UVM_BOOT_CAPTBL, UVM_CAPID(UVM_BOOT_TBL_KMEM,0), TEST_THD1, UVM_BOOT_INIT_PROC, 10, Cur_Addr)>=0);
         UVM_ASSERT(UVM_Thd_Sched_Bind(TEST_THD1,UVM_CAPID(UVM_BOOT_TBL_THD,0),UVM_CAPID_NULL,0,0)>=0);
         UVM_ASSERT(UVM_Thd_Time_Xfer(TEST_THD1,UVM_CAPID(UVM_BOOT_TBL_THD,0),UVM_THD_INF_TIME)>=0);
-        UVM_ASSERT(UVM_Thd_Exec_Set(TEST_THD1,test,12*UVM_POW2(RME_PGT_SIZE_1M),0)>=0);
-
+        UVM_ASSERT(UVM_Thd_Exec_Set(TEST_THD1,TEST_THD1_FUNC,12*UVM_POW2(RME_PGT_SIZE_1M)+0x20000000ULL,0)>=0);
         Cur_Addr+=UVM_THD_SIZE;
+
         UVM_ASSERT(UVM_Thd_Crt(UVM_BOOT_CAPTBL, UVM_CAPID(UVM_BOOT_TBL_KMEM,0), TEST_THD2, UVM_BOOT_INIT_PROC, 10, Cur_Addr)>=0);
         UVM_ASSERT(UVM_Thd_Sched_Bind(TEST_THD2,UVM_CAPID(UVM_BOOT_TBL_THD,0),UVM_CAPID_NULL,0,0)>=0);
         UVM_ASSERT(UVM_Thd_Time_Xfer(TEST_THD2,UVM_CAPID(UVM_BOOT_TBL_THD,0),UVM_THD_INF_TIME)>=0);
-        UVM_ASSERT(UVM_Thd_Exec_Set(TEST_THD2,test2,13*UVM_POW2(RME_PGT_SIZE_1M),1)>=0);
+        UVM_ASSERT(UVM_Thd_Exec_Set(TEST_THD2,TEST_THD2_FUNC,13*UVM_POW2(RME_PGT_SIZE_1M)+0x20000000ULL,1)>=0);
+        Cur_Addr+=UVM_THD_SIZE;
 
         UVM_Thd_Swt(TEST_THD1,0);
-        UVM_LOG_S("\r\nShould not get here");
-        while(1);
+        UVM_LOG_S("\r\nExit THD1!");
+        /*Thread switching test ends here*/
+
+        /*Signal send test begins here*/
+        UVM_ASSERT(UVM_Sig_Crt(UVM_BOOT_CAPTBL,UVM_CAPID(UVM_BOOT_TBL_KMEM,0),TEST_SIG1, Cur_Addr)>=0);
+        Cur_Addr+=UVM_SIG_SIZE;
+        sum=0;
+        for(Count=0;Count<1000000;Count++)
+        {
+            start=__UVM_X64_Read_TSC();
+            UVM_Sig_Snd(TEST_SIG1);
+            end=__UVM_X64_Read_TSC();
+            sum+=end-start;
+        }
+        UVM_LOG_S("\r\nSignal send takes clock cycles:");
+        UVM_LOG_I(sum/1000000);
+        while (1);
+        /*Signal send test ends here*/
+
+
         UVM_ASSERT(UVM_Inv_Crt(UVM_BOOT_CAPTBL, UVM_CAPID(UVM_BOOT_TBL_KMEM,0), TEST_INV1, UVM_BOOT_INIT_PROC, Cur_Addr)>=0);
         Cur_Addr+=UVM_INV_SIZE;
-        UVM_ASSERT(UVM_Inv_Set(TEST_INV1, sinvtest,12*UVM_POW2(RME_PGT_SIZE_1M),0)>=0);
-
+        UVM_ASSERT(UVM_Inv_Set(TEST_INV1, TEST_INV1_FUNC,12*UVM_POW2(RME_PGT_SIZE_1M),0)>=0);
         sum=0;
         sumin=0;
         sumout=0;
@@ -250,9 +239,7 @@ core-local ctxsw wrt.cores
 core-local IPC wrt.cores
 map/unmap pages wrt.cores
 WCIRT*/
-
-    while(1);
-    
+    while (1);
     while(1)
     {
         /* Receive the scheduler notifications for the interrupt threads. If any of

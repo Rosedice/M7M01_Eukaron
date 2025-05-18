@@ -880,8 +880,8 @@ Return      : ret_t - If successful, 0; or an error code.
 ret_t UVM_Sig_Crt(cid_t Cap_Captbl, cid_t Cap_Kmem, cid_t Cap_Sig, ptr_t Vaddr)
 {
     return UVM_CAP_OP(RME_SVC_SIG_CRT, Cap_Captbl,
+                      Cap_Sig,
                       Cap_Kmem,
-                      Cap_Sig, 
                       Vaddr);
 }
 /* End Function:UVM_Sig_Crt **************************************************/
