@@ -65,11 +65,23 @@ void UVM_Clear(void* Addr, ptr_t Size)
 }
 /* End Function:UVM_Clear ****************************************************/
 
-/* place the stack at 12MB. this must be fine */
 #define TEST_THD1        9
 #define TEST_THD2        10
 #define TEST_INV1        11
 #define TEST_SIG1        12
+#define TEST_PROC_CAPTBL  13
+#define TEST_PROCESS_PGT  14
+#define TEST_PROCESS      15
+
+/*The test process cap slot*/
+/*#define TEST_PROCESS_PGT       1
+#define TEST_PROCESS           2*/
+
+/*The test process page table slot*/
+#define TEST_PROCESS_PML4   0
+#define RME_TEST_PDP(X)      (TEST_PROCESS_PML4+1+(X))
+#define RME_TEST_PDE(X)      (RME_TEST_PDP(16)+(X))
+
 volatile ptr_t start;
 volatile ptr_t middle;
 volatile ptr_t end;
@@ -91,7 +103,6 @@ void TEST_THD1_FUNC(void)
     }
     UVM_LOG_S("\r\nThread Switching takes clock cycles:");
     UVM_LOG_I(sum/1000000);
-    UVM_Thd_Swt(UVM_BOOT_TBL_THD,0);
 }
 
 void TEST_THD2_FUNC(void)
@@ -102,7 +113,10 @@ void TEST_THD2_FUNC(void)
     }
 }
 
-void TEST_INV1_FUNC(void){}
+void TEST_INV1_FUNC(ptr_t param)
+{
+    UVM_Inv_Ret(param);
+}
 
 /* Begin Function:main ********************************************************
 Description : The entry of the VMM's init thread. 
@@ -117,8 +131,7 @@ int main(ptr_t CPUID)
     UVM_LOG_S("\r\nEnter user mode success!Welcome to RME system!");
     UVM_LOG_S("\r\nNow we are running init thread on cpu:");
     UVM_LOG_I(CPUID);
-    if(CPUID==0)
-    {
+    if(CPUID==0) {
         /*Empty test begins here*/
         sum=0;
         for(Count=0;Count<1000000;Count++)
@@ -147,7 +160,7 @@ int main(ptr_t CPUID)
         /*Now we begin to place kernel objects at this address,It must be a relative address*/
         Cur_Addr=0xFFFF800010000000ULL-0xFFFF800001600000ULL;
 
-        /*Thread switching test begins here*/
+        /*/*Thread switching test begins here#1#
         UVM_ASSERT(UVM_Thd_Crt(UVM_BOOT_CAPTBL, UVM_CAPID(UVM_BOOT_TBL_KMEM,0), TEST_THD1, UVM_BOOT_INIT_PROC, 10, Cur_Addr)>=0);
         UVM_ASSERT(UVM_Thd_Sched_Bind(TEST_THD1,UVM_CAPID(UVM_BOOT_TBL_THD,0),UVM_CAPID_NULL,0,0)>=0);
         UVM_ASSERT(UVM_Thd_Time_Xfer(TEST_THD1,UVM_CAPID(UVM_BOOT_TBL_THD,0),UVM_THD_INF_TIME)>=0);
@@ -162,7 +175,7 @@ int main(ptr_t CPUID)
 
         UVM_Thd_Swt(TEST_THD1,0);
         UVM_LOG_S("\r\nExit THD1!");
-        /*Thread switching test ends here*/
+        /*Thread switching test ends here#1#*/
 
         /*Signal send test begins here*/
         UVM_ASSERT(UVM_Sig_Crt(UVM_BOOT_CAPTBL,UVM_CAPID(UVM_BOOT_TBL_KMEM,0),TEST_SIG1, Cur_Addr)>=0);
@@ -177,9 +190,46 @@ int main(ptr_t CPUID)
         }
         UVM_LOG_S("\r\nSignal send takes clock cycles:");
         UVM_LOG_I(sum/1000000);
-        while (1);
+        UVM_LOG_S("\r\n");
         /*Signal send test ends here*/
 
+
+        /*Invocation stub test begins here*/
+        /*Create test process capability table*/
+        UVM_ASSERT(UVM_Captbl_Crt(UVM_BOOT_CAPTBL,UVM_CAPID(UVM_BOOT_TBL_KMEM,0),TEST_PROC_CAPTBL,Cur_Addr,16)>=0);
+        Cur_Addr+=UVM_CAPTBL_SIZE(16);
+        /*Create test process page table*/
+        UVM_ASSERT(UVM_Captbl_Crt(UVM_BOOT_CAPTBL,UVM_CAPID(UVM_BOOT_TBL_KMEM,0),TEST_PROCESS_PGT,Cur_Addr,1+16+8192)>=0);
+        Cur_Addr+=UVM_CAPTBL_SIZE(1+16+8192);
+        /*Create test process PML4*/
+        Cur_Addr+=UVM_ROUND_UP(Cur_Addr,12);
+        UVM_ASSERT(UVM_Pgtbl_Crt(TEST_PROCESS_PGT,UVM_CAPID(UVM_BOOT_TBL_KMEM,0),TEST_PROCESS_PML4,Cur_Addr,0,1U,RME_PGT_SIZE_512G,RME_PGT_NUM_512)>=0);
+        Cur_Addr+=UVM_PGTBL_SIZE_NOM(RME_PGT_NUM_512);
+        /* Create 16 PDPs*/
+        /*for(Count=0;Count<16;Count++)
+        {
+            UVM_ASSERT(UVM_Pgtbl_Crt(TEST_PROCESS_PGT, UVM_CAPID(UVM_BOOT_TBL_KMEM,0), RME_TEST_PDP(Count),
+                                           Cur_Addr, 0, 0U, RME_PGT_SIZE_1G, RME_PGT_NUM_512)>=0);
+            Cur_Addr+=UVM_PGTBL_SIZE_NOM(RME_PGT_NUM_512);
+            UVM_ASSERT(UVM_Pgtbl_Con(UVM_CAPID(TEST_PROCESS_PGT,TEST_PROCESS_PML4),Count,
+                                                UVM_CAPID(TEST_PROCESS_PGT,RME_TEST_PDP(Count)),RME_PGT_ALL_PERM)>=0);
+        }*/
+        /* Create 8192 PDEs*/
+        /*for(Count=0;Count<8192;Count++)
+        {
+            UVM_LOG_S("\r\nCount:");
+            UVM_LOG_I(Count);
+            UVM_ASSERT(UVM_Pgtbl_Crt(TEST_PROCESS_PGT, UVM_CAPID(UVM_BOOT_TBL_KMEM,0), RME_TEST_PDE(Count),
+                                           Cur_Addr, 0, 0U,  RME_PGT_SIZE_2M, RME_PGT_NUM_512)>=0);
+            Cur_Addr+=UVM_PGTBL_SIZE_NOM(RME_PGT_NUM_512);
+            UVM_ASSERT(UVM_Pgtbl_Con(UVM_CAPID(TEST_PROCESS_PGT,RME_TEST_PDP(Count>>9)),Count&0x1FF,
+                                       UVM_CAPID(TEST_PROCESS_PGT,RME_TEST_PDE(Count)),RME_PGT_ALL_PERM)>=0);
+        }*/
+        UVM_LOG_S("\r\nsuccess!!!!");
+        UVM_ASSERT(UVM_Proc_Crt(UVM_BOOT_CAPTBL,UVM_CAPID(UVM_BOOT_TBL_KMEM,0),TEST_PROCESS,TEST_PROC_CAPTBL,
+                                                UVM_BOOT_TBL_PGTBL,Cur_Addr)>=0);
+        UVM_LOG_S("\r\nsuccess!!!!");
+        while (1);
 
         UVM_ASSERT(UVM_Inv_Crt(UVM_BOOT_CAPTBL, UVM_CAPID(UVM_BOOT_TBL_KMEM,0), TEST_INV1, UVM_BOOT_INIT_PROC, Cur_Addr)>=0);
         Cur_Addr+=UVM_INV_SIZE;
@@ -207,45 +257,9 @@ int main(ptr_t CPUID)
         UVM_LOG_I(sumout/1000000);
         UVM_Kern_Act(UVM_BOOT_INIT_KERN, 0x07, 0xa0*5, sumout/1000000, 0);
 
-        /* Stub test */
-        sum=0;
-        for(Count=0;Count<1000000;Count++)
-        {
-            start=__UVM_X64_Read_TSC();
-            UVM_Inv_Act_Dummy(TEST_INV1,0,0);
-            end=__UVM_X64_Read_TSC();
-            sum+=end-start;
-        }
-        UVM_LOG_S("\r\ninv-dummy");
-        UVM_LOG_I(sum/1000000);
-        UVM_Kern_Act(UVM_BOOT_INIT_KERN, 0x07, 0xa0*6, sum/1000000, 0);
+        /*Invocation stub test ends here*/
 
-        /* crazyopt test - single callq/retq */
-        sum=0;
-        for(Count=0;Count<1000000;Count++)
-        {
-            start=__UVM_X64_Read_TSC();
-            UVM_cret(0,0);
-            end=__UVM_X64_Read_TSC();
-            sum+=end-start;
-        }
-        UVM_LOG_S("\r\ncallret");
-        UVM_LOG_I(sum/(1000000/10));
-        UVM_Kern_Act(UVM_BOOT_INIT_KERN, 0x07, 0xa0*7, sum/1000000, 0);
-
-    }
-    /* Run some simple benchmarks *//*
-core-local ctxsw wrt.cores
-core-local IPC wrt.cores
-map/unmap pages wrt.cores
-WCIRT*/
-    while (1);
-    while(1)
-    {
-        /* Receive the scheduler notifications for the interrupt threads. If any of
-         * them failed, then we just panic, because none of them are supposed to fail. */
-        /* UVM_LOG_S("I"); */
-        UVM_Idle();
+        while (1);
     }
 }
 /* End Function:main *********************************************************/

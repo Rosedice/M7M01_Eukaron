@@ -4802,7 +4802,7 @@ static rme_ret_t _RME_Prc_Crt(struct RME_Cap_Cpt* Cpt,
 #if(RME_PGT_RAW_ENABLE==0U)
     RME_CAP_CHECK(Pgt_Op,RME_PGT_FLAG_PRC_CRT);
 #endif
-    
+
     /* Get the cap slot */
     RME_CPT_GETSLOT(Cpt_Crt,Cap_Prc,struct RME_Cap_Prc*,Prc_Crt);
     /* Take the slot if possible */

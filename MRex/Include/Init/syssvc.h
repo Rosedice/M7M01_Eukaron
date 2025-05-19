@@ -183,6 +183,8 @@ while(0)
 #define UVM_PGTBL_SIZE_NOM(NUM_ORDER)        UVM_ROUNDED(UVM_PGTBL_WORD_SIZE_NOM(NUM_ORDER))
 /* Top-level page directory */
 #define UVM_PGTBL_SIZE_TOP(NUM_ORDER)        UVM_ROUNDED(UVM_PGTBL_WORD_SIZE_TOP(NUM_ORDER))
+/* Page size*/
+#define UVM_PGTBL_WORD_SIZE_NOM(NUM_ORDER)  UVM_ROUNDED((1<<(NUM_ORDER))*sizeof(ptr_t))
 /* Process */
 #define UVM_PROC_SIZE                        UVM_ROUNDED(UVM_PROC_WORD_SIZE)
 /* Thread */

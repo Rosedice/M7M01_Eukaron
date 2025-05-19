@@ -26,12 +26,9 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="6325f417-13e6-4af5-b8d7-2d5af7a23565" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/../Include/Kernel/rme_kernel.h" beforeDir="false" afterPath="$PROJECT_DIR$/../Include/Kernel/rme_kernel.h" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Include/Platform/X64/rme_platform_x64.h" beforeDir="false" afterPath="$PROJECT_DIR$/../Include/Platform/X64/rme_platform_x64.h" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Include/Init/syssvc.h" beforeDir="false" afterPath="$PROJECT_DIR$/Include/Init/syssvc.h" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Init/init.c" beforeDir="false" afterPath="$PROJECT_DIR$/Init/init.c" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Init/syssvc.c" beforeDir="false" afterPath="$PROJECT_DIR$/Init/syssvc.c" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Object/UVM" beforeDir="false" afterPath="$PROJECT_DIR$/Object/UVM" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/UVM.asm" beforeDir="false" afterPath="$PROJECT_DIR$/UVM.asm" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/UVM.bin" beforeDir="false" afterPath="$PROJECT_DIR$/UVM.bin" afterDir="false" />
@@ -43,7 +40,6 @@
       <change beforePath="$PROJECT_DIR$/../Project/GCC-X64/UVM.c" beforeDir="false" afterPath="$PROJECT_DIR$/../Project/GCC-X64/UVM.c" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../Project/GCC-X64/isofiles/boot/RME" beforeDir="false" afterPath="$PROJECT_DIR$/../Project/GCC-X64/isofiles/boot/RME" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../Source/Kernel/rme_kernel.c" beforeDir="false" afterPath="$PROJECT_DIR$/../Source/Kernel/rme_kernel.c" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Source/Platform/X64/rme_platform_x64.c" beforeDir="false" afterPath="$PROJECT_DIR$/../Source/Platform/X64/rme_platform_x64.c" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
