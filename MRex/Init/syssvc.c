@@ -505,10 +505,10 @@ Return      : ret_t - If the unmapping is successful, it will return 0; else err
 ret_t UVM_Pgtbl_Add(cid_t Cap_Pgtbl_Dst, ptr_t Pos_Dst, ptr_t Flags_Dst,
                     cid_t Cap_Pgtbl_Src, ptr_t Pos_Src, ptr_t Index)
 {
-    return UVM_CAP_OP(RME_SVC_PGT_ADD, 0,
+    return UVM_CAP_OP(RME_SVC_PGT_ADD, Flags_Dst,
                       UVM_PARAM_D1(Cap_Pgtbl_Dst)|UVM_PARAM_D0(Pos_Dst),
                       UVM_PARAM_D1(Cap_Pgtbl_Src)|UVM_PARAM_D0(Pos_Src),
-                      UVM_PARAM_D1(Flags_Dst)|UVM_PARAM_D0(Index));
+                      Index);
 }
 /* End Function:UVM_Pgtbl_Add ************************************************/
 
@@ -586,9 +586,9 @@ ret_t UVM_Proc_Crt(cid_t Cap_Captbl_Crt, cid_t Cap_Kmem, cid_t Cap_Proc,
                    cid_t Cap_Captbl, cid_t Cap_Pgtbl, ptr_t Vaddr)
 {
     return UVM_CAP_OP(RME_SVC_PRC_CRT, Cap_Captbl_Crt,
-                      UVM_PARAM_D1(Cap_Kmem)|UVM_PARAM_D0(Cap_Proc),
-                      UVM_PARAM_D1(Cap_Captbl)|UVM_PARAM_D0(Cap_Pgtbl),
-                      Vaddr);
+                      Cap_Proc,
+                      Cap_Captbl,
+                      Cap_Pgtbl);
 }
 /* End Function:UVM_Proc_Crt *************************************************/
 

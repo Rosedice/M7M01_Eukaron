@@ -27,8 +27,8 @@
   <component name="ChangeListManager">
     <list default="true" id="6325f417-13e6-4af5-b8d7-2d5af7a23565" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Include/Init/syssvc.h" beforeDir="false" afterPath="$PROJECT_DIR$/Include/Init/syssvc.h" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Init/init.c" beforeDir="false" afterPath="$PROJECT_DIR$/Init/init.c" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Init/syssvc.c" beforeDir="false" afterPath="$PROJECT_DIR$/Init/syssvc.c" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Object/UVM" beforeDir="false" afterPath="$PROJECT_DIR$/Object/UVM" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/UVM.asm" beforeDir="false" afterPath="$PROJECT_DIR$/UVM.asm" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/UVM.bin" beforeDir="false" afterPath="$PROJECT_DIR$/UVM.bin" afterDir="false" />
@@ -40,6 +40,7 @@
       <change beforePath="$PROJECT_DIR$/../Project/GCC-X64/UVM.c" beforeDir="false" afterPath="$PROJECT_DIR$/../Project/GCC-X64/UVM.c" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../Project/GCC-X64/isofiles/boot/RME" beforeDir="false" afterPath="$PROJECT_DIR$/../Project/GCC-X64/isofiles/boot/RME" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../Source/Kernel/rme_kernel.c" beforeDir="false" afterPath="$PROJECT_DIR$/../Source/Kernel/rme_kernel.c" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Source/Platform/X64/rme_platform_x64.c" beforeDir="false" afterPath="$PROJECT_DIR$/../Source/Platform/X64/rme_platform_x64.c" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -98,28 +99,28 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">{
-  &quot;keyToString&quot;: {
-    &quot;ModuleVcsDetector.initialDetectionPerformed&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.RadMigrateCodeStyle&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.cidr.known.project.marker&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.readMode.enableVisualFormatting&quot;: &quot;true&quot;,
-    &quot;SHELLCHECK.PATH&quot;: &quot;I do mind&quot;,
-    &quot;cf.first.check.clang-format&quot;: &quot;false&quot;,
-    &quot;cidr.known.project.marker&quot;: &quot;true&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;main&quot;,
-    &quot;last_opened_file_path&quot;: &quot;/home/kevin/M7M01_Eukaron/MRex/Makefile&quot;,
-    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
-    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
-    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
-    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
-    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
-    &quot;settings.editor.selected.configurable&quot;: &quot;configurable.group.language&quot;,
-    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "ModuleVcsDetector.initialDetectionPerformed": "true",
+    "RunOnceActivity.RadMigrateCodeStyle": "true",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "RunOnceActivity.cidr.known.project.marker": "true",
+    "RunOnceActivity.git.unshallow": "true",
+    "RunOnceActivity.readMode.enableVisualFormatting": "true",
+    "SHELLCHECK.PATH": "I do mind",
+    "cf.first.check.clang-format": "false",
+    "cidr.known.project.marker": "true",
+    "git-widget-placeholder": "main",
+    "last_opened_file_path": "/home/kevin/M7M01_Eukaron/MRex/Makefile",
+    "node.js.detected.package.eslint": "true",
+    "node.js.detected.package.tslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "node.js.selected.package.tslint": "(autodetect)",
+    "nodejs_package_manager_path": "npm",
+    "settings.editor.selected.configurable": "preferences.lookFeel",
+    "vue.rearranger.settings.migration": "true"
   }
-}</component>
+}]]></component>
   <component name="RunManager" selected="原生应用程序.UVM">
     <configuration name="UVM" type="CLionNativeAppRunConfigurationType" REDIRECT_INPUT="false" ELEVATE="false" USE_EXTERNAL_CONSOLE="false" EMULATE_TERMINAL="false" PASS_PARENT_ENVS_2="true" PROJECT_NAME="MRex" TARGET_NAME="UVM" CONFIG_NAME="UVM" version="1">
       <method v="2">

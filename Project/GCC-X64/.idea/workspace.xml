@@ -24,8 +24,8 @@
   <component name="ChangeListManager">
     <list default="true" id="ac4fed31-378c-48ff-aa30-57d690a7c470" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/../../MRex/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../../MRex/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../MRex/Include/Init/syssvc.h" beforeDir="false" afterPath="$PROJECT_DIR$/../../MRex/Include/Init/syssvc.h" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../../MRex/Init/init.c" beforeDir="false" afterPath="$PROJECT_DIR$/../../MRex/Init/init.c" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../MRex/Init/syssvc.c" beforeDir="false" afterPath="$PROJECT_DIR$/../../MRex/Init/syssvc.c" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../../MRex/Object/UVM" beforeDir="false" afterPath="$PROJECT_DIR$/../../MRex/Object/UVM" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../../MRex/UVM.asm" beforeDir="false" afterPath="$PROJECT_DIR$/../../MRex/UVM.asm" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../../MRex/UVM.bin" beforeDir="false" afterPath="$PROJECT_DIR$/../../MRex/UVM.bin" afterDir="false" />
@@ -37,6 +37,7 @@
       <change beforePath="$PROJECT_DIR$/UVM.c" beforeDir="false" afterPath="$PROJECT_DIR$/UVM.c" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/isofiles/boot/RME" beforeDir="false" afterPath="$PROJECT_DIR$/isofiles/boot/RME" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../../Source/Kernel/rme_kernel.c" beforeDir="false" afterPath="$PROJECT_DIR$/../../Source/Kernel/rme_kernel.c" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../Source/Platform/X64/rme_platform_x64.c" beforeDir="false" afterPath="$PROJECT_DIR$/../../Source/Platform/X64/rme_platform_x64.c" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />

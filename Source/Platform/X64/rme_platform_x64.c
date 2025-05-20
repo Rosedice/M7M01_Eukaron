@@ -1435,6 +1435,8 @@ rme_ptr_t __RME_Boot(void)
     /* Align the address to 4096 to prepare for page table creation */
     Cur_Addr=RME_ROUND_UP(Cur_Addr,12);
     /* Create PML4 */
+    RME_DBG_S("\r\nPML4 address:");
+    RME_DBG_H(Cur_Addr);
     RME_ASSERT(_RME_Pgt_Boot_Crt(RME_X64_CPT, RME_BOOT_TBL_PGT, RME_BOOT_PML4,
                                    Cur_Addr, 0, RME_PGT_TOP, RME_PGT_SIZE_512G, RME_PGT_NUM_512)==0);
     Cur_Addr+=RME_KOM_ROUND(RME_PGT_SIZE_TOP(RME_PGT_NUM_512));
@@ -1565,6 +1567,8 @@ rme_ptr_t __RME_Boot(void)
     __RME_X64_Timer_Init();
     __RME_X64_IOAPIC_Int_Enable(2,0);
     /* Change page tables */
+    RME_DBG_S("\r\nInit page table address:");
+    RME_DBG_H(RME_CAP_GETOBJ((RME_CPU_LOCAL()->Thd_Cur)->Sched.Prc->Pgt,rme_ptr_t));
     __RME_Pgt_Set(RME_CAP_GETOBJ((RME_CPU_LOCAL()->Thd_Cur)->Sched.Prc->Pgt,rme_ptr_t));
 
     /* Load the init process to address 0x20000000 - It should be smaller than 2MB */

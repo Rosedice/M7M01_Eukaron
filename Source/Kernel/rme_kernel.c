@@ -1563,7 +1563,6 @@ void _RME_Svc_Handler(struct RME_Reg_Struct* Reg)
         case RME_SVC_INV_CRT:
         {
             RME_COV_MARKER();
-            
             Retval=_RME_Inv_Crt(Cpt,
                                 (rme_cid_t)Cid,                             /* rme_cid_t Cap_Cpt */
                                 (rme_cid_t)RME_PARAM_D1(Param[0]),          /* rme_cid_t Cap_Kom */
@@ -4786,7 +4785,6 @@ static rme_ret_t _RME_Prc_Crt(struct RME_Cap_Cpt* Cpt,
     struct RME_Cap_Pgt* Prc_Pgt;
 #endif
     rme_ptr_t Type_Stat;
-    
     /* Get the capability slots */
     RME_CPT_GETCAP(Cpt,Cap_Cpt_Crt,RME_CAP_TYPE_CPT,
                    struct RME_Cap_Cpt*,Cpt_Crt,Type_Stat);
@@ -7636,15 +7634,15 @@ static rme_ret_t _RME_Inv_Act(struct RME_Cap_Cpt* Cpt,
                        Invocation->Entry,
                        Invocation->Stack,
                        Param,Reg);
-    
-    
+
+
     /* We are assuming that we are always invoking into a new process (why use synchronous
      * invocation if you don't do so?). So we always switch page tables regardless. */
 #if(RME_PGT_RAW_ENABLE==0U)
     RME_ASSERT(RME_CAP_IS_ROOT(Invocation->Prc->Pgt)!=0U);
 #endif
     __RME_Pgt_Set((rme_ptr_t)Invocation->Prc->Pgt);
-    
+
     return 0;
 }
 /* End Function:_RME_Inv_Act *************************************************/
