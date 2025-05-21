@@ -137,7 +137,8 @@ typedef rme_s64_t rme_ret_t;
 #define RME_PREEMPT_PRIO_NUM         			(64U)
 #define RME_TIMESTAMP() 						RME_x64_timestamp
 #define RME_KOT_VA_BASE_ROUND(x)				RME_ROUND_UP(x,12)
-#define RME_CAPID(table, index) 	(((table) << 16) | (1 << 15) | ((index) & 0x7FFF))
+#define RME_CAPID_2L                        (((rme_cid_t)1)<<(sizeof(rme_ptr_t)*2-1))
+#define RME_CAPID(X,Y)                      (((X)<<(sizeof(rme_ptr_t)*2))|(Y)|RME_CAPID_2L)
 /* Atomic instructions - The oficial release replaces all these with inline
  * assembly to boost speed. Sometimes this can harm compiler compatibility. If
  * you need normal assembly version, consider uncommenting the macro below. */
@@ -1535,7 +1536,7 @@ __EXTERN__ void __RME_X64_Fault_Handler(struct RME_Reg_Struct* Reg, rme_ptr_t Re
 /* Generic interrupt handler */
 __EXTERN__ void __RME_X64_Generic_Handler(struct RME_Reg_Struct* Reg, rme_ptr_t Int_Num);
 /* Page table operations */
-__EXTERN__ void __RME_Pgt_Set(rme_ptr_t Pgt);
+__EXTERN__ void __RME_Pgt_Set(struct RME_Cap_Pgt* Pgt);
 __EXTERN__ rme_ptr_t __RME_Pgt_Kom_Init(void);
 __EXTERN__ rme_ptr_t __RME_Pgt_Check(rme_ptr_t Base_Addr, rme_ptr_t Is_Top, rme_ptr_t Size_Order, rme_ptr_t Num_Order, rme_ptr_t Vaddr);
 __EXTERN__ rme_ptr_t __RME_Pgt_Init(struct RME_Cap_Pgt* Pgt_Op);

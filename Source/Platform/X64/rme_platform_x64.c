@@ -1376,7 +1376,7 @@ rme_ptr_t __RME_SMP_Low_Level_Init(void)
     RME_ASSERT(CPU_Local->Sig_Vct!=0);
 
     /* Change page tables */
-    __RME_Pgt_Set(RME_CAP_GETOBJ((CPU_Local->Thd_Cur)->Sched.Prc->Pgt,rme_ptr_t));
+    __RME_Pgt_Set((CPU_Local->Thd_Cur)->Sched.Prc->Pgt);
     /* Boot into the init thread - never returns */
     __RME_Enter_User_Mode(0, RME_X64_USTACK(CPU_Local->CPUID), CPU_Local->CPUID);
 
@@ -1423,7 +1423,6 @@ rme_ptr_t __RME_Boot(void)
     Cpt=(struct RME_Cap_Cpt*)Cur_Addr;
     RME_ASSERT(_RME_Cpt_Boot_Init(RME_BOOT_INIT_CPT,Cur_Addr,16)==RME_BOOT_INIT_CPT);
     Cur_Addr+=RME_KOM_ROUND(RME_CPT_SIZE(16));
-
     /* Create the capability table for initial page tables - now we are only
      * adding 2MB pages. There will be 1 PML4, 16 PDP, and 16*512=8192 PGD.
      * This should provide support for up to 4TB of memory, which will be sufficient
@@ -1431,7 +1430,6 @@ rme_ptr_t __RME_Boot(void)
      * is fine */
     RME_ASSERT(_RME_Cpt_Boot_Crt(RME_X64_CPT, RME_BOOT_INIT_CPT, RME_BOOT_TBL_PGT, Cur_Addr, 1+16+8192)==0);
     Cur_Addr+=RME_KOM_ROUND(RME_CPT_SIZE(1+16+8192));
-
     /* Align the address to 4096 to prepare for page table creation */
     Cur_Addr=RME_ROUND_UP(Cur_Addr,12);
     /* Create PML4 */
@@ -1444,7 +1442,7 @@ rme_ptr_t __RME_Boot(void)
     for(Count=0;Count<16;Count++)
     {
         RME_ASSERT(_RME_Pgt_Boot_Crt(RME_X64_CPT, RME_BOOT_TBL_PGT, RME_BOOT_PDP(Count),
-                                       Cur_Addr, 0, RME_PGT_NOM, RME_PGT_SIZE_1G, RME_PGT_NUM_512)==0);
+                                       Cur_Addr, (rme_ptr_t)RME_POW2(RME_PGT_SIZE_512G)*Count, RME_PGT_NOM, RME_PGT_SIZE_1G, RME_PGT_NUM_512)==0);
         Cur_Addr+=RME_KOM_ROUND(RME_PGT_SIZE_NOM(RME_PGT_NUM_512));
         RME_ASSERT(_RME_Pgt_Boot_Con(RME_X64_CPT, RME_CAPID(RME_BOOT_TBL_PGT,RME_BOOT_PML4), Count,
                                        RME_CAPID(RME_BOOT_TBL_PGT,RME_BOOT_PDP(Count)), RME_PGT_ALL_PERM)==0);
@@ -1454,7 +1452,7 @@ rme_ptr_t __RME_Boot(void)
     for(Count=0;Count<8192;Count++)
     {
         RME_ASSERT(_RME_Pgt_Boot_Crt(RME_X64_CPT, RME_BOOT_TBL_PGT, RME_BOOT_PDE(Count),
-                                       Cur_Addr, 0, RME_PGT_NOM, RME_PGT_SIZE_2M, RME_PGT_NUM_512)==0);
+                                       Cur_Addr, (rme_ptr_t)RME_POW2(RME_PGT_SIZE_1G)*Count, RME_PGT_NOM, RME_PGT_SIZE_2M, RME_PGT_NUM_512)==0);
         Cur_Addr+=RME_KOM_ROUND(RME_PGT_SIZE_NOM(RME_PGT_NUM_512));
         RME_ASSERT(_RME_Pgt_Boot_Con(RME_X64_CPT, RME_CAPID(RME_BOOT_TBL_PGT,RME_BOOT_PDP(Count>>9)), Count&0x1FF,
                                        RME_CAPID(RME_BOOT_TBL_PGT,RME_BOOT_PDE(Count)), RME_PGT_ALL_PERM)==0);
@@ -1498,7 +1496,6 @@ rme_ptr_t __RME_Boot(void)
     /* Activate the first process - This process cannot be deleted */
     RME_ASSERT(_RME_Prc_Boot_Crt(RME_X64_CPT, RME_BOOT_INIT_CPT, RME_BOOT_INIT_PRC,
                                   RME_BOOT_INIT_CPT, RME_CAPID(RME_BOOT_TBL_PGT,RME_BOOT_PML4))==0);
-
     /* Create the initial kernel function capability */
     RME_ASSERT(_RME_Kfn_Boot_Crt(RME_X64_CPT, RME_BOOT_INIT_CPT, RME_BOOT_INIT_KERN)==0);
 
@@ -1569,16 +1566,16 @@ rme_ptr_t __RME_Boot(void)
     /* Change page tables */
     RME_DBG_S("\r\nInit page table address:");
     RME_DBG_H(RME_CAP_GETOBJ((RME_CPU_LOCAL()->Thd_Cur)->Sched.Prc->Pgt,rme_ptr_t));
-    __RME_Pgt_Set(RME_CAP_GETOBJ((RME_CPU_LOCAL()->Thd_Cur)->Sched.Prc->Pgt,rme_ptr_t));
+    __RME_Pgt_Set((RME_CPU_LOCAL()->Thd_Cur)->Sched.Prc->Pgt);
 
-    /* Load the init process to address 0x20000000 - It should be smaller than 2MB */
+    /* Load the init process to address 0x0 - It should be smaller than 2MB */
     extern const unsigned char UVM_Init[];
-    _RME_Memcpy((void*)0x20000000,(void*)UVM_Init,RME_POW2(RME_PGT_SIZE_2M));
+    _RME_Memcpy((void*)0x0,(void*)UVM_Init,RME_POW2(RME_PGT_SIZE_2M));
 
     /* Now other non-booting processors may proceed and go into their threads */
     RME_X64_CPU_Cnt=0;
     /* Boot into the init thread */
-    __RME_Enter_User_Mode(0x20000000ULL, RME_X64_USTACK(0)+0x20000000ULL, 0);
+    __RME_Enter_User_Mode(0x0ULL, RME_X64_USTACK(0), 0);
     return 0;
 }
 /* End Function:__RME_Boot ***************************************************/
@@ -1928,9 +1925,9 @@ Input       : rme_ptr_t Pgt - The virtual address of the page table.
 Output      : None.
 Return      : None.
 ******************************************************************************/
-void __RME_Pgt_Set(rme_ptr_t Pgt)
+void __RME_Pgt_Set(struct RME_Cap_Pgt* Pgt)
 {
-    __RME_X64_Pgt_Set(RME_X64_VA2PA(Pgt));
+    __RME_X64_Pgt_Set(RME_X64_VA2PA(RME_CAP_GETOBJ(Pgt,rme_ptr_t)));
 }
 /* End Function:__RME_Pgt_Set **********************************************/
 

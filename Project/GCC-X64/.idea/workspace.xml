@@ -23,13 +23,16 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="ac4fed31-378c-48ff-aa30-57d690a7c470" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/../../Include/Platform/X64/rme_platform_x64.h" beforeDir="false" afterPath="$PROJECT_DIR$/../../Include/Platform/X64/rme_platform_x64.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../MRex/.idea/editor.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../../MRex/.idea/editor.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../../MRex/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../../MRex/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../MRex/Include/Platform/X64/uvmlib_x64.ld" beforeDir="false" afterPath="$PROJECT_DIR$/../../MRex/Include/Platform/X64/uvmlib_x64.ld" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../../MRex/Init/init.c" beforeDir="false" afterPath="$PROJECT_DIR$/../../MRex/Init/init.c" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../MRex/Init/syssvc.c" beforeDir="false" afterPath="$PROJECT_DIR$/../../MRex/Init/syssvc.c" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../../MRex/Object/UVM" beforeDir="false" afterPath="$PROJECT_DIR$/../../MRex/Object/UVM" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../../MRex/UVM.asm" beforeDir="false" afterPath="$PROJECT_DIR$/../../MRex/UVM.asm" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../../MRex/UVM.bin" beforeDir="false" afterPath="$PROJECT_DIR$/../../MRex/UVM.bin" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../../MRex/UVM.c" beforeDir="false" afterPath="$PROJECT_DIR$/../../MRex/UVM.c" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/editor.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/editor.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Object/RME" beforeDir="false" afterPath="$PROJECT_DIR$/Object/RME" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/RME.asm" beforeDir="false" afterPath="$PROJECT_DIR$/RME.asm" afterDir="false" />
@@ -134,11 +137,6 @@
         <option name="CLION.COMPOUND.BUILD" enabled="true" />
       </method>
     </configuration>
-    <configuration default="true" type="CMakeRunConfiguration" factoryName="Application" REDIRECT_INPUT="false" ELEVATE="false" USE_EXTERNAL_CONSOLE="false" EMULATE_TERMINAL="false" PASS_PARENT_ENVS_2="true">
-      <method v="2">
-        <option name="com.jetbrains.cidr.execution.CidrBuildBeforeRunTaskProvider$BuildBeforeRunTask" enabled="true" />
-      </method>
-    </configuration>
     <list>
       <item itemvalue="原生应用程序.RME" />
       <item itemvalue="原生应用程序.all" />
@@ -156,6 +154,8 @@
       <workItem from="1747191428924" duration="6374000" />
       <workItem from="1747203004640" duration="307000" />
       <workItem from="1747203427580" duration="13309000" />
+      <workItem from="1747795292525" duration="24945000" />
+      <workItem from="1747823549156" duration="22179000" />
     </task>
     <servers />
   </component>

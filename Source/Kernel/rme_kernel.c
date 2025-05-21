@@ -3106,7 +3106,7 @@ static rme_ret_t _RME_Pgt_Crt(struct RME_Cap_Cpt* Cpt,
     if((Size_Order+Num_Order)>RME_POW2(RME_WORD_ORDER))
     {
         RME_COV_MARKER();
-        
+
         return RME_ERR_PGT_HW;
     }
     else
@@ -4623,8 +4623,7 @@ static rme_ret_t _RME_Run_Swt(struct RME_Reg_Struct* Reg,
 #endif
     {
         RME_COV_MARKER();
-        
-        __RME_Pgt_Set((rme_ptr_t)Pgt_New);
+        __RME_Pgt_Set(Pgt_New);
     }
     else
     {
@@ -7402,7 +7401,6 @@ static rme_ret_t _RME_Inv_Crt(struct RME_Cap_Cpt* Cpt,
     /* Try to populate the area */
     if(_RME_Kot_Mark(Vaddr,RME_INV_SIZE)!=0)
     {
-        RME_DBG_S("\nKOT_MARK didn't pass!!");
         RME_COV_MARKER();
         RME_WRITE_RELEASE(&(Inv_Crt->Head.Type_Stat),0U);
         return RME_ERR_CPT_KOT;
@@ -7641,7 +7639,7 @@ static rme_ret_t _RME_Inv_Act(struct RME_Cap_Cpt* Cpt,
 #if(RME_PGT_RAW_ENABLE==0U)
     RME_ASSERT(RME_CAP_IS_ROOT(Invocation->Prc->Pgt)!=0U);
 #endif
-    __RME_Pgt_Set((rme_ptr_t)Invocation->Prc->Pgt);
+    __RME_Pgt_Set(Invocation->Prc->Pgt);
 
     return 0;
 }
@@ -7729,7 +7727,7 @@ static rme_ret_t _RME_Inv_Ret(struct RME_Reg_Struct* Reg,
 #if(RME_PGT_RAW_ENABLE==0U)
         RME_ASSERT(RME_CAP_IS_ROOT(Invocation->Prc->Pgt)!=0U);
 #endif
-        __RME_Pgt_Set((rme_ptr_t)Invocation->Prc->Pgt);
+        __RME_Pgt_Set(Invocation->Prc->Pgt);
     }
     else
     {
@@ -7738,7 +7736,7 @@ static rme_ret_t _RME_Inv_Ret(struct RME_Reg_Struct* Reg,
 #if(RME_PGT_RAW_ENABLE==0U)
         RME_ASSERT(RME_CAP_IS_ROOT(Thread->Sched.Prc->Pgt)!=0U);
 #endif
-        __RME_Pgt_Set((rme_ptr_t)Thread->Sched.Prc->Pgt);
+        __RME_Pgt_Set(Thread->Sched.Prc->Pgt);
     }
     
     return 0;
