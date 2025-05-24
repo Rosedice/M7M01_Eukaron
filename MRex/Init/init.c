@@ -89,8 +89,7 @@ void TEST_THD1_FUNC(void)
 {
     cnt_t Count;
     sum=0;
-    UVM_LOG_S("\r\nenter thread 1");
-    /*for(Count=0;Count<10000;Count++)
+    for(Count=0;Count<10000;Count++)
     {
         start=__UVM_X64_Read_TSC();
         UVM_Thd_Swt(TEST_THD2,0);
@@ -99,24 +98,15 @@ void TEST_THD1_FUNC(void)
     }
     UVM_LOG_S("\r\nThread Switching takes clock cycles:");
     UVM_LOG_I(sum/10000);
-    UVM_Thd_Swt(UVM_CAPID(UVM_BOOT_TBL_THD,0),0);*/
-    for(Count=0;Count<10000;Count++)
-    {
-        UVM_ASSERT(UVM_Sig_Rcv(TEST_SIG1,RME_SIG_FLAG_RCV_NS)>=0);
-        start=__UVM_X64_Read_TSC();
-        UVM_ASSERT(UVM_Thd_Swt(TEST_THD2,0)>=0);
-        end=__UVM_X64_Read_TSC();
-        sum+=end-start;
-    }
-    UVM_LOG_S("\r\nsig snd/rev takes clock cycles:");
-    UVM_LOG_I(sum/10000);
+    UVM_Thd_Swt(UVM_CAPID(UVM_BOOT_TBL_THD,0),0);
+    /*UVM_ASSERT(UVM_Sig_Snd(TEST_SIG1)>=0);*/
 }
 
 void TEST_THD2_FUNC(void)
 {
     while(1)
     {
-        UVM_Sig_Snd(TEST_SIG1);
+        UVM_Thd_Swt(TEST_THD1,0);
     }
 }
 
@@ -188,6 +178,7 @@ int main(ptr_t CPUID)
         UVM_LOG_S("\r\nExit THD1!");*/
         /*Thread switching test ends here*/
 
+        /*
         UVM_ASSERT(UVM_Proc_Crt(UVM_BOOT_CAPTBL,UVM_CAPID(UVM_BOOT_TBL_KMEM,0),TEST_PROCESS,UVM_BOOT_CAPTBL,
                                         UVM_CAPID(UVM_BOOT_TBL_PGTBL,0),Cur_Addr)>=0);
         Cur_Addr+=UVM_PROC_SIZE;
@@ -196,30 +187,21 @@ int main(ptr_t CPUID)
         UVM_ASSERT(UVM_Thd_Time_Xfer(TEST_THD1,UVM_CAPID(UVM_BOOT_TBL_THD,0),UVM_THD_INF_TIME)>=0);
         UVM_ASSERT(UVM_Thd_Exec_Set(TEST_THD1,TEST_THD1_FUNC,12*UVM_POW2(RME_PGT_SIZE_1M),0)>=0);
         Cur_Addr+=UVM_THD_SIZE;
-
-        UVM_ASSERT(UVM_Thd_Crt(UVM_BOOT_CAPTBL, UVM_CAPID(UVM_BOOT_TBL_KMEM,0), TEST_THD2, UVM_BOOT_INIT_PROC, 10, Cur_Addr)>=0);
-        UVM_ASSERT(UVM_Thd_Sched_Bind(TEST_THD2,UVM_CAPID(UVM_BOOT_TBL_THD,0),UVM_CAPID_NULL,0,0)>=0);
-        UVM_ASSERT(UVM_Thd_Time_Xfer(TEST_THD2,UVM_CAPID(UVM_BOOT_TBL_THD,0),UVM_THD_INF_TIME)>=0);
-        UVM_ASSERT(UVM_Thd_Exec_Set(TEST_THD2,TEST_THD2_FUNC,13*UVM_POW2(RME_PGT_SIZE_1M),1)>=0);
-        Cur_Addr+=UVM_THD_SIZE;
-
-        /*Signal send test begins here*/
+        /*Signal send test begins here#1#
         UVM_ASSERT(UVM_Sig_Crt(UVM_BOOT_CAPTBL,UVM_CAPID(UVM_BOOT_TBL_KMEM,0),TEST_SIG1, Cur_Addr)>=0);
         Cur_Addr+=UVM_SIG_SIZE;
         sum=0;
-        UVM_ASSERT(UVM_Thd_Swt(TEST_THD1,0)>=0);
-        /*for(Count=0;Count<10000;Count++)
+        for(Count=0;Count<10000;Count++)
         {
-            UVM_ASSERT(UVM_Sig_Rcv(TEST_SIG1,RME_SIG_FLAG_RCV_BS)>=0);
+            UVM_Sig_Rcv(TEST_SIG1,0);
             start=__UVM_X64_Read_TSC();
-            UVM_ASSERT(UVM_Thd_Swt(TEST_THD1,0)>=0);
+            UVM_Thd_Swt(TEST_THD1,0);
             end=__UVM_X64_Read_TSC();
             sum+=end-start;
-        }*/
-        while (1){}
+        }
         UVM_LOG_S("\r\nSignal send takes clock cycles:");
         UVM_LOG_I(sum/10000);
-        while (1){}
+        while (1){}*/
         /*Signal send test ends here*/
 
 
@@ -270,7 +252,7 @@ int main(ptr_t CPUID)
         Cur_Addr+=UVM_PROC_SIZE;
 
         /*create the test invacation stub */
-        /*UVM_ASSERT(UVM_Inv_Crt(UVM_BOOT_CAPTBL, UVM_CAPID(UVM_BOOT_TBL_KMEM,0), TEST_INV1, TEST_PROCESS, Cur_Addr)>=0);
+        UVM_ASSERT(UVM_Inv_Crt(UVM_BOOT_CAPTBL, UVM_CAPID(UVM_BOOT_TBL_KMEM,0), TEST_INV1, TEST_PROCESS, Cur_Addr)>=0);
         UVM_LOG_S("\r\nSuccess!!!!");
         Cur_Addr+=UVM_INV_SIZE;
         UVM_ASSERT(UVM_Inv_Set(TEST_INV1, TEST_INV1_FUNC,12*UVM_POW2(RME_PGT_SIZE_1M),0)>=0);
@@ -278,7 +260,7 @@ int main(ptr_t CPUID)
         sum=0;
         sumin=0;
         sumout=0;
-        /* Run a raw test before we run anything else #1#
+        /* Run a raw test before we run anything else */
         for(Count=0;Count<10000;Count++)
         {
             start=__UVM_X64_Read_TSC();
@@ -294,7 +276,7 @@ int main(ptr_t CPUID)
         UVM_LOG_I(sumin/10000);
         UVM_LOG_S("\r\nout");
         UVM_LOG_I(sumout/10000);
-        while (1){}*/
+        while (1){}
         /*Invocation stub test ends here*/
         /*Cross-process thread switching test begins here*/
         /*create thread*/

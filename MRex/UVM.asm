@@ -11,7 +11,7 @@ Output      : None.
 *****************************************************************************/
 _UVM_Entry:
     JMP                 main
-       0:	e9 50 03 00 00       	jmp    355 <main>
+       0:	e9 eb 01 00 00       	jmp    1f0 <main>
 
 0000000000000005 <__UVM_X64_In>:
 Output         : None.
@@ -344,2542 +344,1730 @@ _UVM_MSB_Get:
      103:	48 29 f8             	sub    %rdi,%rax
     RETQ
      106:	c3                   	ret    
+     107:	66 0f 1f 84 00 00 00 	nopw   0x0(%rax,%rax,1)
+     10e:	00 00 
 
-0000000000000107 <UVM_Clear>:
-              ptr_t Size - The size to clear.
-Output      : None.
-Return      : None.
-******************************************************************************/
-void UVM_Clear(void* Addr, ptr_t Size)
-{
-     107:	f3 0f 1e fa          	endbr64 
-     10b:	55                   	push   %rbp
-     10c:	48 89 e5             	mov    %rsp,%rbp
-     10f:	48 83 ec 30          	sub    $0x30,%rsp
-     113:	48 89 7d d8          	mov    %rdi,-0x28(%rbp)
-     117:	48 89 75 d0          	mov    %rsi,-0x30(%rbp)
-    u8* Byte_Inc;
-    ptr_t Words;
-    ptr_t Bytes;
-    
-    /* On processors not that fast, copy by word is really important */
-    Word_Inc=(ptr_t*)Addr;
-     11b:	48 8b 45 d8          	mov    -0x28(%rbp),%rax
-     11f:	48 89 45 f8          	mov    %rax,-0x8(%rbp)
-    for(Words=Size/sizeof(ptr_t);Words>0;Words--)
-     123:	48 8b 45 d0          	mov    -0x30(%rbp),%rax
-     127:	48 c1 e8 03          	shr    $0x3,%rax
-     12b:	48 89 45 e8          	mov    %rax,-0x18(%rbp)
-     12f:	eb 15                	jmp    146 <UVM_Clear+0x3f>
-    {
-        *Word_Inc=0;
-     131:	48 8b 45 f8          	mov    -0x8(%rbp),%rax
-     135:	48 c7 00 00 00 00 00 	movq   $0x0,(%rax)
-        Word_Inc++;
-     13c:	48 83 45 f8 08       	addq   $0x8,-0x8(%rbp)
-    for(Words=Size/sizeof(ptr_t);Words>0;Words--)
-     141:	48 83 6d e8 01       	subq   $0x1,-0x18(%rbp)
-     146:	48 83 7d e8 00       	cmpq   $0x0,-0x18(%rbp)
-     14b:	75 e4                	jne    131 <UVM_Clear+0x2a>
-    }
-    
-    /* Get the final bytes */
-    Byte_Inc=(u8*)Word_Inc;
-     14d:	48 8b 45 f8          	mov    -0x8(%rbp),%rax
-     151:	48 89 45 f0          	mov    %rax,-0x10(%rbp)
-    for(Bytes=Size%sizeof(ptr_t);Bytes>0;Bytes--)
-     155:	48 8b 45 d0          	mov    -0x30(%rbp),%rax
-     159:	83 e0 07             	and    $0x7,%eax
-     15c:	48 89 45 e0          	mov    %rax,-0x20(%rbp)
-     160:	eb 11                	jmp    173 <UVM_Clear+0x6c>
-    {
-        *Byte_Inc=0;
-     162:	48 8b 45 f0          	mov    -0x10(%rbp),%rax
-     166:	c6 00 00             	movb   $0x0,(%rax)
-        Byte_Inc++;
-     169:	48 83 45 f0 01       	addq   $0x1,-0x10(%rbp)
-    for(Bytes=Size%sizeof(ptr_t);Bytes>0;Bytes--)
-     16e:	48 83 6d e0 01       	subq   $0x1,-0x20(%rbp)
-     173:	48 83 7d e0 00       	cmpq   $0x0,-0x20(%rbp)
-     178:	75 e8                	jne    162 <UVM_Clear+0x5b>
-    }
-}
-     17a:	90                   	nop
-     17b:	90                   	nop
-     17c:	c9                   	leave  
-     17d:	c3                   	ret    
-
-000000000000017e <TEST_THD1_FUNC>:
-ptr_t sum;
-ptr_t sumin;
-ptr_t sumout;
-
-void TEST_THD1_FUNC(void)
-{
-     17e:	f3 0f 1e fa          	endbr64 
-     182:	55                   	push   %rbp
-     183:	48 89 e5             	mov    %rsp,%rbp
-     186:	48 83 ec 10          	sub    $0x10,%rsp
-    cnt_t Count;
-    sum=0;
-     18a:	48 c7 05 8b 1e 00 00 	movq   $0x0,0x1e8b(%rip)        # 2020 <sum>
-     191:	00 00 00 00 
-    UVM_LOG_S("\r\nenter thread 1");
-     195:	bf 40 1a 00 00       	mov    $0x1a40,%edi
-     19a:	e8 68 0c 00 00       	call   e07 <UVM_Print_String>
-        sum+=end-start;
-    }
-    UVM_LOG_S("\r\nThread Switching takes clock cycles:");
-    UVM_LOG_I(sum/10000);
-    UVM_Thd_Swt(UVM_CAPID(UVM_BOOT_TBL_THD,0),0);*/
-    for(Count=0;Count<10000;Count++)
-     19f:	48 c7 45 f8 00 00 00 	movq   $0x0,-0x8(%rbp)
-     1a6:	00 
-     1a7:	e9 2c 01 00 00       	jmp    2d8 <TEST_THD1_FUNC+0x15a>
-    {
-        UVM_ASSERT(UVM_Sig_Rcv(TEST_SIG1,RME_SIG_FLAG_RCV_NS)>=0);
-     1ac:	be 08 00 00 00       	mov    $0x8,%esi
-     1b1:	bf 0c 00 00 00       	mov    $0xc,%edi
-     1b6:	e8 83 16 00 00       	call   183e <UVM_Sig_Rcv>
-     1bb:	48 85 c0             	test   %rax,%rax
-     1be:	79 5c                	jns    21c <TEST_THD1_FUNC+0x9e>
-     1c0:	bf 58 1a 00 00       	mov    $0x1a58,%edi
-     1c5:	e8 3d 0c 00 00       	call   e07 <UVM_Print_String>
-     1ca:	bf 89 1a 00 00       	mov    $0x1a89,%edi
-     1cf:	e8 33 0c 00 00       	call   e07 <UVM_Print_String>
-     1d4:	bf 95 1a 00 00       	mov    $0x1a95,%edi
-     1d9:	e8 29 0c 00 00       	call   e07 <UVM_Print_String>
-     1de:	bf 69 00 00 00       	mov    $0x69,%edi
-     1e3:	e8 55 09 00 00       	call   b3d <UVM_Print_Int>
-     1e8:	bf 9d 1a 00 00       	mov    $0x1a9d,%edi
-     1ed:	e8 15 0c 00 00       	call   e07 <UVM_Print_String>
-     1f2:	bf a0 1a 00 00       	mov    $0x1aa0,%edi
-     1f7:	e8 0b 0c 00 00       	call   e07 <UVM_Print_String>
-     1fc:	bf ac 1a 00 00       	mov    $0x1aac,%edi
-     201:	e8 01 0c 00 00       	call   e07 <UVM_Print_String>
-     206:	bf af 1a 00 00       	mov    $0x1aaf,%edi
-     20b:	e8 f7 0b 00 00       	call   e07 <UVM_Print_String>
-     210:	bf 9d 1a 00 00       	mov    $0x1a9d,%edi
-     215:	e8 ed 0b 00 00       	call   e07 <UVM_Print_String>
-     21a:	eb fe                	jmp    21a <TEST_THD1_FUNC+0x9c>
-        UVM_LOG_S("\r\nsig snd/rev takes clock cycles:");
-     21c:	bf b8 1a 00 00       	mov    $0x1ab8,%edi
-     221:	e8 e1 0b 00 00       	call   e07 <UVM_Print_String>
-        start=__UVM_X64_Read_TSC();
-     226:	e8 f0 fd ff ff       	call   1b <__UVM_X64_Read_TSC>
-     22b:	48 89 05 d6 1d 00 00 	mov    %rax,0x1dd6(%rip)        # 2008 <start>
-        UVM_ASSERT(UVM_Thd_Swt(TEST_THD2,0)>=0);
-     232:	be 00 00 00 00       	mov    $0x0,%esi
-     237:	bf 0a 00 00 00       	mov    $0xa,%edi
-     23c:	e8 0a 15 00 00       	call   174b <UVM_Thd_Swt>
-     241:	48 85 c0             	test   %rax,%rax
-     244:	79 5c                	jns    2a2 <TEST_THD1_FUNC+0x124>
-     246:	bf 58 1a 00 00       	mov    $0x1a58,%edi
-     24b:	e8 b7 0b 00 00       	call   e07 <UVM_Print_String>
-     250:	bf 89 1a 00 00       	mov    $0x1a89,%edi
-     255:	e8 ad 0b 00 00       	call   e07 <UVM_Print_String>
-     25a:	bf 95 1a 00 00       	mov    $0x1a95,%edi
-     25f:	e8 a3 0b 00 00       	call   e07 <UVM_Print_String>
-     264:	bf 6c 00 00 00       	mov    $0x6c,%edi
-     269:	e8 cf 08 00 00       	call   b3d <UVM_Print_Int>
-     26e:	bf 9d 1a 00 00       	mov    $0x1a9d,%edi
-     273:	e8 8f 0b 00 00       	call   e07 <UVM_Print_String>
-     278:	bf a0 1a 00 00       	mov    $0x1aa0,%edi
-     27d:	e8 85 0b 00 00       	call   e07 <UVM_Print_String>
-     282:	bf ac 1a 00 00       	mov    $0x1aac,%edi
-     287:	e8 7b 0b 00 00       	call   e07 <UVM_Print_String>
-     28c:	bf af 1a 00 00       	mov    $0x1aaf,%edi
-     291:	e8 71 0b 00 00       	call   e07 <UVM_Print_String>
-     296:	bf 9d 1a 00 00       	mov    $0x1a9d,%edi
-     29b:	e8 67 0b 00 00       	call   e07 <UVM_Print_String>
-     2a0:	eb fe                	jmp    2a0 <TEST_THD1_FUNC+0x122>
-        end=__UVM_X64_Read_TSC();
-     2a2:	e8 74 fd ff ff       	call   1b <__UVM_X64_Read_TSC>
-     2a7:	48 89 05 6a 1d 00 00 	mov    %rax,0x1d6a(%rip)        # 2018 <end>
-        sum+=end-start;
-     2ae:	48 8b 05 63 1d 00 00 	mov    0x1d63(%rip),%rax        # 2018 <end>
-     2b5:	48 8b 15 4c 1d 00 00 	mov    0x1d4c(%rip),%rdx        # 2008 <start>
-     2bc:	48 29 d0             	sub    %rdx,%rax
-     2bf:	48 89 c1             	mov    %rax,%rcx
-     2c2:	48 8b 05 57 1d 00 00 	mov    0x1d57(%rip),%rax        # 2020 <sum>
-     2c9:	48 01 c8             	add    %rcx,%rax
-     2cc:	48 89 05 4d 1d 00 00 	mov    %rax,0x1d4d(%rip)        # 2020 <sum>
-    for(Count=0;Count<10000;Count++)
-     2d3:	48 83 45 f8 01       	addq   $0x1,-0x8(%rbp)
-     2d8:	48 81 7d f8 0f 27 00 	cmpq   $0x270f,-0x8(%rbp)
-     2df:	00 
-     2e0:	0f 8e c6 fe ff ff    	jle    1ac <TEST_THD1_FUNC+0x2e>
-    }
-    UVM_LOG_S("\r\nsig snd/rev takes clock cycles:");
-     2e6:	bf b8 1a 00 00       	mov    $0x1ab8,%edi
-     2eb:	e8 17 0b 00 00       	call   e07 <UVM_Print_String>
-    UVM_LOG_I(sum/10000);
-     2f0:	48 8b 05 29 1d 00 00 	mov    0x1d29(%rip),%rax        # 2020 <sum>
-     2f7:	48 ba 4b 59 86 38 d6 	movabs $0x346dc5d63886594b,%rdx
-     2fe:	c5 6d 34 
-     301:	48 f7 e2             	mul    %rdx
-     304:	48 89 d0             	mov    %rdx,%rax
-     307:	48 c1 e8 0b          	shr    $0xb,%rax
-     30b:	48 89 c7             	mov    %rax,%rdi
-     30e:	e8 2a 08 00 00       	call   b3d <UVM_Print_Int>
-}
-     313:	90                   	nop
-     314:	c9                   	leave  
-     315:	c3                   	ret    
-
-0000000000000316 <TEST_THD2_FUNC>:
-
-void TEST_THD2_FUNC(void)
-{
-     316:	f3 0f 1e fa          	endbr64 
-     31a:	55                   	push   %rbp
-     31b:	48 89 e5             	mov    %rsp,%rbp
-    while(1)
-    {
-        UVM_Sig_Snd(TEST_SIG1);
-     31e:	bf 0c 00 00 00       	mov    $0xc,%edi
-     323:	e8 e1 14 00 00       	call   1809 <UVM_Sig_Snd>
-     328:	eb f4                	jmp    31e <TEST_THD2_FUNC+0x8>
-
-000000000000032a <TEST_INV1_FUNC>:
+0000000000000110 <TEST_INV1_FUNC>:
+        UVM_Thd_Swt(TEST_THD1,0);
     }
 }
 
 void TEST_INV1_FUNC(ptr_t param)
 {
-     32a:	f3 0f 1e fa          	endbr64 
-     32e:	55                   	push   %rbp
-     32f:	48 89 e5             	mov    %rsp,%rbp
-     332:	48 83 ec 10          	sub    $0x10,%rsp
-     336:	48 89 7d f8          	mov    %rdi,-0x8(%rbp)
+     110:	f3 0f 1e fa          	endbr64 
+     114:	55                   	push   %rbp
+     115:	48 89 fd             	mov    %rdi,%rbp
     middle=__UVM_X64_Read_TSC();
-     33a:	e8 dc fc ff ff       	call   1b <__UVM_X64_Read_TSC>
-     33f:	48 89 05 ca 1c 00 00 	mov    %rax,0x1cca(%rip)        # 2010 <middle>
+     118:	e8 fe fe ff ff       	call   1b <__UVM_X64_Read_TSC>
     UVM_Inv_Ret(param);
-     346:	48 8b 45 f8          	mov    -0x8(%rbp),%rax
-     34a:	48 89 c7             	mov    %rax,%rdi
-     34d:	e8 92 fd ff ff       	call   e4 <UVM_Inv_Ret>
+     11d:	48 89 ef             	mov    %rbp,%rdi
 }
-     352:	90                   	nop
-     353:	c9                   	leave  
-     354:	c3                   	ret    
+     120:	5d                   	pop    %rbp
+    middle=__UVM_X64_Read_TSC();
+     121:	48 89 05 f8 1e 00 00 	mov    %rax,0x1ef8(%rip)        # 2020 <middle>
+    UVM_Inv_Ret(param);
+     128:	e9 b7 ff ff ff       	jmp    e4 <UVM_Inv_Ret>
+     12d:	0f 1f 00             	nopl   (%rax)
 
-0000000000000355 <main>:
+0000000000000130 <TEST_THD1_FUNC>:
+{
+     130:	f3 0f 1e fa          	endbr64 
+    sum=0;
+     134:	48 c7 05 d1 1e 00 00 	movq   $0x0,0x1ed1(%rip)        # 2010 <sum>
+     13b:	00 00 00 00 
+{
+     13f:	53                   	push   %rbx
+    sum=0;
+     140:	bb 10 27 00 00       	mov    $0x2710,%ebx
+     145:	0f 1f 00             	nopl   (%rax)
+        start=__UVM_X64_Read_TSC();
+     148:	e8 ce fe ff ff       	call   1b <__UVM_X64_Read_TSC>
+        UVM_Thd_Swt(TEST_THD2,0);
+     14d:	31 f6                	xor    %esi,%esi
+     14f:	bf 0a 00 00 00       	mov    $0xa,%edi
+        start=__UVM_X64_Read_TSC();
+     154:	48 89 05 cd 1e 00 00 	mov    %rax,0x1ecd(%rip)        # 2028 <start>
+        UVM_Thd_Swt(TEST_THD2,0);
+     15b:	e8 50 0d 00 00       	call   eb0 <UVM_Thd_Swt>
+        end=__UVM_X64_Read_TSC();
+     160:	e8 b6 fe ff ff       	call   1b <__UVM_X64_Read_TSC>
+     165:	48 89 05 ac 1e 00 00 	mov    %rax,0x1eac(%rip)        # 2018 <end>
+        sum+=end-start;
+     16c:	48 8b 05 a5 1e 00 00 	mov    0x1ea5(%rip),%rax        # 2018 <end>
+     173:	48 8b 15 ae 1e 00 00 	mov    0x1eae(%rip),%rdx        # 2028 <start>
+     17a:	48 29 d0             	sub    %rdx,%rax
+     17d:	48 01 05 8c 1e 00 00 	add    %rax,0x1e8c(%rip)        # 2010 <sum>
+    for(Count=0;Count<10000;Count++)
+     184:	48 83 eb 01          	sub    $0x1,%rbx
+     188:	75 be                	jne    148 <TEST_THD1_FUNC+0x18>
+    UVM_LOG_S("\r\nThread Switching takes clock cycles:");
+     18a:	bf 48 10 00 00       	mov    $0x1048,%edi
+     18f:	e8 1c 08 00 00       	call   9b0 <UVM_Print_String>
+    UVM_LOG_I(sum/10000);
+     194:	48 ba 4b 59 86 38 d6 	movabs $0x346dc5d63886594b,%rdx
+     19b:	c5 6d 34 
+     19e:	48 89 d0             	mov    %rdx,%rax
+     1a1:	48 f7 25 68 1e 00 00 	mulq   0x1e68(%rip)        # 2010 <sum>
+     1a8:	48 89 d7             	mov    %rdx,%rdi
+     1ab:	48 c1 ef 0b          	shr    $0xb,%rdi
+     1af:	e8 cc 05 00 00       	call   780 <UVM_Print_Int>
+    UVM_Thd_Swt(UVM_CAPID(UVM_BOOT_TBL_THD,0),0);
+     1b4:	31 f6                	xor    %esi,%esi
+     1b6:	bf 00 80 03 00       	mov    $0x38000,%edi
+}
+     1bb:	5b                   	pop    %rbx
+    UVM_Thd_Swt(UVM_CAPID(UVM_BOOT_TBL_THD,0),0);
+     1bc:	e9 ef 0c 00 00       	jmp    eb0 <UVM_Thd_Swt>
+     1c1:	66 66 2e 0f 1f 84 00 	data16 cs nopw 0x0(%rax,%rax,1)
+     1c8:	00 00 00 00 
+     1cc:	0f 1f 40 00          	nopl   0x0(%rax)
+
+00000000000001d0 <TEST_THD2_FUNC>:
+{
+     1d0:	f3 0f 1e fa          	endbr64 
+     1d4:	50                   	push   %rax
+     1d5:	58                   	pop    %rax
+     1d6:	48 83 ec 08          	sub    $0x8,%rsp
+     1da:	66 0f 1f 44 00 00    	nopw   0x0(%rax,%rax,1)
+        UVM_Thd_Swt(TEST_THD1,0);
+     1e0:	31 f6                	xor    %esi,%esi
+     1e2:	bf 09 00 00 00       	mov    $0x9,%edi
+     1e7:	e8 c4 0c 00 00       	call   eb0 <UVM_Thd_Swt>
+    while(1)
+     1ec:	eb f2                	jmp    1e0 <TEST_THD2_FUNC+0x10>
+     1ee:	66 90                	xchg   %ax,%ax
+
+00000000000001f0 <main>:
 Input       : None.
 Output      : None.
 Return      : int - This function shall never return.
 ******************************************************************************/
 int main(ptr_t CPUID)
 {
-     355:	f3 0f 1e fa          	endbr64 
-     359:	55                   	push   %rbp
-     35a:	48 89 e5             	mov    %rsp,%rbp
-     35d:	4c 8d 9c 24 00 c0 ff 	lea    -0x4000(%rsp),%r11
-     364:	ff 
-     365:	48 81 ec 00 10 00 00 	sub    $0x1000,%rsp
-     36c:	48 83 0c 24 00       	orq    $0x0,(%rsp)
-     371:	4c 39 dc             	cmp    %r11,%rsp
-     374:	75 ef                	jne    365 <main+0x10>
-     376:	48 83 ec 20          	sub    $0x20,%rsp
-     37a:	48 89 bd e8 bf ff ff 	mov    %rdi,-0x4018(%rbp)
+     1f0:	f3 0f 1e fa          	endbr64 
+     1f4:	53                   	push   %rbx
+     1f5:	48 89 fb             	mov    %rdi,%rbx
     ptr_t Cur_Addr;
     cnt_t Count;
     cnt_t Count1;
     cnt_t Count2;
     ptr_t TEST_INV_STACK[2048];
     UVM_LOG_S("\r\nEnter user mode success!Welcome to RME system!");
-     381:	bf e0 1a 00 00       	mov    $0x1ae0,%edi
-     386:	e8 7c 0a 00 00       	call   e07 <UVM_Print_String>
+     1f8:	bf 70 10 00 00       	mov    $0x1070,%edi
+     1fd:	e8 ae 07 00 00       	call   9b0 <UVM_Print_String>
     UVM_LOG_S("\r\nNow we are running init thread on cpu:");
-     38b:	bf 18 1b 00 00       	mov    $0x1b18,%edi
-     390:	e8 72 0a 00 00       	call   e07 <UVM_Print_String>
+     202:	bf a8 10 00 00       	mov    $0x10a8,%edi
+     207:	e8 a4 07 00 00       	call   9b0 <UVM_Print_String>
     UVM_LOG_I(CPUID);
-     395:	48 8b 85 e8 bf ff ff 	mov    -0x4018(%rbp),%rax
-     39c:	48 89 c7             	mov    %rax,%rdi
-     39f:	e8 99 07 00 00       	call   b3d <UVM_Print_Int>
+     20c:	48 89 df             	mov    %rbx,%rdi
+     20f:	e8 6c 05 00 00       	call   780 <UVM_Print_Int>
     if(CPUID==0) {
-     3a4:	48 83 bd e8 bf ff ff 	cmpq   $0x0,-0x4018(%rbp)
-     3ab:	00 
-     3ac:	0f 85 e7 06 00 00    	jne    a99 <main+0x744>
+     214:	48 85 db             	test   %rbx,%rbx
+     217:	0f 85 f8 02 00 00    	jne    515 <main+0x325>
         /*Empty test begins here*/
         sum=0;
-     3b2:	48 c7 05 63 1c 00 00 	movq   $0x0,0x1c63(%rip)        # 2020 <sum>
-     3b9:	00 00 00 00 
+     21d:	48 c7 05 e8 1d 00 00 	movq   $0x0,0x1de8(%rip)        # 2010 <sum>
+     224:	00 00 00 00 
+     228:	bb 10 27 00 00       	mov    $0x2710,%ebx
+     22d:	0f 1f 00             	nopl   (%rax)
         for(Count=0;Count<10000;Count++)
-     3bd:	48 c7 45 f8 00 00 00 	movq   $0x0,-0x8(%rbp)
-     3c4:	00 
-     3c5:	eb 42                	jmp    409 <main+0xb4>
         {
             start=__UVM_X64_Read_TSC();
-     3c7:	e8 4f fc ff ff       	call   1b <__UVM_X64_Read_TSC>
-     3cc:	48 89 05 35 1c 00 00 	mov    %rax,0x1c35(%rip)        # 2008 <start>
+     230:	e8 e6 fd ff ff       	call   1b <__UVM_X64_Read_TSC>
+     235:	48 89 05 ec 1d 00 00 	mov    %rax,0x1dec(%rip)        # 2028 <start>
             end=__UVM_X64_Read_TSC();
-     3d3:	e8 43 fc ff ff       	call   1b <__UVM_X64_Read_TSC>
-     3d8:	48 89 05 39 1c 00 00 	mov    %rax,0x1c39(%rip)        # 2018 <end>
+     23c:	e8 da fd ff ff       	call   1b <__UVM_X64_Read_TSC>
+     241:	48 89 05 d0 1d 00 00 	mov    %rax,0x1dd0(%rip)        # 2018 <end>
             sum+=end-start;
-     3df:	48 8b 05 32 1c 00 00 	mov    0x1c32(%rip),%rax        # 2018 <end>
-     3e6:	48 8b 15 1b 1c 00 00 	mov    0x1c1b(%rip),%rdx        # 2008 <start>
-     3ed:	48 29 d0             	sub    %rdx,%rax
-     3f0:	48 89 c1             	mov    %rax,%rcx
-     3f3:	48 8b 05 26 1c 00 00 	mov    0x1c26(%rip),%rax        # 2020 <sum>
-     3fa:	48 01 c8             	add    %rcx,%rax
-     3fd:	48 89 05 1c 1c 00 00 	mov    %rax,0x1c1c(%rip)        # 2020 <sum>
+     248:	48 8b 05 c9 1d 00 00 	mov    0x1dc9(%rip),%rax        # 2018 <end>
+     24f:	48 8b 15 d2 1d 00 00 	mov    0x1dd2(%rip),%rdx        # 2028 <start>
+     256:	48 29 d0             	sub    %rdx,%rax
+     259:	48 01 05 b0 1d 00 00 	add    %rax,0x1db0(%rip)        # 2010 <sum>
         for(Count=0;Count<10000;Count++)
-     404:	48 83 45 f8 01       	addq   $0x1,-0x8(%rbp)
-     409:	48 81 7d f8 0f 27 00 	cmpq   $0x270f,-0x8(%rbp)
-     410:	00 
-     411:	7e b4                	jle    3c7 <main+0x72>
+     260:	48 83 eb 01          	sub    $0x1,%rbx
+     264:	75 ca                	jne    230 <main+0x40>
         }
         UVM_LOG_S("\r\nEmpty test takes clock cycles:");
-     413:	bf 48 1b 00 00       	mov    $0x1b48,%edi
-     418:	e8 ea 09 00 00       	call   e07 <UVM_Print_String>
+     266:	bf d8 10 00 00       	mov    $0x10d8,%edi
         UVM_LOG_I(sum/10000);
-     41d:	48 8b 05 fc 1b 00 00 	mov    0x1bfc(%rip),%rax        # 2020 <sum>
-     424:	48 ba 4b 59 86 38 d6 	movabs $0x346dc5d63886594b,%rdx
-     42b:	c5 6d 34 
-     42e:	48 f7 e2             	mul    %rdx
-     431:	48 89 d0             	mov    %rdx,%rax
-     434:	48 c1 e8 0b          	shr    $0xb,%rax
-     438:	48 89 c7             	mov    %rax,%rdi
-     43b:	e8 fd 06 00 00       	call   b3d <UVM_Print_Int>
         /*Empty test ends here*/
 
         /*Empty system call test begins here*/
         sum=0;
-     440:	48 c7 05 d5 1b 00 00 	movq   $0x0,0x1bd5(%rip)        # 2020 <sum>
-     447:	00 00 00 00 
+     26b:	bb 10 27 00 00       	mov    $0x2710,%ebx
+        UVM_LOG_S("\r\nEmpty test takes clock cycles:");
+     270:	e8 3b 07 00 00       	call   9b0 <UVM_Print_String>
+        UVM_LOG_I(sum/10000);
+     275:	48 8b 05 94 1d 00 00 	mov    0x1d94(%rip),%rax        # 2010 <sum>
+     27c:	b9 10 27 00 00       	mov    $0x2710,%ecx
+     281:	31 d2                	xor    %edx,%edx
+     283:	48 f7 f1             	div    %rcx
+     286:	48 89 c7             	mov    %rax,%rdi
+     289:	e8 f2 04 00 00       	call   780 <UVM_Print_Int>
+        sum=0;
+     28e:	48 c7 05 77 1d 00 00 	movq   $0x0,0x1d77(%rip)        # 2010 <sum>
+     295:	00 00 00 00 
         for(Count=0;Count<10000;Count++)
-     44b:	48 c7 45 f8 00 00 00 	movq   $0x0,-0x8(%rbp)
-     452:	00 
-     453:	eb 63                	jmp    4b8 <main+0x163>
+     299:	0f 1f 80 00 00 00 00 	nopl   0x0(%rax)
         {
             start=__UVM_X64_Read_TSC();
-     455:	e8 c1 fb ff ff       	call   1b <__UVM_X64_Read_TSC>
-     45a:	48 89 05 a7 1b 00 00 	mov    %rax,0x1ba7(%rip)        # 2008 <start>
+     2a0:	e8 76 fd ff ff       	call   1b <__UVM_X64_Read_TSC>
             UVM_Svc(-1,-1,-1,-1);
-     461:	48 c7 c1 ff ff ff ff 	mov    $0xffffffffffffffff,%rcx
-     468:	48 c7 c2 ff ff ff ff 	mov    $0xffffffffffffffff,%rdx
-     46f:	48 c7 c6 ff ff ff ff 	mov    $0xffffffffffffffff,%rsi
-     476:	48 c7 c7 ff ff ff ff 	mov    $0xffffffffffffffff,%rdi
-     47d:	e8 6b fc ff ff       	call   ed <UVM_Svc>
+     2a5:	48 c7 c2 ff ff ff ff 	mov    $0xffffffffffffffff,%rdx
+     2ac:	48 c7 c1 ff ff ff ff 	mov    $0xffffffffffffffff,%rcx
+     2b3:	48 c7 c6 ff ff ff ff 	mov    $0xffffffffffffffff,%rsi
+     2ba:	48 c7 c7 ff ff ff ff 	mov    $0xffffffffffffffff,%rdi
+            start=__UVM_X64_Read_TSC();
+     2c1:	48 89 05 60 1d 00 00 	mov    %rax,0x1d60(%rip)        # 2028 <start>
+            UVM_Svc(-1,-1,-1,-1);
+     2c8:	e8 20 fe ff ff       	call   ed <UVM_Svc>
             end=__UVM_X64_Read_TSC();
-     482:	e8 94 fb ff ff       	call   1b <__UVM_X64_Read_TSC>
-     487:	48 89 05 8a 1b 00 00 	mov    %rax,0x1b8a(%rip)        # 2018 <end>
+     2cd:	e8 49 fd ff ff       	call   1b <__UVM_X64_Read_TSC>
+     2d2:	48 89 05 3f 1d 00 00 	mov    %rax,0x1d3f(%rip)        # 2018 <end>
             sum+=end-start;
-     48e:	48 8b 05 83 1b 00 00 	mov    0x1b83(%rip),%rax        # 2018 <end>
-     495:	48 8b 15 6c 1b 00 00 	mov    0x1b6c(%rip),%rdx        # 2008 <start>
-     49c:	48 29 d0             	sub    %rdx,%rax
-     49f:	48 89 c1             	mov    %rax,%rcx
-     4a2:	48 8b 05 77 1b 00 00 	mov    0x1b77(%rip),%rax        # 2020 <sum>
-     4a9:	48 01 c8             	add    %rcx,%rax
-     4ac:	48 89 05 6d 1b 00 00 	mov    %rax,0x1b6d(%rip)        # 2020 <sum>
+     2d9:	48 8b 05 38 1d 00 00 	mov    0x1d38(%rip),%rax        # 2018 <end>
+     2e0:	48 8b 15 41 1d 00 00 	mov    0x1d41(%rip),%rdx        # 2028 <start>
+     2e7:	48 29 d0             	sub    %rdx,%rax
+     2ea:	48 01 05 1f 1d 00 00 	add    %rax,0x1d1f(%rip)        # 2010 <sum>
         for(Count=0;Count<10000;Count++)
-     4b3:	48 83 45 f8 01       	addq   $0x1,-0x8(%rbp)
-     4b8:	48 81 7d f8 0f 27 00 	cmpq   $0x270f,-0x8(%rbp)
-     4bf:	00 
-     4c0:	7e 93                	jle    455 <main+0x100>
+     2f1:	48 83 eb 01          	sub    $0x1,%rbx
+     2f5:	75 a9                	jne    2a0 <main+0xb0>
         }
         UVM_LOG_S("\r\nEmpty system call takes clock cycles:");
-     4c2:	bf 70 1b 00 00       	mov    $0x1b70,%edi
-     4c7:	e8 3b 09 00 00       	call   e07 <UVM_Print_String>
+     2f7:	bf 00 11 00 00       	mov    $0x1100,%edi
+     2fc:	e8 af 06 00 00       	call   9b0 <UVM_Print_String>
         UVM_LOG_I(sum/10000);
-     4cc:	48 8b 05 4d 1b 00 00 	mov    0x1b4d(%rip),%rax        # 2020 <sum>
-     4d3:	48 ba 4b 59 86 38 d6 	movabs $0x346dc5d63886594b,%rdx
-     4da:	c5 6d 34 
-     4dd:	48 f7 e2             	mul    %rdx
-     4e0:	48 89 d0             	mov    %rdx,%rax
-     4e3:	48 c1 e8 0b          	shr    $0xb,%rax
-     4e7:	48 89 c7             	mov    %rax,%rdi
-     4ea:	e8 4e 06 00 00       	call   b3d <UVM_Print_Int>
-        /*Empty system call test ends here*/
+     301:	48 8b 05 08 1d 00 00 	mov    0x1d08(%rip),%rax        # 2010 <sum>
+     308:	b9 10 27 00 00       	mov    $0x2710,%ecx
+     30d:	31 d2                	xor    %edx,%edx
+     30f:	48 f7 f1             	div    %rcx
+     312:	48 89 c7             	mov    %rax,%rdi
+     315:	e8 66 04 00 00       	call   780 <UVM_Print_Int>
+        /*Signal send test ends here*/
 
-        /*Now we begin to place kernel objects at this address,It must be a relative address*/
-        Cur_Addr=0xFFFF800010000000ULL-0xFFFF800001600000ULL;
-     4ef:	48 c7 45 f0 00 00 a0 	movq   $0xea00000,-0x10(%rbp)
-     4f6:	0e 
 
-        UVM_Thd_Swt(TEST_THD1,0);
-        UVM_LOG_S("\r\nExit THD1!");*/
-        /*Thread switching test ends here*/
-
+        /*Invocation stub test begins here*/
+        /*Create test process capability table*/
+        UVM_ASSERT(UVM_Captbl_Crt(UVM_BOOT_CAPTBL,UVM_CAPID(UVM_BOOT_TBL_KMEM,0),TEST_PROC_CAPTBL,Cur_Addr,16)>=0);
+     31a:	31 ff                	xor    %edi,%edi
+     31c:	41 b8 10 00 00 00    	mov    $0x10,%r8d
+     322:	b9 00 00 a0 0e       	mov    $0xea00000,%ecx
+     327:	ba 0d 00 00 00       	mov    $0xd,%edx
+     32c:	be 00 80 05 00       	mov    $0x58000,%esi
+     331:	e8 ba 06 00 00       	call   9f0 <UVM_Captbl_Crt>
+     336:	48 85 c0             	test   %rax,%rax
+     339:	0f 88 d8 01 00 00    	js     517 <main+0x327>
+        Cur_Addr+=UVM_CAPTBL_SIZE(16);
+        /*Create test process page table*/
+        UVM_ASSERT(UVM_Captbl_Crt(UVM_BOOT_CAPTBL,UVM_CAPID(UVM_BOOT_TBL_KMEM,0),TEST_PROCESS_PGT,Cur_Addr,1+16+8192)>=0);
+     33f:	31 ff                	xor    %edi,%edi
+     341:	41 b8 11 20 00 00    	mov    $0x2011,%r8d
+     347:	b9 00 04 a0 0e       	mov    $0xea00400,%ecx
+     34c:	ba 0e 00 00 00       	mov    $0xe,%edx
+     351:	be 00 80 05 00       	mov    $0x58000,%esi
+     356:	e8 95 06 00 00       	call   9f0 <UVM_Captbl_Crt>
+     35b:	48 85 c0             	test   %rax,%rax
+     35e:	0f 88 0f 02 00 00    	js     573 <main+0x383>
+        Cur_Addr+=UVM_CAPTBL_SIZE(1+16+8192);
+        /*Create test process PML4*/
+        Cur_Addr=UVM_ROUND_UP(Cur_Addr,12);
+        UVM_ASSERT(UVM_Pgtbl_Crt(TEST_PROCESS_PGT,UVM_CAPID(UVM_BOOT_TBL_KMEM,0),TEST_PROCESS_PML4,Cur_Addr,0,1U,RME_PGT_SIZE_512G,RME_PGT_NUM_512)>=0);
+     364:	6a 09                	push   $0x9
+     366:	b9 00 10 a8 0e       	mov    $0xea81000,%ecx
+     36b:	31 d2                	xor    %edx,%edx
+     36d:	41 b9 01 00 00 00    	mov    $0x1,%r9d
+     373:	6a 27                	push   $0x27
+     375:	45 31 c0             	xor    %r8d,%r8d
+     378:	be 00 80 05 00       	mov    $0x58000,%esi
+     37d:	bf 0e 00 00 00       	mov    $0xe,%edi
+     382:	e8 39 08 00 00       	call   bc0 <UVM_Pgtbl_Crt>
+     387:	5a                   	pop    %rdx
+     388:	59                   	pop    %rcx
+     389:	48 85 c0             	test   %rax,%rax
+     38c:	0f 88 3d 02 00 00    	js     5cf <main+0x3df>
+                                    UVM_CAPID(UVM_BOOT_TBL_PGTBL,RME_TEST_PDE(Count1)),Count2,0)>=0);
+            }
+        }
+        UVM_LOG_S("\r\nSuccess!!!!");*/
+        /*Now we create the test process*/
         UVM_ASSERT(UVM_Proc_Crt(UVM_BOOT_CAPTBL,UVM_CAPID(UVM_BOOT_TBL_KMEM,0),TEST_PROCESS,UVM_BOOT_CAPTBL,
-     4f7:	48 8b 45 f0          	mov    -0x10(%rbp),%rax
-     4fb:	49 89 c1             	mov    %rax,%r9
-     4fe:	41 b8 00 80 01 00    	mov    $0x18000,%r8d
-     504:	b9 00 00 00 00       	mov    $0x0,%ecx
-     509:	ba 0f 00 00 00       	mov    $0xf,%edx
-     50e:	be 00 80 05 00       	mov    $0x58000,%esi
-     513:	bf 00 00 00 00       	mov    $0x0,%edi
-     518:	e8 c7 0e 00 00       	call   13e4 <UVM_Proc_Crt>
-     51d:	48 85 c0             	test   %rax,%rax
-     520:	79 5c                	jns    57e <main+0x229>
-     522:	bf 58 1a 00 00       	mov    $0x1a58,%edi
-     527:	e8 db 08 00 00       	call   e07 <UVM_Print_String>
-     52c:	bf 89 1a 00 00       	mov    $0x1a89,%edi
-     531:	e8 d1 08 00 00       	call   e07 <UVM_Print_String>
-     536:	bf 95 1a 00 00       	mov    $0x1a95,%edi
-     53b:	e8 c7 08 00 00       	call   e07 <UVM_Print_String>
-     540:	bf c0 00 00 00       	mov    $0xc0,%edi
-     545:	e8 f3 05 00 00       	call   b3d <UVM_Print_Int>
-     54a:	bf 9d 1a 00 00       	mov    $0x1a9d,%edi
-     54f:	e8 b3 08 00 00       	call   e07 <UVM_Print_String>
-     554:	bf a0 1a 00 00       	mov    $0x1aa0,%edi
-     559:	e8 a9 08 00 00       	call   e07 <UVM_Print_String>
-     55e:	bf ac 1a 00 00       	mov    $0x1aac,%edi
-     563:	e8 9f 08 00 00       	call   e07 <UVM_Print_String>
-     568:	bf af 1a 00 00       	mov    $0x1aaf,%edi
-     56d:	e8 95 08 00 00       	call   e07 <UVM_Print_String>
-     572:	bf 9d 1a 00 00       	mov    $0x1a9d,%edi
-     577:	e8 8b 08 00 00       	call   e07 <UVM_Print_String>
-     57c:	eb fe                	jmp    57c <main+0x227>
-                                        UVM_CAPID(UVM_BOOT_TBL_PGTBL,0),Cur_Addr)>=0);
+     392:	31 c9                	xor    %ecx,%ecx
+     394:	31 ff                	xor    %edi,%edi
+     396:	41 b9 00 10 ac 0e    	mov    $0xeac1000,%r9d
+     39c:	41 b8 00 80 01 00    	mov    $0x18000,%r8d
+     3a2:	ba 0f 00 00 00       	mov    $0xf,%edx
+     3a7:	be 00 80 05 00       	mov    $0x58000,%esi
+     3ac:	e8 2f 09 00 00       	call   ce0 <UVM_Proc_Crt>
+     3b1:	48 85 c0             	test   %rax,%rax
+     3b4:	0f 88 cd 02 00 00    	js     687 <main+0x497>
+                                                UVM_CAPID(UVM_BOOT_TBL_PGTBL,0),Cur_Addr)>=0);
         Cur_Addr+=UVM_PROC_SIZE;
-     57e:	48 83 45 f0 20       	addq   $0x20,-0x10(%rbp)
-        UVM_ASSERT(UVM_Thd_Crt(UVM_BOOT_CAPTBL, UVM_CAPID(UVM_BOOT_TBL_KMEM,0), TEST_THD1, TEST_PROCESS, 10, Cur_Addr)>=0);
-     583:	48 8b 45 f0          	mov    -0x10(%rbp),%rax
-     587:	49 89 c1             	mov    %rax,%r9
-     58a:	41 b8 0a 00 00 00    	mov    $0xa,%r8d
-     590:	b9 0f 00 00 00       	mov    $0xf,%ecx
-     595:	ba 09 00 00 00       	mov    $0x9,%edx
-     59a:	be 00 80 05 00       	mov    $0x58000,%esi
-     59f:	bf 00 00 00 00       	mov    $0x0,%edi
-     5a4:	e8 36 0f 00 00       	call   14df <UVM_Thd_Crt>
-     5a9:	48 85 c0             	test   %rax,%rax
-     5ac:	79 5c                	jns    60a <main+0x2b5>
-     5ae:	bf 58 1a 00 00       	mov    $0x1a58,%edi
-     5b3:	e8 4f 08 00 00       	call   e07 <UVM_Print_String>
-     5b8:	bf 89 1a 00 00       	mov    $0x1a89,%edi
-     5bd:	e8 45 08 00 00       	call   e07 <UVM_Print_String>
-     5c2:	bf 95 1a 00 00       	mov    $0x1a95,%edi
-     5c7:	e8 3b 08 00 00       	call   e07 <UVM_Print_String>
-     5cc:	bf c3 00 00 00       	mov    $0xc3,%edi
-     5d1:	e8 67 05 00 00       	call   b3d <UVM_Print_Int>
-     5d6:	bf 9d 1a 00 00       	mov    $0x1a9d,%edi
-     5db:	e8 27 08 00 00       	call   e07 <UVM_Print_String>
-     5e0:	bf a0 1a 00 00       	mov    $0x1aa0,%edi
-     5e5:	e8 1d 08 00 00       	call   e07 <UVM_Print_String>
-     5ea:	bf ac 1a 00 00       	mov    $0x1aac,%edi
-     5ef:	e8 13 08 00 00       	call   e07 <UVM_Print_String>
-     5f4:	bf af 1a 00 00       	mov    $0x1aaf,%edi
-     5f9:	e8 09 08 00 00       	call   e07 <UVM_Print_String>
-     5fe:	bf 9d 1a 00 00       	mov    $0x1a9d,%edi
-     603:	e8 ff 07 00 00       	call   e07 <UVM_Print_String>
-     608:	eb fe                	jmp    608 <main+0x2b3>
-        UVM_ASSERT(UVM_Thd_Sched_Bind(TEST_THD1,UVM_CAPID(UVM_BOOT_TBL_THD,0),UVM_CAPID_NULL,0,0)>=0);
-     60a:	41 b8 00 00 00 00    	mov    $0x0,%r8d
-     610:	b9 00 00 00 00       	mov    $0x0,%ecx
-     615:	b8 00 00 00 80       	mov    $0x80000000,%eax
-     61a:	48 89 c2             	mov    %rax,%rdx
-     61d:	be 00 80 03 00       	mov    $0x38000,%esi
-     622:	bf 09 00 00 00       	mov    $0x9,%edi
-     627:	e8 e2 0f 00 00       	call   160e <UVM_Thd_Sched_Bind>
-     62c:	48 85 c0             	test   %rax,%rax
-     62f:	79 5c                	jns    68d <main+0x338>
-     631:	bf 58 1a 00 00       	mov    $0x1a58,%edi
-     636:	e8 cc 07 00 00       	call   e07 <UVM_Print_String>
-     63b:	bf 89 1a 00 00       	mov    $0x1a89,%edi
-     640:	e8 c2 07 00 00       	call   e07 <UVM_Print_String>
-     645:	bf 95 1a 00 00       	mov    $0x1a95,%edi
-     64a:	e8 b8 07 00 00       	call   e07 <UVM_Print_String>
-     64f:	bf c4 00 00 00       	mov    $0xc4,%edi
-     654:	e8 e4 04 00 00       	call   b3d <UVM_Print_Int>
-     659:	bf 9d 1a 00 00       	mov    $0x1a9d,%edi
-     65e:	e8 a4 07 00 00       	call   e07 <UVM_Print_String>
-     663:	bf a0 1a 00 00       	mov    $0x1aa0,%edi
-     668:	e8 9a 07 00 00       	call   e07 <UVM_Print_String>
-     66d:	bf ac 1a 00 00       	mov    $0x1aac,%edi
-     672:	e8 90 07 00 00       	call   e07 <UVM_Print_String>
-     677:	bf af 1a 00 00       	mov    $0x1aaf,%edi
-     67c:	e8 86 07 00 00       	call   e07 <UVM_Print_String>
-     681:	bf 9d 1a 00 00       	mov    $0x1a9d,%edi
-     686:	e8 7c 07 00 00       	call   e07 <UVM_Print_String>
-     68b:	eb fe                	jmp    68b <main+0x336>
-        UVM_ASSERT(UVM_Thd_Time_Xfer(TEST_THD1,UVM_CAPID(UVM_BOOT_TBL_THD,0),UVM_THD_INF_TIME)>=0);
-     68d:	48 b8 fe ff ff ff ff 	movabs $0x7ffffffffffffffe,%rax
-     694:	ff ff 7f 
-     697:	48 89 c2             	mov    %rax,%rdx
-     69a:	be 00 80 03 00       	mov    $0x38000,%esi
-     69f:	bf 09 00 00 00       	mov    $0x9,%edi
-     6a4:	e8 67 10 00 00       	call   1710 <UVM_Thd_Time_Xfer>
-     6a9:	48 85 c0             	test   %rax,%rax
-     6ac:	79 5c                	jns    70a <main+0x3b5>
-     6ae:	bf 58 1a 00 00       	mov    $0x1a58,%edi
-     6b3:	e8 4f 07 00 00       	call   e07 <UVM_Print_String>
-     6b8:	bf 89 1a 00 00       	mov    $0x1a89,%edi
-     6bd:	e8 45 07 00 00       	call   e07 <UVM_Print_String>
-     6c2:	bf 95 1a 00 00       	mov    $0x1a95,%edi
-     6c7:	e8 3b 07 00 00       	call   e07 <UVM_Print_String>
-     6cc:	bf c5 00 00 00       	mov    $0xc5,%edi
-     6d1:	e8 67 04 00 00       	call   b3d <UVM_Print_Int>
-     6d6:	bf 9d 1a 00 00       	mov    $0x1a9d,%edi
-     6db:	e8 27 07 00 00       	call   e07 <UVM_Print_String>
-     6e0:	bf a0 1a 00 00       	mov    $0x1aa0,%edi
-     6e5:	e8 1d 07 00 00       	call   e07 <UVM_Print_String>
-     6ea:	bf ac 1a 00 00       	mov    $0x1aac,%edi
-     6ef:	e8 13 07 00 00       	call   e07 <UVM_Print_String>
-     6f4:	bf af 1a 00 00       	mov    $0x1aaf,%edi
-     6f9:	e8 09 07 00 00       	call   e07 <UVM_Print_String>
-     6fe:	bf 9d 1a 00 00       	mov    $0x1a9d,%edi
-     703:	e8 ff 06 00 00       	call   e07 <UVM_Print_String>
-     708:	eb fe                	jmp    708 <main+0x3b3>
-        UVM_ASSERT(UVM_Thd_Exec_Set(TEST_THD1,TEST_THD1_FUNC,12*UVM_POW2(RME_PGT_SIZE_1M),0)>=0);
-     70a:	b8 7e 01 00 00       	mov    $0x17e,%eax
-     70f:	b9 00 00 00 00       	mov    $0x0,%ecx
-     714:	ba 00 00 c0 00       	mov    $0xc00000,%edx
-     719:	48 89 c6             	mov    %rax,%rsi
-     71c:	bf 09 00 00 00       	mov    $0x9,%edi
-     721:	e8 6a 0e 00 00       	call   1590 <UVM_Thd_Exec_Set>
-     726:	48 85 c0             	test   %rax,%rax
-     729:	79 5c                	jns    787 <main+0x432>
-     72b:	bf 58 1a 00 00       	mov    $0x1a58,%edi
-     730:	e8 d2 06 00 00       	call   e07 <UVM_Print_String>
-     735:	bf 89 1a 00 00       	mov    $0x1a89,%edi
-     73a:	e8 c8 06 00 00       	call   e07 <UVM_Print_String>
-     73f:	bf 95 1a 00 00       	mov    $0x1a95,%edi
-     744:	e8 be 06 00 00       	call   e07 <UVM_Print_String>
-     749:	bf c6 00 00 00       	mov    $0xc6,%edi
-     74e:	e8 ea 03 00 00       	call   b3d <UVM_Print_Int>
-     753:	bf 9d 1a 00 00       	mov    $0x1a9d,%edi
-     758:	e8 aa 06 00 00       	call   e07 <UVM_Print_String>
-     75d:	bf a0 1a 00 00       	mov    $0x1aa0,%edi
-     762:	e8 a0 06 00 00       	call   e07 <UVM_Print_String>
-     767:	bf ac 1a 00 00       	mov    $0x1aac,%edi
-     76c:	e8 96 06 00 00       	call   e07 <UVM_Print_String>
-     771:	bf af 1a 00 00       	mov    $0x1aaf,%edi
-     776:	e8 8c 06 00 00       	call   e07 <UVM_Print_String>
-     77b:	bf 9d 1a 00 00       	mov    $0x1a9d,%edi
-     780:	e8 82 06 00 00       	call   e07 <UVM_Print_String>
-     785:	eb fe                	jmp    785 <main+0x430>
-        Cur_Addr+=UVM_THD_SIZE;
-     787:	48 81 45 f0 d0 09 00 	addq   $0x9d0,-0x10(%rbp)
-     78e:	00 
 
-        UVM_ASSERT(UVM_Thd_Crt(UVM_BOOT_CAPTBL, UVM_CAPID(UVM_BOOT_TBL_KMEM,0), TEST_THD2, UVM_BOOT_INIT_PROC, 10, Cur_Addr)>=0);
-     78f:	48 8b 45 f0          	mov    -0x10(%rbp),%rax
-     793:	49 89 c1             	mov    %rax,%r9
-     796:	41 b8 0a 00 00 00    	mov    $0xa,%r8d
-     79c:	b9 02 00 00 00       	mov    $0x2,%ecx
-     7a1:	ba 0a 00 00 00       	mov    $0xa,%edx
-     7a6:	be 00 80 05 00       	mov    $0x58000,%esi
-     7ab:	bf 00 00 00 00       	mov    $0x0,%edi
-     7b0:	e8 2a 0d 00 00       	call   14df <UVM_Thd_Crt>
-     7b5:	48 85 c0             	test   %rax,%rax
-     7b8:	79 5c                	jns    816 <main+0x4c1>
-     7ba:	bf 58 1a 00 00       	mov    $0x1a58,%edi
-     7bf:	e8 43 06 00 00       	call   e07 <UVM_Print_String>
-     7c4:	bf 89 1a 00 00       	mov    $0x1a89,%edi
-     7c9:	e8 39 06 00 00       	call   e07 <UVM_Print_String>
-     7ce:	bf 95 1a 00 00       	mov    $0x1a95,%edi
-     7d3:	e8 2f 06 00 00       	call   e07 <UVM_Print_String>
-     7d8:	bf c9 00 00 00       	mov    $0xc9,%edi
-     7dd:	e8 5b 03 00 00       	call   b3d <UVM_Print_Int>
-     7e2:	bf 9d 1a 00 00       	mov    $0x1a9d,%edi
-     7e7:	e8 1b 06 00 00       	call   e07 <UVM_Print_String>
-     7ec:	bf a0 1a 00 00       	mov    $0x1aa0,%edi
-     7f1:	e8 11 06 00 00       	call   e07 <UVM_Print_String>
-     7f6:	bf ac 1a 00 00       	mov    $0x1aac,%edi
-     7fb:	e8 07 06 00 00       	call   e07 <UVM_Print_String>
-     800:	bf af 1a 00 00       	mov    $0x1aaf,%edi
-     805:	e8 fd 05 00 00       	call   e07 <UVM_Print_String>
-     80a:	bf 9d 1a 00 00       	mov    $0x1a9d,%edi
-     80f:	e8 f3 05 00 00       	call   e07 <UVM_Print_String>
-     814:	eb fe                	jmp    814 <main+0x4bf>
-        UVM_ASSERT(UVM_Thd_Sched_Bind(TEST_THD2,UVM_CAPID(UVM_BOOT_TBL_THD,0),UVM_CAPID_NULL,0,0)>=0);
-     816:	41 b8 00 00 00 00    	mov    $0x0,%r8d
-     81c:	b9 00 00 00 00       	mov    $0x0,%ecx
-     821:	b8 00 00 00 80       	mov    $0x80000000,%eax
-     826:	48 89 c2             	mov    %rax,%rdx
-     829:	be 00 80 03 00       	mov    $0x38000,%esi
-     82e:	bf 0a 00 00 00       	mov    $0xa,%edi
-     833:	e8 d6 0d 00 00       	call   160e <UVM_Thd_Sched_Bind>
-     838:	48 85 c0             	test   %rax,%rax
-     83b:	79 5c                	jns    899 <main+0x544>
-     83d:	bf 58 1a 00 00       	mov    $0x1a58,%edi
-     842:	e8 c0 05 00 00       	call   e07 <UVM_Print_String>
-     847:	bf 89 1a 00 00       	mov    $0x1a89,%edi
-     84c:	e8 b6 05 00 00       	call   e07 <UVM_Print_String>
-     851:	bf 95 1a 00 00       	mov    $0x1a95,%edi
-     856:	e8 ac 05 00 00       	call   e07 <UVM_Print_String>
-     85b:	bf ca 00 00 00       	mov    $0xca,%edi
-     860:	e8 d8 02 00 00       	call   b3d <UVM_Print_Int>
-     865:	bf 9d 1a 00 00       	mov    $0x1a9d,%edi
-     86a:	e8 98 05 00 00       	call   e07 <UVM_Print_String>
-     86f:	bf a0 1a 00 00       	mov    $0x1aa0,%edi
-     874:	e8 8e 05 00 00       	call   e07 <UVM_Print_String>
-     879:	bf ac 1a 00 00       	mov    $0x1aac,%edi
-     87e:	e8 84 05 00 00       	call   e07 <UVM_Print_String>
-     883:	bf af 1a 00 00       	mov    $0x1aaf,%edi
-     888:	e8 7a 05 00 00       	call   e07 <UVM_Print_String>
-     88d:	bf 9d 1a 00 00       	mov    $0x1a9d,%edi
-     892:	e8 70 05 00 00       	call   e07 <UVM_Print_String>
-     897:	eb fe                	jmp    897 <main+0x542>
-        UVM_ASSERT(UVM_Thd_Time_Xfer(TEST_THD2,UVM_CAPID(UVM_BOOT_TBL_THD,0),UVM_THD_INF_TIME)>=0);
-     899:	48 b8 fe ff ff ff ff 	movabs $0x7ffffffffffffffe,%rax
-     8a0:	ff ff 7f 
-     8a3:	48 89 c2             	mov    %rax,%rdx
-     8a6:	be 00 80 03 00       	mov    $0x38000,%esi
-     8ab:	bf 0a 00 00 00       	mov    $0xa,%edi
-     8b0:	e8 5b 0e 00 00       	call   1710 <UVM_Thd_Time_Xfer>
-     8b5:	48 85 c0             	test   %rax,%rax
-     8b8:	79 5c                	jns    916 <main+0x5c1>
-     8ba:	bf 58 1a 00 00       	mov    $0x1a58,%edi
-     8bf:	e8 43 05 00 00       	call   e07 <UVM_Print_String>
-     8c4:	bf 89 1a 00 00       	mov    $0x1a89,%edi
-     8c9:	e8 39 05 00 00       	call   e07 <UVM_Print_String>
-     8ce:	bf 95 1a 00 00       	mov    $0x1a95,%edi
-     8d3:	e8 2f 05 00 00       	call   e07 <UVM_Print_String>
-     8d8:	bf cb 00 00 00       	mov    $0xcb,%edi
-     8dd:	e8 5b 02 00 00       	call   b3d <UVM_Print_Int>
-     8e2:	bf 9d 1a 00 00       	mov    $0x1a9d,%edi
-     8e7:	e8 1b 05 00 00       	call   e07 <UVM_Print_String>
-     8ec:	bf a0 1a 00 00       	mov    $0x1aa0,%edi
-     8f1:	e8 11 05 00 00       	call   e07 <UVM_Print_String>
-     8f6:	bf ac 1a 00 00       	mov    $0x1aac,%edi
-     8fb:	e8 07 05 00 00       	call   e07 <UVM_Print_String>
-     900:	bf af 1a 00 00       	mov    $0x1aaf,%edi
-     905:	e8 fd 04 00 00       	call   e07 <UVM_Print_String>
-     90a:	bf 9d 1a 00 00       	mov    $0x1a9d,%edi
-     90f:	e8 f3 04 00 00       	call   e07 <UVM_Print_String>
-     914:	eb fe                	jmp    914 <main+0x5bf>
-        UVM_ASSERT(UVM_Thd_Exec_Set(TEST_THD2,TEST_THD2_FUNC,13*UVM_POW2(RME_PGT_SIZE_1M),1)>=0);
-     916:	b8 16 03 00 00       	mov    $0x316,%eax
-     91b:	b9 01 00 00 00       	mov    $0x1,%ecx
-     920:	ba 00 00 d0 00       	mov    $0xd00000,%edx
-     925:	48 89 c6             	mov    %rax,%rsi
-     928:	bf 0a 00 00 00       	mov    $0xa,%edi
-     92d:	e8 5e 0c 00 00       	call   1590 <UVM_Thd_Exec_Set>
-     932:	48 85 c0             	test   %rax,%rax
-     935:	79 5c                	jns    993 <main+0x63e>
-     937:	bf 58 1a 00 00       	mov    $0x1a58,%edi
-     93c:	e8 c6 04 00 00       	call   e07 <UVM_Print_String>
-     941:	bf 89 1a 00 00       	mov    $0x1a89,%edi
-     946:	e8 bc 04 00 00       	call   e07 <UVM_Print_String>
-     94b:	bf 95 1a 00 00       	mov    $0x1a95,%edi
-     950:	e8 b2 04 00 00       	call   e07 <UVM_Print_String>
-     955:	bf cc 00 00 00       	mov    $0xcc,%edi
-     95a:	e8 de 01 00 00       	call   b3d <UVM_Print_Int>
-     95f:	bf 9d 1a 00 00       	mov    $0x1a9d,%edi
-     964:	e8 9e 04 00 00       	call   e07 <UVM_Print_String>
-     969:	bf a0 1a 00 00       	mov    $0x1aa0,%edi
-     96e:	e8 94 04 00 00       	call   e07 <UVM_Print_String>
-     973:	bf ac 1a 00 00       	mov    $0x1aac,%edi
-     978:	e8 8a 04 00 00       	call   e07 <UVM_Print_String>
-     97d:	bf af 1a 00 00       	mov    $0x1aaf,%edi
-     982:	e8 80 04 00 00       	call   e07 <UVM_Print_String>
-     987:	bf 9d 1a 00 00       	mov    $0x1a9d,%edi
-     98c:	e8 76 04 00 00       	call   e07 <UVM_Print_String>
-     991:	eb fe                	jmp    991 <main+0x63c>
-        Cur_Addr+=UVM_THD_SIZE;
-     993:	48 81 45 f0 d0 09 00 	addq   $0x9d0,-0x10(%rbp)
-     99a:	00 
-
-        /*Signal send test begins here*/
-        UVM_ASSERT(UVM_Sig_Crt(UVM_BOOT_CAPTBL,UVM_CAPID(UVM_BOOT_TBL_KMEM,0),TEST_SIG1, Cur_Addr)>=0);
-     99b:	48 8b 45 f0          	mov    -0x10(%rbp),%rax
-     99f:	48 89 c1             	mov    %rax,%rcx
-     9a2:	ba 0c 00 00 00       	mov    $0xc,%edx
-     9a7:	be 00 80 05 00       	mov    $0x58000,%esi
-     9ac:	bf 00 00 00 00       	mov    $0x0,%edi
-     9b1:	e8 cd 0d 00 00       	call   1783 <UVM_Sig_Crt>
-     9b6:	48 85 c0             	test   %rax,%rax
-     9b9:	79 5c                	jns    a17 <main+0x6c2>
-     9bb:	bf 58 1a 00 00       	mov    $0x1a58,%edi
-     9c0:	e8 42 04 00 00       	call   e07 <UVM_Print_String>
-     9c5:	bf 89 1a 00 00       	mov    $0x1a89,%edi
-     9ca:	e8 38 04 00 00       	call   e07 <UVM_Print_String>
-     9cf:	bf 95 1a 00 00       	mov    $0x1a95,%edi
-     9d4:	e8 2e 04 00 00       	call   e07 <UVM_Print_String>
-     9d9:	bf d0 00 00 00       	mov    $0xd0,%edi
-     9de:	e8 5a 01 00 00       	call   b3d <UVM_Print_Int>
-     9e3:	bf 9d 1a 00 00       	mov    $0x1a9d,%edi
-     9e8:	e8 1a 04 00 00       	call   e07 <UVM_Print_String>
-     9ed:	bf a0 1a 00 00       	mov    $0x1aa0,%edi
-     9f2:	e8 10 04 00 00       	call   e07 <UVM_Print_String>
-     9f7:	bf ac 1a 00 00       	mov    $0x1aac,%edi
-     9fc:	e8 06 04 00 00       	call   e07 <UVM_Print_String>
-     a01:	bf af 1a 00 00       	mov    $0x1aaf,%edi
-     a06:	e8 fc 03 00 00       	call   e07 <UVM_Print_String>
-     a0b:	bf 9d 1a 00 00       	mov    $0x1a9d,%edi
-     a10:	e8 f2 03 00 00       	call   e07 <UVM_Print_String>
-     a15:	eb fe                	jmp    a15 <main+0x6c0>
-        Cur_Addr+=UVM_SIG_SIZE;
-     a17:	48 83 45 f0 20       	addq   $0x20,-0x10(%rbp)
+        /*create the test invacation stub */
+        UVM_ASSERT(UVM_Inv_Crt(UVM_BOOT_CAPTBL, UVM_CAPID(UVM_BOOT_TBL_KMEM,0), TEST_INV1, TEST_PROCESS, Cur_Addr)>=0);
+     3ba:	31 ff                	xor    %edi,%edi
+     3bc:	41 b8 20 10 ac 0e    	mov    $0xeac1020,%r8d
+     3c2:	b9 0f 00 00 00       	mov    $0xf,%ecx
+     3c7:	ba 0b 00 00 00       	mov    $0xb,%edx
+     3cc:	be 00 80 05 00       	mov    $0x58000,%esi
+     3d1:	e8 7a 0b 00 00       	call   f50 <UVM_Inv_Crt>
+     3d6:	48 85 c0             	test   %rax,%rax
+     3d9:	0f 88 4c 02 00 00    	js     62b <main+0x43b>
+        UVM_LOG_S("\r\nSuccess!!!!");
+     3df:	bf 88 11 00 00       	mov    $0x1188,%edi
+     3e4:	e8 c7 05 00 00       	call   9b0 <UVM_Print_String>
+        Cur_Addr+=UVM_INV_SIZE;
+        UVM_ASSERT(UVM_Inv_Set(TEST_INV1, TEST_INV1_FUNC,12*UVM_POW2(RME_PGT_SIZE_1M),0)>=0);
+     3e9:	31 c9                	xor    %ecx,%ecx
+     3eb:	ba 00 00 c0 00       	mov    $0xc00000,%edx
+     3f0:	be 10 01 00 00       	mov    $0x110,%esi
+     3f5:	bf 0b 00 00 00       	mov    $0xb,%edi
+     3fa:	e8 a1 0b 00 00       	call   fa0 <UVM_Inv_Set>
+     3ff:	48 85 c0             	test   %rax,%rax
+     402:	0f 88 db 02 00 00    	js     6e3 <main+0x4f3>
+        UVM_LOG_S("\r\nSuccess!!!!");
+     408:	bf 88 11 00 00       	mov    $0x1188,%edi
         sum=0;
-     a1c:	48 c7 05 f9 15 00 00 	movq   $0x0,0x15f9(%rip)        # 2020 <sum>
-     a23:	00 00 00 00 
-        UVM_ASSERT(UVM_Thd_Swt(TEST_THD1,0)>=0);
-     a27:	be 00 00 00 00       	mov    $0x0,%esi
-     a2c:	bf 09 00 00 00       	mov    $0x9,%edi
-     a31:	e8 15 0d 00 00       	call   174b <UVM_Thd_Swt>
-     a36:	48 85 c0             	test   %rax,%rax
-     a39:	79 5c                	jns    a97 <main+0x742>
-     a3b:	bf 58 1a 00 00       	mov    $0x1a58,%edi
-     a40:	e8 c2 03 00 00       	call   e07 <UVM_Print_String>
-     a45:	bf 89 1a 00 00       	mov    $0x1a89,%edi
-     a4a:	e8 b8 03 00 00       	call   e07 <UVM_Print_String>
-     a4f:	bf 95 1a 00 00       	mov    $0x1a95,%edi
-     a54:	e8 ae 03 00 00       	call   e07 <UVM_Print_String>
-     a59:	bf d3 00 00 00       	mov    $0xd3,%edi
-     a5e:	e8 da 00 00 00       	call   b3d <UVM_Print_Int>
-     a63:	bf 9d 1a 00 00       	mov    $0x1a9d,%edi
-     a68:	e8 9a 03 00 00       	call   e07 <UVM_Print_String>
-     a6d:	bf a0 1a 00 00       	mov    $0x1aa0,%edi
-     a72:	e8 90 03 00 00       	call   e07 <UVM_Print_String>
-     a77:	bf ac 1a 00 00       	mov    $0x1aac,%edi
-     a7c:	e8 86 03 00 00       	call   e07 <UVM_Print_String>
-     a81:	bf af 1a 00 00       	mov    $0x1aaf,%edi
-     a86:	e8 7c 03 00 00       	call   e07 <UVM_Print_String>
-     a8b:	bf 9d 1a 00 00       	mov    $0x1a9d,%edi
-     a90:	e8 72 03 00 00       	call   e07 <UVM_Print_String>
-     a95:	eb fe                	jmp    a95 <main+0x740>
+        sumin=0;
+        sumout=0;
+     40d:	bb 10 27 00 00       	mov    $0x2710,%ebx
+        UVM_LOG_S("\r\nSuccess!!!!");
+     412:	e8 99 05 00 00       	call   9b0 <UVM_Print_String>
+        sum=0;
+     417:	48 c7 05 ee 1b 00 00 	movq   $0x0,0x1bee(%rip)        # 2010 <sum>
+     41e:	00 00 00 00 
+        sumin=0;
+     422:	48 c7 05 db 1b 00 00 	movq   $0x0,0x1bdb(%rip)        # 2008 <sumin>
+     429:	00 00 00 00 
+        sumout=0;
+     42d:	48 c7 05 c8 1b 00 00 	movq   $0x0,0x1bc8(%rip)        # 2000 <sumout>
+     434:	00 00 00 00 
+        /* Run a raw test before we run anything else */
+        for(Count=0;Count<10000;Count++)
+     438:	0f 1f 84 00 00 00 00 	nopl   0x0(%rax,%rax,1)
+     43f:	00 
+        {
             start=__UVM_X64_Read_TSC();
-            UVM_ASSERT(UVM_Thd_Swt(TEST_THD1,0)>=0);
+     440:	e8 d6 fb ff ff       	call   1b <__UVM_X64_Read_TSC>
+            UVM_Inv_Act(TEST_INV1,0,0);
+     445:	31 d2                	xor    %edx,%edx
+     447:	31 f6                	xor    %esi,%esi
+     449:	bf 0b 00 00 00       	mov    $0xb,%edi
+            start=__UVM_X64_Read_TSC();
+     44e:	48 89 05 d3 1b 00 00 	mov    %rax,0x1bd3(%rip)        # 2028 <start>
+            UVM_Inv_Act(TEST_INV1,0,0);
+     455:	e8 ff fb ff ff       	call   59 <UVM_Inv_Act>
             end=__UVM_X64_Read_TSC();
+     45a:	e8 bc fb ff ff       	call   1b <__UVM_X64_Read_TSC>
+     45f:	48 89 05 b2 1b 00 00 	mov    %rax,0x1bb2(%rip)        # 2018 <end>
             sum+=end-start;
-        }*/
+     466:	48 8b 05 ab 1b 00 00 	mov    0x1bab(%rip),%rax        # 2018 <end>
+     46d:	48 8b 15 b4 1b 00 00 	mov    0x1bb4(%rip),%rdx        # 2028 <start>
+     474:	48 29 d0             	sub    %rdx,%rax
+     477:	48 01 05 92 1b 00 00 	add    %rax,0x1b92(%rip)        # 2010 <sum>
+            sumin+=middle-start;
+     47e:	48 8b 05 9b 1b 00 00 	mov    0x1b9b(%rip),%rax        # 2020 <middle>
+     485:	48 8b 15 9c 1b 00 00 	mov    0x1b9c(%rip),%rdx        # 2028 <start>
+     48c:	48 29 d0             	sub    %rdx,%rax
+     48f:	48 01 05 72 1b 00 00 	add    %rax,0x1b72(%rip)        # 2008 <sumin>
+            sumout+=end-middle;
+     496:	48 8b 05 7b 1b 00 00 	mov    0x1b7b(%rip),%rax        # 2018 <end>
+     49d:	48 8b 15 7c 1b 00 00 	mov    0x1b7c(%rip),%rdx        # 2020 <middle>
+     4a4:	48 29 d0             	sub    %rdx,%rax
+     4a7:	48 01 05 52 1b 00 00 	add    %rax,0x1b52(%rip)        # 2000 <sumout>
+        for(Count=0;Count<10000;Count++)
+     4ae:	48 83 eb 01          	sub    $0x1,%rbx
+     4b2:	75 8c                	jne    440 <main+0x250>
+        }
+        UVM_LOG_S("\r\ninv");
+     4b4:	bf 96 11 00 00       	mov    $0x1196,%edi
+        UVM_LOG_I(sum/10000);
+     4b9:	bb 10 27 00 00       	mov    $0x2710,%ebx
+        UVM_LOG_S("\r\ninv");
+     4be:	e8 ed 04 00 00       	call   9b0 <UVM_Print_String>
+        UVM_LOG_I(sum/10000);
+     4c3:	48 8b 05 46 1b 00 00 	mov    0x1b46(%rip),%rax        # 2010 <sum>
+     4ca:	31 d2                	xor    %edx,%edx
+     4cc:	48 f7 f3             	div    %rbx
+     4cf:	48 89 c7             	mov    %rax,%rdi
+     4d2:	e8 a9 02 00 00       	call   780 <UVM_Print_Int>
+        UVM_LOG_S("\r\nin");
+     4d7:	bf 9c 11 00 00       	mov    $0x119c,%edi
+     4dc:	e8 cf 04 00 00       	call   9b0 <UVM_Print_String>
+        UVM_LOG_I(sumin/10000);
+     4e1:	48 8b 05 20 1b 00 00 	mov    0x1b20(%rip),%rax        # 2008 <sumin>
+     4e8:	31 d2                	xor    %edx,%edx
+     4ea:	48 f7 f3             	div    %rbx
+     4ed:	48 89 c7             	mov    %rax,%rdi
+     4f0:	e8 8b 02 00 00       	call   780 <UVM_Print_Int>
+        UVM_LOG_S("\r\nout");
+     4f5:	bf a1 11 00 00       	mov    $0x11a1,%edi
+     4fa:	e8 b1 04 00 00       	call   9b0 <UVM_Print_String>
+        UVM_LOG_I(sumout/10000);
+     4ff:	48 8b 05 fa 1a 00 00 	mov    0x1afa(%rip),%rax        # 2000 <sumout>
+     506:	31 d2                	xor    %edx,%edx
+     508:	48 f7 f3             	div    %rbx
+     50b:	48 89 c7             	mov    %rax,%rdi
+     50e:	e8 6d 02 00 00       	call   780 <UVM_Print_Int>
         while (1){}
-     a97:	eb fe                	jmp    a97 <main+0x742>
+     513:	eb fe                	jmp    513 <main+0x323>
         UVM_Thd_Swt(TEST_THD1,0);
 
         /*Cross-process thread switching test ends here*/
         while (1);/*Idle*/
     }
 }
-     a99:	90                   	nop
-     a9a:	c9                   	leave  
-     a9b:	c3                   	ret    
+     515:	5b                   	pop    %rbx
+     516:	c3                   	ret    
+        UVM_ASSERT(UVM_Captbl_Crt(UVM_BOOT_CAPTBL,UVM_CAPID(UVM_BOOT_TBL_KMEM,0),TEST_PROC_CAPTBL,Cur_Addr,16)>=0);
+     517:	bf 28 11 00 00       	mov    $0x1128,%edi
+     51c:	e8 8f 04 00 00       	call   9b0 <UVM_Print_String>
+     521:	bf 59 11 00 00       	mov    $0x1159,%edi
+     526:	e8 85 04 00 00       	call   9b0 <UVM_Print_String>
+     52b:	bf 65 11 00 00       	mov    $0x1165,%edi
+     530:	e8 7b 04 00 00       	call   9b0 <UVM_Print_String>
+     535:	bf d2 00 00 00       	mov    $0xd2,%edi
+     53a:	e8 41 02 00 00       	call   780 <UVM_Print_Int>
+     53f:	bf 6d 11 00 00       	mov    $0x116d,%edi
+     544:	e8 67 04 00 00       	call   9b0 <UVM_Print_String>
+     549:	bf 70 11 00 00       	mov    $0x1170,%edi
+     54e:	e8 5d 04 00 00       	call   9b0 <UVM_Print_String>
+     553:	bf 7c 11 00 00       	mov    $0x117c,%edi
+     558:	e8 53 04 00 00       	call   9b0 <UVM_Print_String>
+     55d:	bf 7f 11 00 00       	mov    $0x117f,%edi
+     562:	e8 49 04 00 00       	call   9b0 <UVM_Print_String>
+     567:	bf 6d 11 00 00       	mov    $0x116d,%edi
+     56c:	e8 3f 04 00 00       	call   9b0 <UVM_Print_String>
+     571:	eb fe                	jmp    571 <main+0x381>
+        UVM_ASSERT(UVM_Captbl_Crt(UVM_BOOT_CAPTBL,UVM_CAPID(UVM_BOOT_TBL_KMEM,0),TEST_PROCESS_PGT,Cur_Addr,1+16+8192)>=0);
+     573:	bf 28 11 00 00       	mov    $0x1128,%edi
+     578:	e8 33 04 00 00       	call   9b0 <UVM_Print_String>
+     57d:	bf 59 11 00 00       	mov    $0x1159,%edi
+     582:	e8 29 04 00 00       	call   9b0 <UVM_Print_String>
+     587:	bf 65 11 00 00       	mov    $0x1165,%edi
+     58c:	e8 1f 04 00 00       	call   9b0 <UVM_Print_String>
+     591:	bf d5 00 00 00       	mov    $0xd5,%edi
+     596:	e8 e5 01 00 00       	call   780 <UVM_Print_Int>
+     59b:	bf 6d 11 00 00       	mov    $0x116d,%edi
+     5a0:	e8 0b 04 00 00       	call   9b0 <UVM_Print_String>
+     5a5:	bf 70 11 00 00       	mov    $0x1170,%edi
+     5aa:	e8 01 04 00 00       	call   9b0 <UVM_Print_String>
+     5af:	bf 7c 11 00 00       	mov    $0x117c,%edi
+     5b4:	e8 f7 03 00 00       	call   9b0 <UVM_Print_String>
+     5b9:	bf 7f 11 00 00       	mov    $0x117f,%edi
+     5be:	e8 ed 03 00 00       	call   9b0 <UVM_Print_String>
+     5c3:	bf 6d 11 00 00       	mov    $0x116d,%edi
+     5c8:	e8 e3 03 00 00       	call   9b0 <UVM_Print_String>
+     5cd:	eb fe                	jmp    5cd <main+0x3dd>
+        UVM_ASSERT(UVM_Pgtbl_Crt(TEST_PROCESS_PGT,UVM_CAPID(UVM_BOOT_TBL_KMEM,0),TEST_PROCESS_PML4,Cur_Addr,0,1U,RME_PGT_SIZE_512G,RME_PGT_NUM_512)>=0);
+     5cf:	bf 28 11 00 00       	mov    $0x1128,%edi
+     5d4:	e8 d7 03 00 00       	call   9b0 <UVM_Print_String>
+     5d9:	bf 59 11 00 00       	mov    $0x1159,%edi
+     5de:	e8 cd 03 00 00       	call   9b0 <UVM_Print_String>
+     5e3:	bf 65 11 00 00       	mov    $0x1165,%edi
+     5e8:	e8 c3 03 00 00       	call   9b0 <UVM_Print_String>
+     5ed:	bf d9 00 00 00       	mov    $0xd9,%edi
+     5f2:	e8 89 01 00 00       	call   780 <UVM_Print_Int>
+     5f7:	bf 6d 11 00 00       	mov    $0x116d,%edi
+     5fc:	e8 af 03 00 00       	call   9b0 <UVM_Print_String>
+     601:	bf 70 11 00 00       	mov    $0x1170,%edi
+     606:	e8 a5 03 00 00       	call   9b0 <UVM_Print_String>
+     60b:	bf 7c 11 00 00       	mov    $0x117c,%edi
+     610:	e8 9b 03 00 00       	call   9b0 <UVM_Print_String>
+     615:	bf 7f 11 00 00       	mov    $0x117f,%edi
+     61a:	e8 91 03 00 00       	call   9b0 <UVM_Print_String>
+     61f:	bf 6d 11 00 00       	mov    $0x116d,%edi
+     624:	e8 87 03 00 00       	call   9b0 <UVM_Print_String>
+     629:	eb fe                	jmp    629 <main+0x439>
+        UVM_ASSERT(UVM_Inv_Crt(UVM_BOOT_CAPTBL, UVM_CAPID(UVM_BOOT_TBL_KMEM,0), TEST_INV1, TEST_PROCESS, Cur_Addr)>=0);
+     62b:	bf 28 11 00 00       	mov    $0x1128,%edi
+     630:	e8 7b 03 00 00       	call   9b0 <UVM_Print_String>
+     635:	bf 59 11 00 00       	mov    $0x1159,%edi
+     63a:	e8 71 03 00 00       	call   9b0 <UVM_Print_String>
+     63f:	bf 65 11 00 00       	mov    $0x1165,%edi
+     644:	e8 67 03 00 00       	call   9b0 <UVM_Print_String>
+     649:	bf ff 00 00 00       	mov    $0xff,%edi
+     64e:	e8 2d 01 00 00       	call   780 <UVM_Print_Int>
+     653:	bf 6d 11 00 00       	mov    $0x116d,%edi
+     658:	e8 53 03 00 00       	call   9b0 <UVM_Print_String>
+     65d:	bf 70 11 00 00       	mov    $0x1170,%edi
+     662:	e8 49 03 00 00       	call   9b0 <UVM_Print_String>
+     667:	bf 7c 11 00 00       	mov    $0x117c,%edi
+     66c:	e8 3f 03 00 00       	call   9b0 <UVM_Print_String>
+     671:	bf 7f 11 00 00       	mov    $0x117f,%edi
+     676:	e8 35 03 00 00       	call   9b0 <UVM_Print_String>
+     67b:	bf 6d 11 00 00       	mov    $0x116d,%edi
+     680:	e8 2b 03 00 00       	call   9b0 <UVM_Print_String>
+     685:	eb fe                	jmp    685 <main+0x495>
+        UVM_ASSERT(UVM_Proc_Crt(UVM_BOOT_CAPTBL,UVM_CAPID(UVM_BOOT_TBL_KMEM,0),TEST_PROCESS,UVM_BOOT_CAPTBL,
+     687:	bf 28 11 00 00       	mov    $0x1128,%edi
+     68c:	e8 1f 03 00 00       	call   9b0 <UVM_Print_String>
+     691:	bf 59 11 00 00       	mov    $0x1159,%edi
+     696:	e8 15 03 00 00       	call   9b0 <UVM_Print_String>
+     69b:	bf 65 11 00 00       	mov    $0x1165,%edi
+     6a0:	e8 0b 03 00 00       	call   9b0 <UVM_Print_String>
+     6a5:	bf fa 00 00 00       	mov    $0xfa,%edi
+     6aa:	e8 d1 00 00 00       	call   780 <UVM_Print_Int>
+     6af:	bf 6d 11 00 00       	mov    $0x116d,%edi
+     6b4:	e8 f7 02 00 00       	call   9b0 <UVM_Print_String>
+     6b9:	bf 70 11 00 00       	mov    $0x1170,%edi
+     6be:	e8 ed 02 00 00       	call   9b0 <UVM_Print_String>
+     6c3:	bf 7c 11 00 00       	mov    $0x117c,%edi
+     6c8:	e8 e3 02 00 00       	call   9b0 <UVM_Print_String>
+     6cd:	bf 7f 11 00 00       	mov    $0x117f,%edi
+     6d2:	e8 d9 02 00 00       	call   9b0 <UVM_Print_String>
+     6d7:	bf 6d 11 00 00       	mov    $0x116d,%edi
+     6dc:	e8 cf 02 00 00       	call   9b0 <UVM_Print_String>
+     6e1:	eb fe                	jmp    6e1 <main+0x4f1>
+        UVM_ASSERT(UVM_Inv_Set(TEST_INV1, TEST_INV1_FUNC,12*UVM_POW2(RME_PGT_SIZE_1M),0)>=0);
+     6e3:	bf 28 11 00 00       	mov    $0x1128,%edi
+     6e8:	e8 c3 02 00 00       	call   9b0 <UVM_Print_String>
+     6ed:	bf 59 11 00 00       	mov    $0x1159,%edi
+     6f2:	e8 b9 02 00 00       	call   9b0 <UVM_Print_String>
+     6f7:	bf 65 11 00 00       	mov    $0x1165,%edi
+     6fc:	e8 af 02 00 00       	call   9b0 <UVM_Print_String>
+     701:	bf 02 01 00 00       	mov    $0x102,%edi
+     706:	e8 75 00 00 00       	call   780 <UVM_Print_Int>
+     70b:	bf 6d 11 00 00       	mov    $0x116d,%edi
+     710:	e8 9b 02 00 00       	call   9b0 <UVM_Print_String>
+     715:	bf 70 11 00 00       	mov    $0x1170,%edi
+     71a:	e8 91 02 00 00       	call   9b0 <UVM_Print_String>
+     71f:	bf 7c 11 00 00       	mov    $0x117c,%edi
+     724:	e8 87 02 00 00       	call   9b0 <UVM_Print_String>
+     729:	bf 7f 11 00 00       	mov    $0x117f,%edi
+     72e:	e8 7d 02 00 00       	call   9b0 <UVM_Print_String>
+     733:	bf 6d 11 00 00       	mov    $0x116d,%edi
+     738:	e8 73 02 00 00       	call   9b0 <UVM_Print_String>
+     73d:	eb fe                	jmp    73d <main+0x54d>
+     73f:	90                   	nop
 
-0000000000000a9c <UVM_List_Crt>:
+0000000000000740 <UVM_List_Crt>:
 Input       : volatile struct UVM_List* Head - The pointer to the list head.
 Output      : None.
 Return      : None.
 ******************************************************************************/
 void UVM_List_Crt(volatile struct UVM_List* Head)
 {
-     a9c:	f3 0f 1e fa          	endbr64 
-     aa0:	55                   	push   %rbp
-     aa1:	48 89 e5             	mov    %rsp,%rbp
-     aa4:	48 83 ec 08          	sub    $0x8,%rsp
-     aa8:	48 89 7d f8          	mov    %rdi,-0x8(%rbp)
+     740:	f3 0f 1e fa          	endbr64 
     Head->Prev=(struct UVM_List*)Head;
-     aac:	48 8b 45 f8          	mov    -0x8(%rbp),%rax
-     ab0:	48 8b 55 f8          	mov    -0x8(%rbp),%rdx
-     ab4:	48 89 10             	mov    %rdx,(%rax)
+     744:	48 89 3f             	mov    %rdi,(%rdi)
     Head->Next=(struct UVM_List*)Head;
-     ab7:	48 8b 45 f8          	mov    -0x8(%rbp),%rax
-     abb:	48 8b 55 f8          	mov    -0x8(%rbp),%rdx
-     abf:	48 89 50 08          	mov    %rdx,0x8(%rax)
+     747:	48 89 7f 08          	mov    %rdi,0x8(%rdi)
 }
-     ac3:	90                   	nop
-     ac4:	c9                   	leave  
-     ac5:	c3                   	ret    
+     74b:	c3                   	ret    
+     74c:	0f 1f 40 00          	nopl   0x0(%rax)
 
-0000000000000ac6 <UVM_List_Del>:
+0000000000000750 <UVM_List_Del>:
               volatile struct UVM_List* Next - The next node of the target node.
 Output      : None.
 Return      : None.
 ******************************************************************************/
 void UVM_List_Del(volatile struct UVM_List* Prev,volatile struct UVM_List* Next)
 {
-     ac6:	f3 0f 1e fa          	endbr64 
-     aca:	55                   	push   %rbp
-     acb:	48 89 e5             	mov    %rsp,%rbp
-     ace:	48 83 ec 10          	sub    $0x10,%rsp
-     ad2:	48 89 7d f8          	mov    %rdi,-0x8(%rbp)
-     ad6:	48 89 75 f0          	mov    %rsi,-0x10(%rbp)
+     750:	f3 0f 1e fa          	endbr64 
     Next->Prev=(struct UVM_List*)Prev;
-     ada:	48 8b 45 f0          	mov    -0x10(%rbp),%rax
-     ade:	48 8b 55 f8          	mov    -0x8(%rbp),%rdx
-     ae2:	48 89 10             	mov    %rdx,(%rax)
+     754:	48 89 3e             	mov    %rdi,(%rsi)
     Prev->Next=(struct UVM_List*)Next;
-     ae5:	48 8b 45 f8          	mov    -0x8(%rbp),%rax
-     ae9:	48 8b 55 f0          	mov    -0x10(%rbp),%rdx
-     aed:	48 89 50 08          	mov    %rdx,0x8(%rax)
+     757:	48 89 77 08          	mov    %rsi,0x8(%rdi)
 }
-     af1:	90                   	nop
-     af2:	c9                   	leave  
-     af3:	c3                   	ret    
+     75b:	c3                   	ret    
+     75c:	0f 1f 40 00          	nopl   0x0(%rax)
 
-0000000000000af4 <UVM_List_Ins>:
+0000000000000760 <UVM_List_Ins>:
 Return      : None.
 ******************************************************************************/
 void UVM_List_Ins(volatile struct UVM_List* New,
                   volatile struct UVM_List* Prev,
                   volatile struct UVM_List* Next)
 {
-     af4:	f3 0f 1e fa          	endbr64 
-     af8:	55                   	push   %rbp
-     af9:	48 89 e5             	mov    %rsp,%rbp
-     afc:	48 83 ec 18          	sub    $0x18,%rsp
-     b00:	48 89 7d f8          	mov    %rdi,-0x8(%rbp)
-     b04:	48 89 75 f0          	mov    %rsi,-0x10(%rbp)
-     b08:	48 89 55 e8          	mov    %rdx,-0x18(%rbp)
+     760:	f3 0f 1e fa          	endbr64 
     Next->Prev=(struct UVM_List*)New;
-     b0c:	48 8b 45 e8          	mov    -0x18(%rbp),%rax
-     b10:	48 8b 55 f8          	mov    -0x8(%rbp),%rdx
-     b14:	48 89 10             	mov    %rdx,(%rax)
+     764:	48 89 3a             	mov    %rdi,(%rdx)
     New->Next=(struct UVM_List*)Next;
-     b17:	48 8b 45 f8          	mov    -0x8(%rbp),%rax
-     b1b:	48 8b 55 e8          	mov    -0x18(%rbp),%rdx
-     b1f:	48 89 50 08          	mov    %rdx,0x8(%rax)
+     767:	48 89 57 08          	mov    %rdx,0x8(%rdi)
     New->Prev=(struct UVM_List*)Prev;
-     b23:	48 8b 45 f8          	mov    -0x8(%rbp),%rax
-     b27:	48 8b 55 f0          	mov    -0x10(%rbp),%rdx
-     b2b:	48 89 10             	mov    %rdx,(%rax)
+     76b:	48 89 37             	mov    %rsi,(%rdi)
     Prev->Next=(struct UVM_List*)New;
-     b2e:	48 8b 45 f0          	mov    -0x10(%rbp),%rax
-     b32:	48 8b 55 f8          	mov    -0x8(%rbp),%rdx
-     b36:	48 89 50 08          	mov    %rdx,0x8(%rax)
+     76e:	48 89 7e 08          	mov    %rdi,0x8(%rsi)
 }
-     b3a:	90                   	nop
-     b3b:	c9                   	leave  
-     b3c:	c3                   	ret    
+     772:	c3                   	ret    
+     773:	66 66 2e 0f 1f 84 00 	data16 cs nopw 0x0(%rax,%rax,1)
+     77a:	00 00 00 00 
+     77e:	66 90                	xchg   %ax,%ax
 
-0000000000000b3d <UVM_Print_Int>:
+0000000000000780 <UVM_Print_Int>:
 Input       : cnt_t Int - The integer to print.
 Output      : None.
 Return      : cnt_t - The length of the string printed.
 ******************************************************************************/
 cnt_t UVM_Print_Int(cnt_t Int)
 {
-     b3d:	f3 0f 1e fa          	endbr64 
-     b41:	55                   	push   %rbp
-     b42:	48 89 e5             	mov    %rsp,%rbp
-     b45:	48 83 ec 30          	sub    $0x30,%rsp
-     b49:	48 89 7d d8          	mov    %rdi,-0x28(%rbp)
+     780:	f3 0f 1e fa          	endbr64 
+     784:	41 57                	push   %r15
+     786:	41 56                	push   %r14
+     788:	41 55                	push   %r13
+     78a:	41 54                	push   %r12
+     78c:	55                   	push   %rbp
+     78d:	53                   	push   %rbx
+     78e:	48 83 ec 08          	sub    $0x8,%rsp
     cnt_t Count;
     cnt_t Num;
     ptr_t Div;
     
     /* how many digits are there? */
     if(Int==0)
-     b4d:	48 83 7d d8 00       	cmpq   $0x0,-0x28(%rbp)
-     b52:	75 14                	jne    b68 <UVM_Print_Int+0x2b>
+     792:	48 85 ff             	test   %rdi,%rdi
+     795:	0f 84 4d 01 00 00    	je     8e8 <UVM_Print_Int+0x168>
     {
         UVM_Putchar('0');
-     b54:	bf 30 00 00 00       	mov    $0x30,%edi
-     b59:	e8 0d 0e 00 00       	call   196b <UVM_Putchar>
         return 1;
-     b5e:	b8 01 00 00 00       	mov    $0x1,%eax
-     b63:	e9 d8 01 00 00       	jmp    d40 <UVM_Print_Int+0x203>
     }
     else if(Int<0)
-     b68:	48 83 7d d8 00       	cmpq   $0x0,-0x28(%rbp)
-     b6d:	0f 89 f1 00 00 00    	jns    c64 <UVM_Print_Int+0x127>
-    {
-        /* How many digits are there? */
-        Count=0;
-     b73:	48 c7 45 f0 00 00 00 	movq   $0x0,-0x10(%rbp)
-     b7a:	00 
-        Div=1;
-     b7b:	48 c7 45 e0 01 00 00 	movq   $0x1,-0x20(%rbp)
-     b82:	00 
-        Iter=-Int;
-     b83:	48 8b 45 d8          	mov    -0x28(%rbp),%rax
-     b87:	48 f7 d8             	neg    %rax
-     b8a:	48 89 45 f8          	mov    %rax,-0x8(%rbp)
-        while(Iter!=0)
-     b8e:	eb 36                	jmp    bc6 <UVM_Print_Int+0x89>
-        {
-            Iter/=10;
-     b90:	48 8b 45 f8          	mov    -0x8(%rbp),%rax
-     b94:	48 ba cd cc cc cc cc 	movabs $0xcccccccccccccccd,%rdx
-     b9b:	cc cc cc 
-     b9e:	48 f7 e2             	mul    %rdx
-     ba1:	48 89 d0             	mov    %rdx,%rax
-     ba4:	48 c1 e8 03          	shr    $0x3,%rax
-     ba8:	48 89 45 f8          	mov    %rax,-0x8(%rbp)
-            Count++;
-     bac:	48 83 45 f0 01       	addq   $0x1,-0x10(%rbp)
-            Div*=10;
-     bb1:	48 8b 55 e0          	mov    -0x20(%rbp),%rdx
-     bb5:	48 89 d0             	mov    %rdx,%rax
-     bb8:	48 c1 e0 02          	shl    $0x2,%rax
-     bbc:	48 01 d0             	add    %rdx,%rax
-     bbf:	48 01 c0             	add    %rax,%rax
-     bc2:	48 89 45 e0          	mov    %rax,-0x20(%rbp)
-        while(Iter!=0)
-     bc6:	48 83 7d f8 00       	cmpq   $0x0,-0x8(%rbp)
-     bcb:	75 c3                	jne    b90 <UVM_Print_Int+0x53>
-        }
-        Div/=10;
-     bcd:	48 8b 45 e0          	mov    -0x20(%rbp),%rax
-     bd1:	48 ba cd cc cc cc cc 	movabs $0xcccccccccccccccd,%rdx
-     bd8:	cc cc cc 
-     bdb:	48 f7 e2             	mul    %rdx
-     bde:	48 89 d0             	mov    %rdx,%rax
-     be1:	48 c1 e8 03          	shr    $0x3,%rax
-     be5:	48 89 45 e0          	mov    %rax,-0x20(%rbp)
-        
-        UVM_Putchar('-');
-     be9:	bf 2d 00 00 00       	mov    $0x2d,%edi
-     bee:	e8 78 0d 00 00       	call   196b <UVM_Putchar>
-        Iter=-Int;
-     bf3:	48 8b 45 d8          	mov    -0x28(%rbp),%rax
-     bf7:	48 f7 d8             	neg    %rax
-     bfa:	48 89 45 f8          	mov    %rax,-0x8(%rbp)
-        Num=Count+1;
-     bfe:	48 8b 45 f0          	mov    -0x10(%rbp),%rax
-     c02:	48 83 c0 01          	add    $0x1,%rax
-     c06:	48 89 45 e8          	mov    %rax,-0x18(%rbp)
-        
-        while(Count>0)
-     c0a:	eb 4c                	jmp    c58 <UVM_Print_Int+0x11b>
-        {
-            Count--;
-     c0c:	48 83 6d f0 01       	subq   $0x1,-0x10(%rbp)
-            UVM_Putchar(Iter/Div+'0');
-     c11:	48 8b 45 f8          	mov    -0x8(%rbp),%rax
-     c15:	ba 00 00 00 00       	mov    $0x0,%edx
-     c1a:	48 f7 75 e0          	divq   -0x20(%rbp)
-     c1e:	83 c0 30             	add    $0x30,%eax
-     c21:	0f be c0             	movsbl %al,%eax
-     c24:	89 c7                	mov    %eax,%edi
-     c26:	e8 40 0d 00 00       	call   196b <UVM_Putchar>
-            Iter=Iter%Div;
-     c2b:	48 8b 45 f8          	mov    -0x8(%rbp),%rax
-     c2f:	ba 00 00 00 00       	mov    $0x0,%edx
-     c34:	48 f7 75 e0          	divq   -0x20(%rbp)
-     c38:	48 89 55 f8          	mov    %rdx,-0x8(%rbp)
-            Div/=10;
-     c3c:	48 8b 45 e0          	mov    -0x20(%rbp),%rax
-     c40:	48 ba cd cc cc cc cc 	movabs $0xcccccccccccccccd,%rdx
-     c47:	cc cc cc 
-     c4a:	48 f7 e2             	mul    %rdx
-     c4d:	48 89 d0             	mov    %rdx,%rax
-     c50:	48 c1 e8 03          	shr    $0x3,%rax
-     c54:	48 89 45 e0          	mov    %rax,-0x20(%rbp)
-        while(Count>0)
-     c58:	48 83 7d f0 00       	cmpq   $0x0,-0x10(%rbp)
-     c5d:	7f ad                	jg     c0c <UVM_Print_Int+0xcf>
-     c5f:	e9 d8 00 00 00       	jmp    d3c <UVM_Print_Int+0x1ff>
-        }
-    }
+     79b:	0f 88 a7 00 00 00    	js     848 <UVM_Print_Int+0xc8>
     else
     {
         /* How many digits are there? */
         Count=0;
-     c64:	48 c7 45 f0 00 00 00 	movq   $0x0,-0x10(%rbp)
-     c6b:	00 
         Div=1;
-     c6c:	48 c7 45 e0 01 00 00 	movq   $0x1,-0x20(%rbp)
-     c73:	00 
         Iter=Int;
-     c74:	48 8b 45 d8          	mov    -0x28(%rbp),%rax
-     c78:	48 89 45 f8          	mov    %rax,-0x8(%rbp)
+     7a1:	48 89 fa             	mov    %rdi,%rdx
+        Div=1;
+     7a4:	bb 01 00 00 00       	mov    $0x1,%ebx
+        Count=0;
+     7a9:	45 31 e4             	xor    %r12d,%r12d
         while(Iter!=0)
-     c7c:	eb 36                	jmp    cb4 <UVM_Print_Int+0x177>
         {
             Iter/=10;
-     c7e:	48 8b 45 f8          	mov    -0x8(%rbp),%rax
-     c82:	48 ba cd cc cc cc cc 	movabs $0xcccccccccccccccd,%rdx
-     c89:	cc cc cc 
-     c8c:	48 f7 e2             	mul    %rdx
-     c8f:	48 89 d0             	mov    %rdx,%rax
-     c92:	48 c1 e8 03          	shr    $0x3,%rax
-     c96:	48 89 45 f8          	mov    %rax,-0x8(%rbp)
+     7ac:	48 be cd cc cc cc cc 	movabs $0xcccccccccccccccd,%rsi
+     7b3:	cc cc cc 
+     7b6:	66 2e 0f 1f 84 00 00 	cs nopw 0x0(%rax,%rax,1)
+     7bd:	00 00 00 
+     7c0:	48 89 d0             	mov    %rdx,%rax
+     7c3:	48 89 d1             	mov    %rdx,%rcx
             Count++;
-     c9a:	48 83 45 f0 01       	addq   $0x1,-0x10(%rbp)
             Div*=10;
-     c9f:	48 8b 55 e0          	mov    -0x20(%rbp),%rdx
-     ca3:	48 89 d0             	mov    %rdx,%rax
-     ca6:	48 c1 e0 02          	shl    $0x2,%rax
-     caa:	48 01 d0             	add    %rdx,%rax
-     cad:	48 01 c0             	add    %rax,%rax
-     cb0:	48 89 45 e0          	mov    %rax,-0x20(%rbp)
+     7c6:	48 8d 1c 9b          	lea    (%rbx,%rbx,4),%rbx
+            Count++;
+     7ca:	49 83 c4 01          	add    $0x1,%r12
+            Iter/=10;
+     7ce:	48 f7 e6             	mul    %rsi
+            Div*=10;
+     7d1:	48 01 db             	add    %rbx,%rbx
+            Iter/=10;
+     7d4:	48 c1 ea 03          	shr    $0x3,%rdx
         while(Iter!=0)
-     cb4:	48 83 7d f8 00       	cmpq   $0x0,-0x8(%rbp)
-     cb9:	75 c3                	jne    c7e <UVM_Print_Int+0x141>
-        }
-        Div/=10;
-     cbb:	48 8b 45 e0          	mov    -0x20(%rbp),%rax
-     cbf:	48 ba cd cc cc cc cc 	movabs $0xcccccccccccccccd,%rdx
-     cc6:	cc cc cc 
-     cc9:	48 f7 e2             	mul    %rdx
-     ccc:	48 89 d0             	mov    %rdx,%rax
-     ccf:	48 c1 e8 03          	shr    $0x3,%rax
-     cd3:	48 89 45 e0          	mov    %rax,-0x20(%rbp)
-        
-        Iter=Int;
-     cd7:	48 8b 45 d8          	mov    -0x28(%rbp),%rax
-     cdb:	48 89 45 f8          	mov    %rax,-0x8(%rbp)
-        Num=Count;
-     cdf:	48 8b 45 f0          	mov    -0x10(%rbp),%rax
-     ce3:	48 89 45 e8          	mov    %rax,-0x18(%rbp)
-        
+     7d8:	48 83 f9 09          	cmp    $0x9,%rcx
+     7dc:	77 e2                	ja     7c0 <UVM_Print_Int+0x40>
         while(Count>0)
-     ce7:	eb 4c                	jmp    d35 <UVM_Print_Int+0x1f8>
         {
             Count--;
-     ce9:	48 83 6d f0 01       	subq   $0x1,-0x10(%rbp)
             UVM_Putchar(Iter/Div+'0');
-     cee:	48 8b 45 f8          	mov    -0x8(%rbp),%rax
-     cf2:	ba 00 00 00 00       	mov    $0x0,%edx
-     cf7:	48 f7 75 e0          	divq   -0x20(%rbp)
-     cfb:	83 c0 30             	add    $0x30,%eax
-     cfe:	0f be c0             	movsbl %al,%eax
-     d01:	89 c7                	mov    %eax,%edi
-     d03:	e8 63 0c 00 00       	call   196b <UVM_Putchar>
             Iter=Iter%Div;
-     d08:	48 8b 45 f8          	mov    -0x8(%rbp),%rax
-     d0c:	ba 00 00 00 00       	mov    $0x0,%edx
-     d11:	48 f7 75 e0          	divq   -0x20(%rbp)
-     d15:	48 89 55 f8          	mov    %rdx,-0x8(%rbp)
             Div/=10;
-     d19:	48 8b 45 e0          	mov    -0x20(%rbp),%rax
-     d1d:	48 ba cd cc cc cc cc 	movabs $0xcccccccccccccccd,%rdx
-     d24:	cc cc cc 
-     d27:	48 f7 e2             	mul    %rdx
-     d2a:	48 89 d0             	mov    %rdx,%rax
-     d2d:	48 c1 e8 03          	shr    $0x3,%rax
-     d31:	48 89 45 e0          	mov    %rax,-0x20(%rbp)
+     7de:	48 bd cd cc cc cc cc 	movabs $0xcccccccccccccccd,%rbp
+     7e5:	cc cc cc 
+        Div/=10;
+     7e8:	48 89 d8             	mov    %rbx,%rax
+            Count++;
+     7eb:	4d 89 e6             	mov    %r12,%r14
+        Div/=10;
+     7ee:	48 f7 e6             	mul    %rsi
+     7f1:	48 89 d3             	mov    %rdx,%rbx
+     7f4:	48 c1 eb 03          	shr    $0x3,%rbx
         while(Count>0)
-     d35:	48 83 7d f0 00       	cmpq   $0x0,-0x10(%rbp)
-     d3a:	7f ad                	jg     ce9 <UVM_Print_Int+0x1ac>
+     7f8:	0f 1f 84 00 00 00 00 	nopl   0x0(%rax,%rax,1)
+     7ff:	00 
+            Count--;
+     800:	48 89 f8             	mov    %rdi,%rax
+     803:	31 d2                	xor    %edx,%edx
+     805:	49 83 ee 01          	sub    $0x1,%r14
+            UVM_Putchar(Iter/Div+'0');
+     809:	48 f7 f3             	div    %rbx
+     80c:	48 89 c7             	mov    %rax,%rdi
+     80f:	49 89 d5             	mov    %rdx,%r13
+     812:	83 c7 30             	add    $0x30,%edi
+     815:	40 0f be ff          	movsbl %dil,%edi
+     819:	e8 b2 07 00 00       	call   fd0 <UVM_Putchar>
+            Div/=10;
+     81e:	48 89 d8             	mov    %rbx,%rax
+            Iter=Iter%Div;
+     821:	4c 89 ef             	mov    %r13,%rdi
+            Div/=10;
+     824:	48 f7 e5             	mul    %rbp
+     827:	48 89 d3             	mov    %rdx,%rbx
+     82a:	48 c1 eb 03          	shr    $0x3,%rbx
+        while(Count>0)
+     82e:	4d 85 f6             	test   %r14,%r14
+     831:	75 cd                	jne    800 <UVM_Print_Int+0x80>
         }
     }
     
     return Num;
-     d3c:	48 8b 45 e8          	mov    -0x18(%rbp),%rax
 }
-     d40:	c9                   	leave  
-     d41:	c3                   	ret    
+     833:	48 83 c4 08          	add    $0x8,%rsp
+     837:	4c 89 e0             	mov    %r12,%rax
+     83a:	5b                   	pop    %rbx
+     83b:	5d                   	pop    %rbp
+     83c:	41 5c                	pop    %r12
+     83e:	41 5d                	pop    %r13
+     840:	41 5e                	pop    %r14
+     842:	41 5f                	pop    %r15
+     844:	c3                   	ret    
+     845:	0f 1f 00             	nopl   (%rax)
+        Iter=-Int;
+     848:	48 f7 df             	neg    %rdi
+        Div=1;
+     84b:	bb 01 00 00 00       	mov    $0x1,%ebx
+        Count=0;
+     850:	45 31 ff             	xor    %r15d,%r15d
+            Iter/=10;
+     853:	48 be cd cc cc cc cc 	movabs $0xcccccccccccccccd,%rsi
+     85a:	cc cc cc 
+        Iter=-Int;
+     85d:	49 89 fe             	mov    %rdi,%r14
+     860:	48 89 fa             	mov    %rdi,%rdx
+     863:	0f 1f 44 00 00       	nopl   0x0(%rax,%rax,1)
+            Iter/=10;
+     868:	48 89 d0             	mov    %rdx,%rax
+     86b:	48 89 d1             	mov    %rdx,%rcx
+            Div*=10;
+     86e:	48 8d 1c 9b          	lea    (%rbx,%rbx,4),%rbx
+     872:	4d 89 fc             	mov    %r15,%r12
+            Iter/=10;
+     875:	48 f7 e6             	mul    %rsi
+            Count++;
+     878:	49 83 c7 01          	add    $0x1,%r15
+            Div*=10;
+     87c:	48 01 db             	add    %rbx,%rbx
+            Iter/=10;
+     87f:	48 c1 ea 03          	shr    $0x3,%rdx
+        while(Iter!=0)
+     883:	48 83 f9 09          	cmp    $0x9,%rcx
+     887:	77 df                	ja     868 <UVM_Print_Int+0xe8>
+        Div/=10;
+     889:	48 89 d8             	mov    %rbx,%rax
+        UVM_Putchar('-');
+     88c:	bf 2d 00 00 00       	mov    $0x2d,%edi
+        Num=Count+1;
+     891:	49 83 c4 02          	add    $0x2,%r12
+            Div/=10;
+     895:	49 bd cd cc cc cc cc 	movabs $0xcccccccccccccccd,%r13
+     89c:	cc cc cc 
+        Div/=10;
+     89f:	48 f7 e6             	mul    %rsi
+     8a2:	48 89 d3             	mov    %rdx,%rbx
+        UVM_Putchar('-');
+     8a5:	e8 26 07 00 00       	call   fd0 <UVM_Putchar>
+        Div/=10;
+     8aa:	48 c1 eb 03          	shr    $0x3,%rbx
+        while(Count>0)
+     8ae:	66 90                	xchg   %ax,%ax
+            Count--;
+     8b0:	4c 89 f0             	mov    %r14,%rax
+     8b3:	31 d2                	xor    %edx,%edx
+     8b5:	49 83 ef 01          	sub    $0x1,%r15
+            UVM_Putchar(Iter/Div+'0');
+     8b9:	48 f7 f3             	div    %rbx
+     8bc:	83 c0 30             	add    $0x30,%eax
+     8bf:	49 89 d6             	mov    %rdx,%r14
+     8c2:	0f be f8             	movsbl %al,%edi
+     8c5:	e8 06 07 00 00       	call   fd0 <UVM_Putchar>
+            Div/=10;
+     8ca:	48 89 d8             	mov    %rbx,%rax
+     8cd:	49 f7 e5             	mul    %r13
+     8d0:	48 89 d3             	mov    %rdx,%rbx
+     8d3:	48 c1 eb 03          	shr    $0x3,%rbx
+        while(Count>0)
+     8d7:	4d 85 ff             	test   %r15,%r15
+     8da:	75 d4                	jne    8b0 <UVM_Print_Int+0x130>
+     8dc:	e9 52 ff ff ff       	jmp    833 <UVM_Print_Int+0xb3>
+     8e1:	0f 1f 80 00 00 00 00 	nopl   0x0(%rax)
+        UVM_Putchar('0');
+     8e8:	bf 30 00 00 00       	mov    $0x30,%edi
+        return 1;
+     8ed:	41 bc 01 00 00 00    	mov    $0x1,%r12d
+        UVM_Putchar('0');
+     8f3:	e8 d8 06 00 00       	call   fd0 <UVM_Putchar>
+        return 1;
+     8f8:	e9 36 ff ff ff       	jmp    833 <UVM_Print_Int+0xb3>
+     8fd:	0f 1f 00             	nopl   (%rax)
 
-0000000000000d42 <UVM_Print_Uint>:
+0000000000000900 <UVM_Print_Uint>:
 Input       : ptr_t Uint - The unsigned integer to print.
 Output      : None.
 Return      : cnt_t - The length of the string printed.
 ******************************************************************************/
 cnt_t UVM_Print_Uint(ptr_t Uint)
 {
-     d42:	f3 0f 1e fa          	endbr64 
-     d46:	55                   	push   %rbp
-     d47:	48 89 e5             	mov    %rsp,%rbp
-     d4a:	48 83 ec 30          	sub    $0x30,%rsp
-     d4e:	48 89 7d d8          	mov    %rdi,-0x28(%rbp)
+     900:	f3 0f 1e fa          	endbr64 
+     904:	41 54                	push   %r12
+     906:	55                   	push   %rbp
+     907:	53                   	push   %rbx
     ptr_t Iter;
     cnt_t Count;
     cnt_t Num;
     
     /* how many digits are there? */
     if(Uint==0)
-     d52:	48 83 7d d8 00       	cmpq   $0x0,-0x28(%rbp)
-     d57:	75 14                	jne    d6d <UVM_Print_Uint+0x2b>
-    {
-        UVM_Putchar('0');
-     d59:	bf 30 00 00 00       	mov    $0x30,%edi
-     d5e:	e8 08 0c 00 00       	call   196b <UVM_Putchar>
-        return 1;
-     d63:	b8 01 00 00 00       	mov    $0x1,%eax
-     d68:	e9 98 00 00 00       	jmp    e05 <UVM_Print_Uint+0xc3>
-    }
+     908:	48 85 ff             	test   %rdi,%rdi
+     90b:	0f 84 87 00 00 00    	je     998 <UVM_Print_Uint+0x98>
     else
     {
         /* Filter out all the zeroes */
         Count=0;
-     d6d:	48 c7 45 f0 00 00 00 	movq   $0x0,-0x10(%rbp)
-     d74:	00 
         Iter=Uint;
-     d75:	48 8b 45 d8          	mov    -0x28(%rbp),%rax
-     d79:	48 89 45 f8          	mov    %rax,-0x8(%rbp)
         while((Iter>>((sizeof(ptr_t)*8)-4))==0)
-     d7d:	eb 0a                	jmp    d89 <UVM_Print_Uint+0x47>
+     911:	48 89 f9             	mov    %rdi,%rcx
+        Count=0;
+     914:	31 d2                	xor    %edx,%edx
+     916:	48 89 fd             	mov    %rdi,%rbp
+        while((Iter>>((sizeof(ptr_t)*8)-4))==0)
+     919:	48 89 f8             	mov    %rdi,%rax
+     91c:	48 c1 e9 3c          	shr    $0x3c,%rcx
         {
             Iter<<=4;
-     d7f:	48 c1 65 f8 04       	shlq   $0x4,-0x8(%rbp)
             Count++;
-     d84:	48 83 45 f0 01       	addq   $0x1,-0x10(%rbp)
-        while((Iter>>((sizeof(ptr_t)*8)-4))==0)
-     d89:	48 8b 45 f8          	mov    -0x8(%rbp),%rax
-     d8d:	48 c1 e8 3c          	shr    $0x3c,%rax
-     d91:	48 85 c0             	test   %rax,%rax
-     d94:	74 e9                	je     d7f <UVM_Print_Uint+0x3d>
         }
         /* Count is the number of pts to print */
         Count=sizeof(ptr_t)*2-Count;
-     d96:	48 8b 55 f0          	mov    -0x10(%rbp),%rdx
-     d9a:	b8 10 00 00 00       	mov    $0x10,%eax
-     d9f:	48 29 d0             	sub    %rdx,%rax
-     da2:	48 89 45 f0          	mov    %rax,-0x10(%rbp)
+     920:	41 bc 10 00 00 00    	mov    $0x10,%r12d
+        while((Iter>>((sizeof(ptr_t)*8)-4))==0)
+     926:	75 27                	jne    94f <UVM_Print_Uint+0x4f>
+     928:	0f 1f 84 00 00 00 00 	nopl   0x0(%rax,%rax,1)
+     92f:	00 
+            Iter<<=4;
+     930:	48 c1 e0 04          	shl    $0x4,%rax
+            Count++;
+     934:	48 83 c2 01          	add    $0x1,%rdx
+        while((Iter>>((sizeof(ptr_t)*8)-4))==0)
+     938:	48 89 c6             	mov    %rax,%rsi
+     93b:	48 c1 ee 3c          	shr    $0x3c,%rsi
+     93f:	74 ef                	je     930 <UVM_Print_Uint+0x30>
+        Count=sizeof(ptr_t)*2-Count;
+     941:	41 bc 10 00 00 00    	mov    $0x10,%r12d
+     947:	49 29 d4             	sub    %rdx,%r12
         Num=Count;
-     da6:	48 8b 45 f0          	mov    -0x10(%rbp),%rax
-     daa:	48 89 45 e8          	mov    %rax,-0x18(%rbp)
         while(Count>0)
-     dae:	eb 4a                	jmp    dfa <UVM_Print_Uint+0xb8>
+     94a:	4d 85 e4             	test   %r12,%r12
+     94d:	7e 3d                	jle    98c <UVM_Print_Uint+0x8c>
+        Count=sizeof(ptr_t)*2-Count;
+     94f:	4c 89 e3             	mov    %r12,%rbx
+     952:	eb 11                	jmp    965 <UVM_Print_Uint+0x65>
+     954:	0f 1f 40 00          	nopl   0x0(%rax)
         {
             Count--;
-     db0:	48 83 6d f0 01       	subq   $0x1,-0x10(%rbp)
             Iter=(Uint>>(Count*4))&0x0F;
-     db5:	48 8b 45 f0          	mov    -0x10(%rbp),%rax
-     db9:	c1 e0 02             	shl    $0x2,%eax
-     dbc:	48 8b 55 d8          	mov    -0x28(%rbp),%rdx
-     dc0:	89 c1                	mov    %eax,%ecx
-     dc2:	48 d3 ea             	shr    %cl,%rdx
-     dc5:	48 89 d0             	mov    %rdx,%rax
-     dc8:	83 e0 0f             	and    $0xf,%eax
-     dcb:	48 89 45 f8          	mov    %rax,-0x8(%rbp)
             if(Iter<10)
-     dcf:	48 83 7d f8 09       	cmpq   $0x9,-0x8(%rbp)
-     dd4:	77 13                	ja     de9 <UVM_Print_Uint+0xa7>
                 UVM_Putchar('0'+Iter);
-     dd6:	48 8b 45 f8          	mov    -0x8(%rbp),%rax
-     dda:	83 c0 30             	add    $0x30,%eax
-     ddd:	0f be c0             	movsbl %al,%eax
-     de0:	89 c7                	mov    %eax,%edi
-     de2:	e8 84 0b 00 00       	call   196b <UVM_Putchar>
-     de7:	eb 11                	jmp    dfa <UVM_Print_Uint+0xb8>
+     958:	8d 78 30             	lea    0x30(%rax),%edi
+     95b:	e8 70 06 00 00       	call   fd0 <UVM_Putchar>
+        while(Count>0)
+     960:	48 85 db             	test   %rbx,%rbx
+     963:	74 27                	je     98c <UVM_Print_Uint+0x8c>
+            Count--;
+     965:	48 83 eb 01          	sub    $0x1,%rbx
+            Iter=(Uint>>(Count*4))&0x0F;
+     969:	48 89 e8             	mov    %rbp,%rax
+     96c:	8d 0c 9d 00 00 00 00 	lea    0x0(,%rbx,4),%ecx
+     973:	48 d3 e8             	shr    %cl,%rax
+     976:	83 e0 0f             	and    $0xf,%eax
+            if(Iter<10)
+     979:	48 83 f8 09          	cmp    $0x9,%rax
+     97d:	76 d9                	jbe    958 <UVM_Print_Uint+0x58>
             else
                 UVM_Putchar('A'+Iter-10);
-     de9:	48 8b 45 f8          	mov    -0x8(%rbp),%rax
-     ded:	83 c0 37             	add    $0x37,%eax
-     df0:	0f be c0             	movsbl %al,%eax
-     df3:	89 c7                	mov    %eax,%edi
-     df5:	e8 71 0b 00 00       	call   196b <UVM_Putchar>
+     97f:	8d 78 37             	lea    0x37(%rax),%edi
+     982:	e8 49 06 00 00       	call   fd0 <UVM_Putchar>
         while(Count>0)
-     dfa:	48 83 7d f0 00       	cmpq   $0x0,-0x10(%rbp)
-     dff:	7f af                	jg     db0 <UVM_Print_Uint+0x6e>
+     987:	48 85 db             	test   %rbx,%rbx
+     98a:	75 d9                	jne    965 <UVM_Print_Uint+0x65>
         }
     }
     
     return Num;
-     e01:	48 8b 45 e8          	mov    -0x18(%rbp),%rax
 }
-     e05:	c9                   	leave  
-     e06:	c3                   	ret    
+     98c:	4c 89 e0             	mov    %r12,%rax
+     98f:	5b                   	pop    %rbx
+     990:	5d                   	pop    %rbp
+     991:	41 5c                	pop    %r12
+     993:	c3                   	ret    
+     994:	0f 1f 40 00          	nopl   0x0(%rax)
+        return 1;
+     998:	41 bc 01 00 00 00    	mov    $0x1,%r12d
+        UVM_Putchar('0');
+     99e:	bf 30 00 00 00       	mov    $0x30,%edi
+     9a3:	e8 28 06 00 00       	call   fd0 <UVM_Putchar>
+}
+     9a8:	4c 89 e0             	mov    %r12,%rax
+     9ab:	5b                   	pop    %rbx
+     9ac:	5d                   	pop    %rbp
+     9ad:	41 5c                	pop    %r12
+     9af:	c3                   	ret    
 
-0000000000000e07 <UVM_Print_String>:
+00000000000009b0 <UVM_Print_String>:
 Input       : s8* String - The string to print.
 Output      : None.
 Return      : cnt_t - The length of the string printed, the '\0' is not included.
 ******************************************************************************/
 cnt_t UVM_Print_String(s8* String)
 {
-     e07:	f3 0f 1e fa          	endbr64 
-     e0b:	55                   	push   %rbp
-     e0c:	48 89 e5             	mov    %rsp,%rbp
-     e0f:	48 83 ec 20          	sub    $0x20,%rsp
-     e13:	48 89 7d e8          	mov    %rdi,-0x18(%rbp)
+     9b0:	f3 0f 1e fa          	endbr64 
+     9b4:	41 54                	push   %r12
     cnt_t Count;
     
     Count=0;
-     e17:	48 c7 45 f8 00 00 00 	movq   $0x0,-0x8(%rbp)
-     e1e:	00 
+     9b6:	45 31 e4             	xor    %r12d,%r12d
+{
+     9b9:	53                   	push   %rbx
+     9ba:	48 89 fb             	mov    %rdi,%rbx
+     9bd:	48 83 ec 08          	sub    $0x8,%rsp
+     9c1:	eb 17                	jmp    9da <UVM_Print_String+0x2a>
+     9c3:	0f 1f 44 00 00       	nopl   0x0(%rax,%rax,1)
     while(Count<UVM_USER_DEBUG_MAX_STR)
-     e1f:	eb 35                	jmp    e56 <UVM_Print_String+0x4f>
     {
         if(String[Count]=='\0')
-     e21:	48 8b 55 f8          	mov    -0x8(%rbp),%rdx
-     e25:	48 8b 45 e8          	mov    -0x18(%rbp),%rax
-     e29:	48 01 d0             	add    %rdx,%rax
-     e2c:	0f b6 00             	movzbl (%rax),%eax
-     e2f:	84 c0                	test   %al,%al
-     e31:	74 2c                	je     e5f <UVM_Print_String+0x58>
             break;
         
         UVM_Putchar(String[Count++]);
-     e33:	48 8b 45 f8          	mov    -0x8(%rbp),%rax
-     e37:	48 8d 50 01          	lea    0x1(%rax),%rdx
-     e3b:	48 89 55 f8          	mov    %rdx,-0x8(%rbp)
-     e3f:	48 89 c2             	mov    %rax,%rdx
-     e42:	48 8b 45 e8          	mov    -0x18(%rbp),%rax
-     e46:	48 01 d0             	add    %rdx,%rax
-     e49:	0f b6 00             	movzbl (%rax),%eax
-     e4c:	0f be c0             	movsbl %al,%eax
-     e4f:	89 c7                	mov    %eax,%edi
-     e51:	e8 15 0b 00 00       	call   196b <UVM_Putchar>
+     9c8:	49 83 c4 01          	add    $0x1,%r12
+     9cc:	e8 ff 05 00 00       	call   fd0 <UVM_Putchar>
     while(Count<UVM_USER_DEBUG_MAX_STR)
-     e56:	48 83 7d f8 7f       	cmpq   $0x7f,-0x8(%rbp)
-     e5b:	7e c4                	jle    e21 <UVM_Print_String+0x1a>
-     e5d:	eb 01                	jmp    e60 <UVM_Print_String+0x59>
-            break;
-     e5f:	90                   	nop
+     9d1:	49 81 fc 80 00 00 00 	cmp    $0x80,%r12
+     9d8:	74 0a                	je     9e4 <UVM_Print_String+0x34>
+        if(String[Count]=='\0')
+     9da:	42 0f be 3c 23       	movsbl (%rbx,%r12,1),%edi
+     9df:	40 84 ff             	test   %dil,%dil
+     9e2:	75 e4                	jne    9c8 <UVM_Print_String+0x18>
     }
     
     return Count;
-     e60:	48 8b 45 f8          	mov    -0x8(%rbp),%rax
 }
-     e64:	c9                   	leave  
-     e65:	c3                   	ret    
+     9e4:	48 83 c4 08          	add    $0x8,%rsp
+     9e8:	4c 89 e0             	mov    %r12,%rax
+     9eb:	5b                   	pop    %rbx
+     9ec:	41 5c                	pop    %r12
+     9ee:	c3                   	ret    
+     9ef:	90                   	nop
 
-0000000000000e66 <UVM_Captbl_Crt>:
+00000000000009f0 <UVM_Captbl_Crt>:
 Output      : None.
 Return      : ret_t - If successful, 0; or an error code.
 ******************************************************************************/
 ret_t UVM_Captbl_Crt(cid_t Cap_Captbl_Crt, cid_t Cap_Kmem, 
                      cid_t Cap_Captbl, ptr_t Vaddr, ptr_t Entry_Num)
 {
-     e66:	f3 0f 1e fa          	endbr64 
-     e6a:	55                   	push   %rbp
-     e6b:	48 89 e5             	mov    %rsp,%rbp
-     e6e:	48 83 ec 30          	sub    $0x30,%rsp
-     e72:	48 89 7d f8          	mov    %rdi,-0x8(%rbp)
-     e76:	48 89 75 f0          	mov    %rsi,-0x10(%rbp)
-     e7a:	48 89 55 e8          	mov    %rdx,-0x18(%rbp)
-     e7e:	48 89 4d e0          	mov    %rcx,-0x20(%rbp)
-     e82:	4c 89 45 d8          	mov    %r8,-0x28(%rbp)
+     9f0:	f3 0f 1e fa          	endbr64 
+     9f4:	49 89 d1             	mov    %rdx,%r9
     return UVM_CAP_OP(RME_SVC_CPT_CRT, Cap_Captbl_Crt,
-     e86:	48 8b 45 f0          	mov    -0x10(%rbp),%rax
-     e8a:	48 c1 e0 20          	shl    $0x20,%rax
-     e8e:	48 89 c2             	mov    %rax,%rdx
-     e91:	48 8b 45 e8          	mov    -0x18(%rbp),%rax
-     e95:	89 c0                	mov    %eax,%eax
-     e97:	48 89 d6             	mov    %rdx,%rsi
-     e9a:	48 09 c6             	or     %rax,%rsi
-     e9d:	48 8b 45 f8          	mov    -0x8(%rbp),%rax
-     ea1:	48 ba 00 00 00 00 0a 	movabs $0xa00000000,%rdx
-     ea8:	00 00 00 
-     eab:	48 09 d0             	or     %rdx,%rax
-     eae:	48 89 c7             	mov    %rax,%rdi
-     eb1:	48 8b 55 d8          	mov    -0x28(%rbp),%rdx
-     eb5:	48 8b 45 e0          	mov    -0x20(%rbp),%rax
-     eb9:	48 89 d1             	mov    %rdx,%rcx
-     ebc:	48 89 c2             	mov    %rax,%rdx
-     ebf:	e8 29 f2 ff ff       	call   ed <UVM_Svc>
-                      UVM_PARAM_D1(Cap_Kmem)|UVM_PARAM_D0(Cap_Captbl),
-                      Vaddr,
-                      Entry_Num);
-}
-     ec4:	c9                   	leave  
-     ec5:	c3                   	ret    
+     9f7:	48 c1 e6 20          	shl    $0x20,%rsi
+{
+     9fb:	48 89 ca             	mov    %rcx,%rdx
+    return UVM_CAP_OP(RME_SVC_CPT_CRT, Cap_Captbl_Crt,
+     9fe:	48 b8 00 00 00 00 0a 	movabs $0xa00000000,%rax
+     a05:	00 00 00 
+     a08:	45 89 c9             	mov    %r9d,%r9d
+{
+     a0b:	4c 89 c1             	mov    %r8,%rcx
+    return UVM_CAP_OP(RME_SVC_CPT_CRT, Cap_Captbl_Crt,
+     a0e:	48 09 c7             	or     %rax,%rdi
+     a11:	4c 09 ce             	or     %r9,%rsi
+     a14:	e9 d4 f6 ff ff       	jmp    ed <UVM_Svc>
+     a19:	0f 1f 80 00 00 00 00 	nopl   0x0(%rax)
 
-0000000000000ec6 <UVM_Captbl_Del>:
+0000000000000a20 <UVM_Captbl_Del>:
               cid_t Cap_Del - The capability to the capability table to be deleted. 1-Level.
 Output      : None.
 Return      : ret_t - If successful, 0; or an error code.
 ******************************************************************************/
 ret_t UVM_Captbl_Del(cid_t Cap_Captbl_Del, cid_t Cap_Del)
 {
-     ec6:	f3 0f 1e fa          	endbr64 
-     eca:	55                   	push   %rbp
-     ecb:	48 89 e5             	mov    %rsp,%rbp
-     ece:	48 83 ec 10          	sub    $0x10,%rsp
-     ed2:	48 89 7d f8          	mov    %rdi,-0x8(%rbp)
-     ed6:	48 89 75 f0          	mov    %rsi,-0x10(%rbp)
+     a20:	f3 0f 1e fa          	endbr64 
     return UVM_CAP_OP(RME_SVC_CPT_DEL, Cap_Captbl_Del,
-     eda:	48 8b 45 f0          	mov    -0x10(%rbp),%rax
-     ede:	48 8b 55 f8          	mov    -0x8(%rbp),%rdx
-     ee2:	48 b9 00 00 00 00 0b 	movabs $0xb00000000,%rcx
-     ee9:	00 00 00 
-     eec:	48 09 ca             	or     %rcx,%rdx
-     eef:	48 89 d7             	mov    %rdx,%rdi
-     ef2:	b9 00 00 00 00       	mov    $0x0,%ecx
-     ef7:	ba 00 00 00 00       	mov    $0x0,%edx
-     efc:	48 89 c6             	mov    %rax,%rsi
-     eff:	e8 e9 f1 ff ff       	call   ed <UVM_Svc>
-                      Cap_Del,
-                      0,
-                      0);
-}
-     f04:	c9                   	leave  
-     f05:	c3                   	ret    
+     a24:	48 b8 00 00 00 00 0b 	movabs $0xb00000000,%rax
+     a2b:	00 00 00 
+     a2e:	31 c9                	xor    %ecx,%ecx
+     a30:	31 d2                	xor    %edx,%edx
+     a32:	48 09 c7             	or     %rax,%rdi
+     a35:	e9 b3 f6 ff ff       	jmp    ed <UVM_Svc>
+     a3a:	66 0f 1f 44 00 00    	nopw   0x0(%rax,%rax,1)
 
-0000000000000f06 <UVM_Captbl_Frz>:
+0000000000000a40 <UVM_Captbl_Frz>:
               cid_t Cap_Frz - The cap to the kernel object being freezed. 1-Level.
 Output      : None.
 Return      : ret_t - If successful, 0; or an error code.
 ******************************************************************************/
 ret_t UVM_Captbl_Frz(cid_t Cap_Captbl_Frz, cid_t Cap_Frz)
 {
-     f06:	f3 0f 1e fa          	endbr64 
-     f0a:	55                   	push   %rbp
-     f0b:	48 89 e5             	mov    %rsp,%rbp
-     f0e:	48 83 ec 10          	sub    $0x10,%rsp
-     f12:	48 89 7d f8          	mov    %rdi,-0x8(%rbp)
-     f16:	48 89 75 f0          	mov    %rsi,-0x10(%rbp)
+     a40:	f3 0f 1e fa          	endbr64 
         return UVM_CAP_OP(RME_SVC_CPT_FRZ, Cap_Captbl_Frz,
-     f1a:	48 8b 45 f0          	mov    -0x10(%rbp),%rax
-     f1e:	48 8b 55 f8          	mov    -0x8(%rbp),%rdx
-     f22:	48 b9 00 00 00 00 0c 	movabs $0xc00000000,%rcx
-     f29:	00 00 00 
-     f2c:	48 09 ca             	or     %rcx,%rdx
-     f2f:	48 89 d7             	mov    %rdx,%rdi
-     f32:	b9 00 00 00 00       	mov    $0x0,%ecx
-     f37:	ba 00 00 00 00       	mov    $0x0,%edx
-     f3c:	48 89 c6             	mov    %rax,%rsi
-     f3f:	e8 a9 f1 ff ff       	call   ed <UVM_Svc>
-                          Cap_Frz,
-                          0,
-                          0);
-}
-     f44:	c9                   	leave  
-     f45:	c3                   	ret    
+     a44:	48 b8 00 00 00 00 0c 	movabs $0xc00000000,%rax
+     a4b:	00 00 00 
+     a4e:	31 c9                	xor    %ecx,%ecx
+     a50:	31 d2                	xor    %edx,%edx
+     a52:	48 09 c7             	or     %rax,%rdi
+     a55:	e9 93 f6 ff ff       	jmp    ed <UVM_Svc>
+     a5a:	66 0f 1f 44 00 00    	nopw   0x0(%rax,%rax,1)
 
-0000000000000f46 <UVM_Captbl_Add>:
+0000000000000a60 <UVM_Captbl_Add>:
 Output      : None.
 Return      : ret_t - If the mapping is successful, it will return 0; else error code.
 ******************************************************************************/
 ret_t UVM_Captbl_Add(cid_t Cap_Captbl_Dst, cid_t Cap_Dst, 
                      cid_t Cap_Captbl_Src, cid_t Cap_Src, ptr_t Flags)
 {
-     f46:	f3 0f 1e fa          	endbr64 
-     f4a:	55                   	push   %rbp
-     f4b:	48 89 e5             	mov    %rsp,%rbp
-     f4e:	48 83 ec 30          	sub    $0x30,%rsp
-     f52:	48 89 7d f8          	mov    %rdi,-0x8(%rbp)
-     f56:	48 89 75 f0          	mov    %rsi,-0x10(%rbp)
-     f5a:	48 89 55 e8          	mov    %rdx,-0x18(%rbp)
-     f5e:	48 89 4d e0          	mov    %rcx,-0x20(%rbp)
-     f62:	4c 89 45 d8          	mov    %r8,-0x28(%rbp)
+     a60:	f3 0f 1e fa          	endbr64 
     return UVM_CAP_OP(RME_SVC_CPT_ADD, 0,
-     f66:	48 8b 45 e8          	mov    -0x18(%rbp),%rax
-     f6a:	48 c1 e0 20          	shl    $0x20,%rax
-     f6e:	48 89 c2             	mov    %rax,%rdx
-     f71:	48 8b 45 e0          	mov    -0x20(%rbp),%rax
-     f75:	89 c0                	mov    %eax,%eax
-     f77:	48 09 c2             	or     %rax,%rdx
-     f7a:	48 8b 45 f8          	mov    -0x8(%rbp),%rax
-     f7e:	48 c1 e0 20          	shl    $0x20,%rax
-     f82:	48 89 c1             	mov    %rax,%rcx
-     f85:	48 8b 45 f0          	mov    -0x10(%rbp),%rax
-     f89:	89 c0                	mov    %eax,%eax
-     f8b:	48 09 c1             	or     %rax,%rcx
-     f8e:	48 89 ce             	mov    %rcx,%rsi
-     f91:	48 8b 45 d8          	mov    -0x28(%rbp),%rax
-     f95:	48 89 c1             	mov    %rax,%rcx
-     f98:	48 b8 00 00 00 00 0d 	movabs $0xd00000000,%rax
-     f9f:	00 00 00 
-     fa2:	48 89 c7             	mov    %rax,%rdi
-     fa5:	e8 43 f1 ff ff       	call   ed <UVM_Svc>
-                      UVM_PARAM_D1(Cap_Captbl_Dst)|UVM_PARAM_D0(Cap_Dst),
-                      UVM_PARAM_D1(Cap_Captbl_Src)|UVM_PARAM_D0(Cap_Src),Flags);
-}
-     faa:	c9                   	leave  
-     fab:	c3                   	ret    
+     a64:	48 c1 e7 20          	shl    $0x20,%rdi
+{
+     a68:	49 89 c9             	mov    %rcx,%r9
+    return UVM_CAP_OP(RME_SVC_CPT_ADD, 0,
+     a6b:	48 c1 e2 20          	shl    $0x20,%rdx
+     a6f:	89 f6                	mov    %esi,%esi
+     a71:	45 89 c9             	mov    %r9d,%r9d
+     a74:	48 09 fe             	or     %rdi,%rsi
+{
+     a77:	4c 89 c1             	mov    %r8,%rcx
+    return UVM_CAP_OP(RME_SVC_CPT_ADD, 0,
+     a7a:	48 bf 00 00 00 00 0d 	movabs $0xd00000000,%rdi
+     a81:	00 00 00 
+     a84:	4c 09 ca             	or     %r9,%rdx
+     a87:	e9 61 f6 ff ff       	jmp    ed <UVM_Svc>
+     a8c:	0f 1f 40 00          	nopl   0x0(%rax)
 
-0000000000000fac <UVM_Captbl_Pgtbl>:
+0000000000000a90 <UVM_Captbl_Pgtbl>:
 Return      : ret_t - If the mapping is successful, it will return 0; else error code.
 ******************************************************************************/
 ret_t UVM_Captbl_Pgtbl(cid_t Cap_Captbl_Dst, cid_t Cap_Dst, 
                        cid_t Cap_Captbl_Src, cid_t Cap_Src,
                        ptr_t Start, ptr_t End, ptr_t Flags)
 {
-     fac:	f3 0f 1e fa          	endbr64 
-     fb0:	55                   	push   %rbp
-     fb1:	48 89 e5             	mov    %rsp,%rbp
-     fb4:	48 83 ec 30          	sub    $0x30,%rsp
-     fb8:	48 89 7d f8          	mov    %rdi,-0x8(%rbp)
-     fbc:	48 89 75 f0          	mov    %rsi,-0x10(%rbp)
-     fc0:	48 89 55 e8          	mov    %rdx,-0x18(%rbp)
-     fc4:	48 89 4d e0          	mov    %rcx,-0x20(%rbp)
-     fc8:	4c 89 45 d8          	mov    %r8,-0x28(%rbp)
-     fcc:	4c 89 4d d0          	mov    %r9,-0x30(%rbp)
+     a90:	f3 0f 1e fa          	endbr64 
     return UVM_CAP_OP(RME_SVC_CPT_ADD, 0,
-     fd0:	48 8b 45 d0          	mov    -0x30(%rbp),%rax
-     fd4:	48 c1 e0 24          	shl    $0x24,%rax
-     fd8:	48 89 c2             	mov    %rax,%rdx
-     fdb:	48 8b 45 d8          	mov    -0x28(%rbp),%rax
-     fdf:	48 c1 e0 08          	shl    $0x8,%rax
-     fe3:	48 09 d0             	or     %rdx,%rax
-     fe6:	48 0b 45 10          	or     0x10(%rbp),%rax
-     fea:	48 8b 55 e8          	mov    -0x18(%rbp),%rdx
-     fee:	48 89 d1             	mov    %rdx,%rcx
-     ff1:	48 c1 e1 20          	shl    $0x20,%rcx
-     ff5:	48 8b 55 e0          	mov    -0x20(%rbp),%rdx
-     ff9:	89 d2                	mov    %edx,%edx
-     ffb:	48 09 ca             	or     %rcx,%rdx
-     ffe:	48 8b 4d f8          	mov    -0x8(%rbp),%rcx
-    1002:	48 89 ce             	mov    %rcx,%rsi
-    1005:	48 c1 e6 20          	shl    $0x20,%rsi
-    1009:	48 8b 4d f0          	mov    -0x10(%rbp),%rcx
-    100d:	89 c9                	mov    %ecx,%ecx
-    100f:	48 09 ce             	or     %rcx,%rsi
-    1012:	48 89 c1             	mov    %rax,%rcx
-    1015:	48 b8 00 00 00 00 0d 	movabs $0xd00000000,%rax
-    101c:	00 00 00 
-    101f:	48 89 c7             	mov    %rax,%rdi
-    1022:	e8 c6 f0 ff ff       	call   ed <UVM_Svc>
-                      UVM_PARAM_D1(Cap_Captbl_Dst)|UVM_PARAM_D0(Cap_Dst),
-                      UVM_PARAM_D1(Cap_Captbl_Src)|UVM_PARAM_D0(Cap_Src),
-                      UVM_PGTBL_FLAG(End,Start,Flags));
-}
-    1027:	c9                   	leave  
-    1028:	c3                   	ret    
+     a94:	49 c1 e1 24          	shl    $0x24,%r9
+{
+     a98:	49 89 f2             	mov    %rsi,%r10
+     a9b:	49 89 cb             	mov    %rcx,%r11
+    return UVM_CAP_OP(RME_SVC_CPT_ADD, 0,
+     a9e:	48 89 fe             	mov    %rdi,%rsi
+     aa1:	4c 89 c1             	mov    %r8,%rcx
+     aa4:	48 c1 e2 20          	shl    $0x20,%rdx
+     aa8:	45 89 db             	mov    %r11d,%r11d
+     aab:	45 89 d2             	mov    %r10d,%r10d
+     aae:	48 c1 e1 08          	shl    $0x8,%rcx
+     ab2:	48 c1 e6 20          	shl    $0x20,%rsi
+     ab6:	4c 09 da             	or     %r11,%rdx
+     ab9:	48 0b 4c 24 08       	or     0x8(%rsp),%rcx
+     abe:	48 bf 00 00 00 00 0d 	movabs $0xd00000000,%rdi
+     ac5:	00 00 00 
+     ac8:	4c 09 c9             	or     %r9,%rcx
+     acb:	4c 09 d6             	or     %r10,%rsi
+     ace:	e9 1a f6 ff ff       	jmp    ed <UVM_Svc>
+     ad3:	66 66 2e 0f 1f 84 00 	data16 cs nopw 0x0(%rax,%rax,1)
+     ada:	00 00 00 00 
+     ade:	66 90                	xchg   %ax,%ax
 
-0000000000001029 <UVM_Captbl_Kern>:
+0000000000000ae0 <UVM_Captbl_Kern>:
 Return      : ret_t - If the mapping is successful, it will return 0; else error code.
 ******************************************************************************/
 ret_t UVM_Captbl_Kern(cid_t Cap_Captbl_Dst, cid_t Cap_Dst, 
                       cid_t Cap_Captbl_Src, cid_t Cap_Src,
                       ptr_t Start, ptr_t End)
 {
-    1029:	f3 0f 1e fa          	endbr64 
-    102d:	55                   	push   %rbp
-    102e:	48 89 e5             	mov    %rsp,%rbp
-    1031:	48 83 ec 30          	sub    $0x30,%rsp
-    1035:	48 89 7d f8          	mov    %rdi,-0x8(%rbp)
-    1039:	48 89 75 f0          	mov    %rsi,-0x10(%rbp)
-    103d:	48 89 55 e8          	mov    %rdx,-0x18(%rbp)
-    1041:	48 89 4d e0          	mov    %rcx,-0x20(%rbp)
-    1045:	4c 89 45 d8          	mov    %r8,-0x28(%rbp)
-    1049:	4c 89 4d d0          	mov    %r9,-0x30(%rbp)
+     ae0:	f3 0f 1e fa          	endbr64 
+     ae4:	49 89 f2             	mov    %rsi,%r10
+     ae7:	49 89 cb             	mov    %rcx,%r11
     return UVM_CAP_OP(RME_SVC_CPT_ADD, 0,
-    104d:	48 8b 45 d0          	mov    -0x30(%rbp),%rax
-    1051:	48 c1 e0 20          	shl    $0x20,%rax
-    1055:	48 0b 45 d8          	or     -0x28(%rbp),%rax
-    1059:	48 8b 55 e8          	mov    -0x18(%rbp),%rdx
-    105d:	48 c1 e2 20          	shl    $0x20,%rdx
-    1061:	48 89 d1             	mov    %rdx,%rcx
-    1064:	48 8b 55 e0          	mov    -0x20(%rbp),%rdx
-    1068:	89 d2                	mov    %edx,%edx
-    106a:	48 09 ca             	or     %rcx,%rdx
-    106d:	48 8b 4d f8          	mov    -0x8(%rbp),%rcx
-    1071:	48 89 ce             	mov    %rcx,%rsi
-    1074:	48 c1 e6 20          	shl    $0x20,%rsi
-    1078:	48 8b 4d f0          	mov    -0x10(%rbp),%rcx
-    107c:	89 c9                	mov    %ecx,%ecx
-    107e:	48 09 ce             	or     %rcx,%rsi
-    1081:	48 89 c1             	mov    %rax,%rcx
-    1084:	48 b8 00 00 00 00 0d 	movabs $0xd00000000,%rax
-    108b:	00 00 00 
-    108e:	48 89 c7             	mov    %rax,%rdi
-    1091:	e8 57 f0 ff ff       	call   ed <UVM_Svc>
-                      UVM_PARAM_D1(Cap_Captbl_Dst)|UVM_PARAM_D0(Cap_Dst),
-                      UVM_PARAM_D1(Cap_Captbl_Src)|UVM_PARAM_D0(Cap_Src),
-                      UVM_KERN_FLAG(End,Start));
-}
-    1096:	c9                   	leave  
-    1097:	c3                   	ret    
+     aea:	48 89 fe             	mov    %rdi,%rsi
+     aed:	4c 89 c9             	mov    %r9,%rcx
+     af0:	48 c1 e1 20          	shl    $0x20,%rcx
+     af4:	48 c1 e2 20          	shl    $0x20,%rdx
+     af8:	45 89 db             	mov    %r11d,%r11d
+     afb:	45 89 d2             	mov    %r10d,%r10d
+     afe:	48 c1 e6 20          	shl    $0x20,%rsi
+     b02:	4c 09 c1             	or     %r8,%rcx
+     b05:	4c 09 da             	or     %r11,%rdx
+     b08:	48 bf 00 00 00 00 0d 	movabs $0xd00000000,%rdi
+     b0f:	00 00 00 
+     b12:	4c 09 d6             	or     %r10,%rsi
+     b15:	e9 d3 f5 ff ff       	jmp    ed <UVM_Svc>
+     b1a:	66 0f 1f 44 00 00    	nopw   0x0(%rax,%rax,1)
 
-0000000000001098 <UVM_Captbl_Kmem>:
+0000000000000b20 <UVM_Captbl_Kmem>:
 Return      : ret_t - If the mapping is successful, it will return 0; else error code.
 ******************************************************************************/
 ret_t UVM_Captbl_Kmem(cid_t Cap_Captbl_Dst, cid_t Cap_Dst, 
                       cid_t Cap_Captbl_Src, cid_t Cap_Src,
                       ptr_t Start, ptr_t End, ptr_t Flags)
 {
-    1098:	f3 0f 1e fa          	endbr64 
-    109c:	55                   	push   %rbp
-    109d:	48 89 e5             	mov    %rsp,%rbp
-    10a0:	48 83 ec 30          	sub    $0x30,%rsp
-    10a4:	48 89 7d f8          	mov    %rdi,-0x8(%rbp)
-    10a8:	48 89 75 f0          	mov    %rsi,-0x10(%rbp)
-    10ac:	48 89 55 e8          	mov    %rdx,-0x18(%rbp)
-    10b0:	48 89 4d e0          	mov    %rcx,-0x20(%rbp)
-    10b4:	4c 89 45 d8          	mov    %r8,-0x28(%rbp)
-    10b8:	4c 89 4d d0          	mov    %r9,-0x30(%rbp)
+     b20:	f3 0f 1e fa          	endbr64 
+     b24:	49 89 cb             	mov    %rcx,%r11
+     b27:	49 89 f2             	mov    %rsi,%r10
     return UVM_CAP_OP(UVM_KMEM_SVC(End,RME_SVC_CPT_ADD), UVM_KMEM_CAPID(Start,Flags),
-    10bc:	48 b8 00 00 00 00 ff 	movabs $0xffffffff00000000,%rax
-    10c3:	ff ff ff 
-    10c6:	48 23 45 d0          	and    -0x30(%rbp),%rax
-    10ca:	48 89 c2             	mov    %rax,%rdx
-    10cd:	48 8b 45 d8          	mov    -0x28(%rbp),%rax
-    10d1:	48 c1 e8 20          	shr    $0x20,%rax
-    10d5:	48 89 d1             	mov    %rdx,%rcx
-    10d8:	48 09 c1             	or     %rax,%rcx
-    10db:	48 8b 45 e8          	mov    -0x18(%rbp),%rax
-    10df:	48 c1 e0 20          	shl    $0x20,%rax
-    10e3:	48 89 c2             	mov    %rax,%rdx
-    10e6:	48 8b 45 e0          	mov    -0x20(%rbp),%rax
-    10ea:	89 c0                	mov    %eax,%eax
-    10ec:	48 09 c2             	or     %rax,%rdx
-    10ef:	48 8b 45 f8          	mov    -0x8(%rbp),%rax
-    10f3:	48 c1 e0 20          	shl    $0x20,%rax
-    10f7:	48 89 c6             	mov    %rax,%rsi
-    10fa:	48 8b 45 f0          	mov    -0x10(%rbp),%rax
-    10fe:	89 c0                	mov    %eax,%eax
-    1100:	48 09 c6             	or     %rax,%rsi
-    1103:	48 8b 45 d0          	mov    -0x30(%rbp),%rax
-    1107:	48 c1 e8 06          	shr    $0x6,%rax
-    110b:	48 c1 e0 26          	shl    $0x26,%rax
-    110f:	48 89 c7             	mov    %rax,%rdi
-    1112:	48 8b 45 d8          	mov    -0x28(%rbp),%rax
-    1116:	48 c1 e8 06          	shr    $0x6,%rax
-    111a:	48 c1 e0 26          	shl    $0x26,%rax
-    111e:	48 c1 e8 20          	shr    $0x20,%rax
-    1122:	48 0b 45 10          	or     0x10(%rbp),%rax
-    1126:	48 09 c7             	or     %rax,%rdi
-    1129:	48 b8 00 00 00 00 0d 	movabs $0xd00000000,%rax
-    1130:	00 00 00 
-    1133:	48 09 f8             	or     %rdi,%rax
-    1136:	48 89 c7             	mov    %rax,%rdi
-    1139:	e8 af ef ff ff       	call   ed <UVM_Svc>
-                      UVM_PARAM_D1(Cap_Captbl_Dst)|UVM_PARAM_D0(Cap_Dst),
-                      UVM_PARAM_D1(Cap_Captbl_Src)|UVM_PARAM_D0(Cap_Src),
-                      UVM_KMEM_FLAG(End,Start));
-}
-    113e:	c9                   	leave  
-    113f:	c3                   	ret    
+     b2a:	4c 89 c0             	mov    %r8,%rax
+     b2d:	48 89 fe             	mov    %rdi,%rsi
+     b30:	4c 89 c7             	mov    %r8,%rdi
+     b33:	48 c1 e8 20          	shr    $0x20,%rax
+     b37:	45 89 db             	mov    %r11d,%r11d
+     b3a:	45 89 d2             	mov    %r10d,%r10d
+     b3d:	48 c1 e2 20          	shl    $0x20,%rdx
+     b41:	83 e7 c0             	and    $0xffffffc0,%edi
+     b44:	48 c1 e6 20          	shl    $0x20,%rsi
+     b48:	48 b9 00 00 00 00 ff 	movabs $0xffffffff00000000,%rcx
+     b4f:	ff ff ff 
+     b52:	4c 21 c9             	and    %r9,%rcx
+     b55:	49 c1 e9 06          	shr    $0x6,%r9
+     b59:	4c 09 da             	or     %r11,%rdx
+     b5c:	4c 09 d6             	or     %r10,%rsi
+     b5f:	49 c1 e1 26          	shl    $0x26,%r9
+     b63:	48 09 c1             	or     %rax,%rcx
+     b66:	48 b8 00 00 00 00 0d 	movabs $0xd00000000,%rax
+     b6d:	00 00 00 
+     b70:	4c 09 cf             	or     %r9,%rdi
+     b73:	48 0b 7c 24 08       	or     0x8(%rsp),%rdi
+     b78:	48 09 c7             	or     %rax,%rdi
+     b7b:	e9 6d f5 ff ff       	jmp    ed <UVM_Svc>
 
-0000000000001140 <UVM_Captbl_Rem>:
+0000000000000b80 <UVM_Captbl_Rem>:
               cid_t Cap_Rem - The capability slot you want to remove. 1-Level.
 Output      : None.
 Return      : ret_t - If the mapping is successful, it will return 0; else error code.
 ******************************************************************************/
 ret_t UVM_Captbl_Rem(cid_t Cap_Captbl_Rem, cid_t Cap_Rem)
 {
-    1140:	f3 0f 1e fa          	endbr64 
-    1144:	55                   	push   %rbp
-    1145:	48 89 e5             	mov    %rsp,%rbp
-    1148:	48 83 ec 10          	sub    $0x10,%rsp
-    114c:	48 89 7d f8          	mov    %rdi,-0x8(%rbp)
-    1150:	48 89 75 f0          	mov    %rsi,-0x10(%rbp)
+     b80:	f3 0f 1e fa          	endbr64 
     return UVM_CAP_OP(RME_SVC_CPT_REM, Cap_Captbl_Rem,
-    1154:	48 8b 45 f0          	mov    -0x10(%rbp),%rax
-    1158:	48 8b 55 f8          	mov    -0x8(%rbp),%rdx
-    115c:	48 b9 00 00 00 00 0e 	movabs $0xe00000000,%rcx
-    1163:	00 00 00 
-    1166:	48 09 ca             	or     %rcx,%rdx
-    1169:	48 89 d7             	mov    %rdx,%rdi
-    116c:	b9 00 00 00 00       	mov    $0x0,%ecx
-    1171:	ba 00 00 00 00       	mov    $0x0,%edx
-    1176:	48 89 c6             	mov    %rax,%rsi
-    1179:	e8 6f ef ff ff       	call   ed <UVM_Svc>
-                      Cap_Rem,
-                      0,
-                      0);
-}
-    117e:	c9                   	leave  
-    117f:	c3                   	ret    
+     b84:	48 b8 00 00 00 00 0e 	movabs $0xe00000000,%rax
+     b8b:	00 00 00 
+     b8e:	31 c9                	xor    %ecx,%ecx
+     b90:	31 d2                	xor    %edx,%edx
+     b92:	48 09 c7             	or     %rax,%rdi
+     b95:	e9 53 f5 ff ff       	jmp    ed <UVM_Svc>
+     b9a:	66 0f 1f 44 00 00    	nopw   0x0(%rax,%rax,1)
 
-0000000000001180 <UVM_Kern_Act>:
+0000000000000ba0 <UVM_Kern_Act>:
                       kernel function ever causes a context switch, it is responsible
                       for setting the return value. On failure, a context switch 
                       in the kernel fucntion is banned.
 ******************************************************************************/
 ret_t UVM_Kern_Act(cid_t Cap_Kern, ptr_t Func_ID, ptr_t Sub_ID, ptr_t Param1, ptr_t Param2)
 {
-    1180:	f3 0f 1e fa          	endbr64 
-    1184:	55                   	push   %rbp
-    1185:	48 89 e5             	mov    %rsp,%rbp
-    1188:	48 83 ec 30          	sub    $0x30,%rsp
-    118c:	48 89 7d f8          	mov    %rdi,-0x8(%rbp)
-    1190:	48 89 75 f0          	mov    %rsi,-0x10(%rbp)
-    1194:	48 89 55 e8          	mov    %rdx,-0x18(%rbp)
-    1198:	48 89 4d e0          	mov    %rcx,-0x20(%rbp)
-    119c:	4c 89 45 d8          	mov    %r8,-0x28(%rbp)
+     ba0:	f3 0f 1e fa          	endbr64 
+     ba4:	49 89 c9             	mov    %rcx,%r9
     return UVM_CAP_OP(RME_SVC_KFN, Cap_Kern,
-    11a0:	48 8b 45 e8          	mov    -0x18(%rbp),%rax
-    11a4:	48 c1 e0 20          	shl    $0x20,%rax
-    11a8:	48 89 c2             	mov    %rax,%rdx
-    11ab:	48 8b 45 f0          	mov    -0x10(%rbp),%rax
-    11af:	89 c0                	mov    %eax,%eax
-    11b1:	48 89 d6             	mov    %rdx,%rsi
-    11b4:	48 09 c6             	or     %rax,%rsi
-    11b7:	48 8b 45 f8          	mov    -0x8(%rbp),%rax
-    11bb:	48 ba 00 00 00 00 04 	movabs $0x400000000,%rdx
-    11c2:	00 00 00 
-    11c5:	48 09 d0             	or     %rdx,%rax
-    11c8:	48 89 c7             	mov    %rax,%rdi
-    11cb:	48 8b 55 d8          	mov    -0x28(%rbp),%rdx
-    11cf:	48 8b 45 e0          	mov    -0x20(%rbp),%rax
-    11d3:	48 89 d1             	mov    %rdx,%rcx
-    11d6:	48 89 c2             	mov    %rax,%rdx
-    11d9:	e8 0f ef ff ff       	call   ed <UVM_Svc>
-                      UVM_PARAM_D1(Sub_ID)|UVM_PARAM_D0(Func_ID),
-                      Param1,
-                      Param2);
-}
-    11de:	c9                   	leave  
-    11df:	c3                   	ret    
+     ba7:	48 c1 e2 20          	shl    $0x20,%rdx
+     bab:	89 f6                	mov    %esi,%esi
+{
+     bad:	4c 89 c1             	mov    %r8,%rcx
+    return UVM_CAP_OP(RME_SVC_KFN, Cap_Kern,
+     bb0:	48 09 d6             	or     %rdx,%rsi
+     bb3:	48 0f ba ef 22       	bts    $0x22,%rdi
+     bb8:	4c 89 ca             	mov    %r9,%rdx
+     bbb:	e9 2d f5 ff ff       	jmp    ed <UVM_Svc>
 
-00000000000011e0 <UVM_Pgtbl_Crt>:
+0000000000000bc0 <UVM_Pgtbl_Crt>:
 Return      : ret_t - If successful, 0; or an error code.
 ******************************************************************************/
 ret_t UVM_Pgtbl_Crt(cid_t Cap_Captbl, cid_t Cap_Kmem, cid_t Cap_Pgtbl, 
                     ptr_t Vaddr, ptr_t Start_Addr, ptr_t Top_Flag,
                     ptr_t Size_Order, ptr_t Num_Order)
 {
-    11e0:	f3 0f 1e fa          	endbr64 
-    11e4:	55                   	push   %rbp
-    11e5:	48 89 e5             	mov    %rsp,%rbp
-    11e8:	48 83 ec 30          	sub    $0x30,%rsp
-    11ec:	48 89 7d f8          	mov    %rdi,-0x8(%rbp)
-    11f0:	48 89 75 f0          	mov    %rsi,-0x10(%rbp)
-    11f4:	48 89 55 e8          	mov    %rdx,-0x18(%rbp)
-    11f8:	48 89 4d e0          	mov    %rcx,-0x20(%rbp)
-    11fc:	4c 89 45 d8          	mov    %r8,-0x28(%rbp)
-    1200:	4c 89 4d d0          	mov    %r9,-0x30(%rbp)
+     bc0:	f3 0f 1e fa          	endbr64 
+     bc4:	49 89 fb             	mov    %rdi,%r11
     
     return UVM_CAP_OP(UVM_PGTBL_SVC(Num_Order,RME_SVC_PGT_CRT), Cap_Captbl,
-    1204:	48 8b 45 d8          	mov    -0x28(%rbp),%rax
-    1208:	48 0b 45 d0          	or     -0x30(%rbp),%rax
-    120c:	48 89 c2             	mov    %rax,%rdx
-    120f:	48 8b 45 f0          	mov    -0x10(%rbp),%rax
-    1213:	48 c1 e0 20          	shl    $0x20,%rax
-    1217:	48 89 c1             	mov    %rax,%rcx
-    121a:	48 8b 45 e8          	mov    -0x18(%rbp),%rax
-    121e:	48 c1 e0 10          	shl    $0x10,%rax
-    1222:	89 c0                	mov    %eax,%eax
-    1224:	48 09 c1             	or     %rax,%rcx
-    1227:	48 8b 45 10          	mov    0x10(%rbp),%rax
-    122b:	0f b7 c0             	movzwl %ax,%eax
-    122e:	48 89 ce             	mov    %rcx,%rsi
-    1231:	48 09 c6             	or     %rax,%rsi
-    1234:	48 8b 45 18          	mov    0x18(%rbp),%rax
-    1238:	48 c1 e0 10          	shl    $0x10,%rax
-    123c:	48 c1 e0 20          	shl    $0x20,%rax
-    1240:	48 89 c1             	mov    %rax,%rcx
-    1243:	48 8b 45 f8          	mov    -0x8(%rbp),%rax
-    1247:	48 09 c1             	or     %rax,%rcx
-    124a:	48 b8 00 00 00 00 0f 	movabs $0xf00000000,%rax
-    1251:	00 00 00 
-    1254:	48 89 cf             	mov    %rcx,%rdi
-    1257:	48 09 c7             	or     %rax,%rdi
-    125a:	48 8b 45 e0          	mov    -0x20(%rbp),%rax
-    125e:	48 89 d1             	mov    %rdx,%rcx
-    1261:	48 89 c2             	mov    %rax,%rdx
-    1264:	e8 84 ee ff ff       	call   ed <UVM_Svc>
-                      UVM_PARAM_D1(Cap_Kmem)|UVM_PARAM_Q1(Cap_Pgtbl)|UVM_PARAM_Q0(Size_Order),
-                      Vaddr, 
-                      Start_Addr|Top_Flag);
-}
-    1269:	c9                   	leave  
-    126a:	c3                   	ret    
+     bc7:	48 c1 e2 10          	shl    $0x10,%rdx
+     bcb:	48 8b 7c 24 10       	mov    0x10(%rsp),%rdi
+{
+     bd0:	49 89 ca             	mov    %rcx,%r10
+    return UVM_CAP_OP(UVM_PGTBL_SVC(Num_Order,RME_SVC_PGT_CRT), Cap_Captbl,
+     bd3:	0f b7 44 24 08       	movzwl 0x8(%rsp),%eax
+     bd8:	89 d2                	mov    %edx,%edx
+     bda:	48 c1 e6 20          	shl    $0x20,%rsi
+     bde:	4c 89 c1             	mov    %r8,%rcx
+     be1:	48 09 d6             	or     %rdx,%rsi
+     be4:	48 c1 e7 30          	shl    $0x30,%rdi
+     be8:	4c 09 c9             	or     %r9,%rcx
+     beb:	4c 89 d2             	mov    %r10,%rdx
+     bee:	48 09 c6             	or     %rax,%rsi
+     bf1:	4c 09 df             	or     %r11,%rdi
+     bf4:	48 b8 00 00 00 00 0f 	movabs $0xf00000000,%rax
+     bfb:	00 00 00 
+     bfe:	48 09 c7             	or     %rax,%rdi
+     c01:	e9 e7 f4 ff ff       	jmp    ed <UVM_Svc>
+     c06:	66 2e 0f 1f 84 00 00 	cs nopw 0x0(%rax,%rax,1)
+     c0d:	00 00 00 
 
-000000000000126b <UVM_Pgtbl_Del>:
+0000000000000c10 <UVM_Pgtbl_Del>:
                                 page table capability to be in. 1-Level.
 Output      : None.
 Return      : ret_t - If successful, 0; or an error code.
 ******************************************************************************/
 ret_t UVM_Pgtbl_Del(cid_t Cap_Captbl, cid_t Cap_Pgtbl)
 {
-    126b:	f3 0f 1e fa          	endbr64 
-    126f:	55                   	push   %rbp
-    1270:	48 89 e5             	mov    %rsp,%rbp
-    1273:	48 83 ec 10          	sub    $0x10,%rsp
-    1277:	48 89 7d f8          	mov    %rdi,-0x8(%rbp)
-    127b:	48 89 75 f0          	mov    %rsi,-0x10(%rbp)
+     c10:	f3 0f 1e fa          	endbr64 
     return UVM_CAP_OP(RME_SVC_PGT_DEL, Cap_Captbl,
-    127f:	48 8b 45 f0          	mov    -0x10(%rbp),%rax
-    1283:	48 8b 55 f8          	mov    -0x8(%rbp),%rdx
-    1287:	48 b9 00 00 00 00 10 	movabs $0x1000000000,%rcx
-    128e:	00 00 00 
-    1291:	48 09 ca             	or     %rcx,%rdx
-    1294:	48 89 d7             	mov    %rdx,%rdi
-    1297:	b9 00 00 00 00       	mov    $0x0,%ecx
-    129c:	ba 00 00 00 00       	mov    $0x0,%edx
-    12a1:	48 89 c6             	mov    %rax,%rsi
-    12a4:	e8 44 ee ff ff       	call   ed <UVM_Svc>
-                      Cap_Pgtbl,
-                      0,
-                      0);
-}
-    12a9:	c9                   	leave  
-    12aa:	c3                   	ret    
+     c14:	48 0f ba ef 24       	bts    $0x24,%rdi
+     c19:	31 c9                	xor    %ecx,%ecx
+     c1b:	31 d2                	xor    %edx,%edx
+     c1d:	e9 cb f4 ff ff       	jmp    ed <UVM_Svc>
+     c22:	66 66 2e 0f 1f 84 00 	data16 cs nopw 0x0(%rax,%rax,1)
+     c29:	00 00 00 00 
+     c2d:	0f 1f 00             	nopl   (%rax)
 
-00000000000012ab <UVM_Pgtbl_Add>:
+0000000000000c30 <UVM_Pgtbl_Add>:
 Output      : None.
 Return      : ret_t - If the unmapping is successful, it will return 0; else error code.
 ******************************************************************************/
 ret_t UVM_Pgtbl_Add(cid_t Cap_Pgtbl_Dst, ptr_t Pos_Dst, ptr_t Flags_Dst,
                     cid_t Cap_Pgtbl_Src, ptr_t Pos_Src, ptr_t Index)
 {
-    12ab:	f3 0f 1e fa          	endbr64 
-    12af:	55                   	push   %rbp
-    12b0:	48 89 e5             	mov    %rsp,%rbp
-    12b3:	48 83 ec 30          	sub    $0x30,%rsp
-    12b7:	48 89 7d f8          	mov    %rdi,-0x8(%rbp)
-    12bb:	48 89 75 f0          	mov    %rsi,-0x10(%rbp)
-    12bf:	48 89 55 e8          	mov    %rdx,-0x18(%rbp)
-    12c3:	48 89 4d e0          	mov    %rcx,-0x20(%rbp)
-    12c7:	4c 89 45 d8          	mov    %r8,-0x28(%rbp)
-    12cb:	4c 89 4d d0          	mov    %r9,-0x30(%rbp)
+     c30:	f3 0f 1e fa          	endbr64 
+     c34:	49 89 d2             	mov    %rdx,%r10
     return UVM_CAP_OP(RME_SVC_PGT_ADD, Flags_Dst,
-    12cf:	48 8b 45 e0          	mov    -0x20(%rbp),%rax
-    12d3:	48 c1 e0 20          	shl    $0x20,%rax
-    12d7:	48 89 c2             	mov    %rax,%rdx
-    12da:	48 8b 45 d8          	mov    -0x28(%rbp),%rax
-    12de:	89 c0                	mov    %eax,%eax
-    12e0:	48 89 d7             	mov    %rdx,%rdi
-    12e3:	48 09 c7             	or     %rax,%rdi
-    12e6:	48 8b 45 f8          	mov    -0x8(%rbp),%rax
-    12ea:	48 c1 e0 20          	shl    $0x20,%rax
-    12ee:	48 89 c2             	mov    %rax,%rdx
-    12f1:	48 8b 45 f0          	mov    -0x10(%rbp),%rax
-    12f5:	89 c0                	mov    %eax,%eax
-    12f7:	48 89 d6             	mov    %rdx,%rsi
-    12fa:	48 09 c6             	or     %rax,%rsi
-    12fd:	48 b8 00 00 00 00 11 	movabs $0x1100000000,%rax
-    1304:	00 00 00 
-    1307:	48 0b 45 e8          	or     -0x18(%rbp),%rax
-    130b:	48 8b 55 d0          	mov    -0x30(%rbp),%rdx
-    130f:	48 89 d1             	mov    %rdx,%rcx
-    1312:	48 89 fa             	mov    %rdi,%rdx
-    1315:	48 89 c7             	mov    %rax,%rdi
-    1318:	e8 d0 ed ff ff       	call   ed <UVM_Svc>
-                      UVM_PARAM_D1(Cap_Pgtbl_Dst)|UVM_PARAM_D0(Pos_Dst),
-                      UVM_PARAM_D1(Cap_Pgtbl_Src)|UVM_PARAM_D0(Pos_Src),
-                      Index);
-}
-    131d:	c9                   	leave  
-    131e:	c3                   	ret    
+     c37:	48 c1 e1 20          	shl    $0x20,%rcx
+     c3b:	89 f6                	mov    %esi,%esi
+     c3d:	45 89 c0             	mov    %r8d,%r8d
+     c40:	48 c1 e7 20          	shl    $0x20,%rdi
+     c44:	48 89 ca             	mov    %rcx,%rdx
+     c47:	4c 89 c9             	mov    %r9,%rcx
+     c4a:	48 b8 00 00 00 00 11 	movabs $0x1100000000,%rax
+     c51:	00 00 00 
+     c54:	48 09 fe             	or     %rdi,%rsi
+     c57:	4c 89 d7             	mov    %r10,%rdi
+     c5a:	4c 09 c2             	or     %r8,%rdx
+     c5d:	48 09 c7             	or     %rax,%rdi
+     c60:	e9 88 f4 ff ff       	jmp    ed <UVM_Svc>
+     c65:	66 66 2e 0f 1f 84 00 	data16 cs nopw 0x0(%rax,%rax,1)
+     c6c:	00 00 00 00 
 
-000000000000131f <UVM_Pgtbl_Rem>:
+0000000000000c70 <UVM_Pgtbl_Rem>:
               ptr_t Pos - The virtual address position to unmap from.
 Output      : None.
 Return      : ret_t - If the unmapping is successful, it will return 0; else error code.
 ******************************************************************************/
 ret_t UVM_Pgtbl_Rem(cid_t Cap_Pgtbl, ptr_t Pos)
 {
-    131f:	f3 0f 1e fa          	endbr64 
-    1323:	55                   	push   %rbp
-    1324:	48 89 e5             	mov    %rsp,%rbp
-    1327:	48 83 ec 10          	sub    $0x10,%rsp
-    132b:	48 89 7d f8          	mov    %rdi,-0x8(%rbp)
-    132f:	48 89 75 f0          	mov    %rsi,-0x10(%rbp)
+     c70:	f3 0f 1e fa          	endbr64 
+     c74:	48 89 f2             	mov    %rsi,%rdx
     return UVM_CAP_OP(RME_SVC_PGT_REM, 0,
-    1333:	48 8b 45 f8          	mov    -0x8(%rbp),%rax
-    1337:	48 8b 55 f0          	mov    -0x10(%rbp),%rdx
-    133b:	b9 00 00 00 00       	mov    $0x0,%ecx
-    1340:	48 89 c6             	mov    %rax,%rsi
-    1343:	48 b8 00 00 00 00 12 	movabs $0x1200000000,%rax
-    134a:	00 00 00 
-    134d:	48 89 c7             	mov    %rax,%rdi
-    1350:	e8 98 ed ff ff       	call   ed <UVM_Svc>
-                      Cap_Pgtbl,
-                      Pos,
-                      0);
-}
-    1355:	c9                   	leave  
-    1356:	c3                   	ret    
+     c77:	31 c9                	xor    %ecx,%ecx
+     c79:	48 89 fe             	mov    %rdi,%rsi
+     c7c:	48 bf 00 00 00 00 12 	movabs $0x1200000000,%rdi
+     c83:	00 00 00 
+     c86:	e9 62 f4 ff ff       	jmp    ed <UVM_Svc>
+     c8b:	0f 1f 44 00 00       	nopl   0x0(%rax,%rax,1)
 
-0000000000001357 <UVM_Pgtbl_Con>:
+0000000000000c90 <UVM_Pgtbl_Con>:
               ptr_t Flags_Child - This have no effect on MPU-based architectures.
 Output      : None.
 Return      : ret_t - If the mapping is successful, it will return 0; else error code.
 ******************************************************************************/
 ret_t UVM_Pgtbl_Con(cid_t Cap_Pgtbl_Parent, ptr_t Pos, cid_t Cap_Pgtbl_Child, ptr_t Flags_Child)
 {
-    1357:	f3 0f 1e fa          	endbr64 
-    135b:	55                   	push   %rbp
-    135c:	48 89 e5             	mov    %rsp,%rbp
-    135f:	48 83 ec 20          	sub    $0x20,%rsp
-    1363:	48 89 7d f8          	mov    %rdi,-0x8(%rbp)
-    1367:	48 89 75 f0          	mov    %rsi,-0x10(%rbp)
-    136b:	48 89 55 e8          	mov    %rdx,-0x18(%rbp)
-    136f:	48 89 4d e0          	mov    %rcx,-0x20(%rbp)
+     c90:	f3 0f 1e fa          	endbr64 
     return UVM_CAP_OP(RME_SVC_PGT_CON, 0,
-    1373:	48 8b 45 f8          	mov    -0x8(%rbp),%rax
-    1377:	48 c1 e0 20          	shl    $0x20,%rax
-    137b:	48 89 c2             	mov    %rax,%rdx
-    137e:	48 8b 45 e8          	mov    -0x18(%rbp),%rax
-    1382:	89 c0                	mov    %eax,%eax
-    1384:	48 89 d6             	mov    %rdx,%rsi
-    1387:	48 09 c6             	or     %rax,%rsi
-    138a:	48 8b 55 e0          	mov    -0x20(%rbp),%rdx
-    138e:	48 8b 45 f0          	mov    -0x10(%rbp),%rax
-    1392:	48 89 d1             	mov    %rdx,%rcx
-    1395:	48 89 c2             	mov    %rax,%rdx
-    1398:	48 b8 00 00 00 00 13 	movabs $0x1300000000,%rax
-    139f:	00 00 00 
-    13a2:	48 89 c7             	mov    %rax,%rdi
-    13a5:	e8 43 ed ff ff       	call   ed <UVM_Svc>
-                      UVM_PARAM_D1(Cap_Pgtbl_Parent)|UVM_PARAM_D0(Cap_Pgtbl_Child),
-                      Pos,
-                      Flags_Child);
-}
-    13aa:	c9                   	leave  
-    13ab:	c3                   	ret    
+     c94:	48 c1 e7 20          	shl    $0x20,%rdi
+{
+     c98:	49 89 f0             	mov    %rsi,%r8
+    return UVM_CAP_OP(RME_SVC_PGT_CON, 0,
+     c9b:	89 d2                	mov    %edx,%edx
+     c9d:	48 89 fe             	mov    %rdi,%rsi
+     ca0:	48 bf 00 00 00 00 13 	movabs $0x1300000000,%rdi
+     ca7:	00 00 00 
+     caa:	48 09 d6             	or     %rdx,%rsi
+     cad:	4c 89 c2             	mov    %r8,%rdx
+     cb0:	e9 38 f4 ff ff       	jmp    ed <UVM_Svc>
+     cb5:	66 66 2e 0f 1f 84 00 	data16 cs nopw 0x0(%rax,%rax,1)
+     cbc:	00 00 00 00 
 
-00000000000013ac <UVM_Pgtbl_Des>:
+0000000000000cc0 <UVM_Pgtbl_Des>:
                           table from.
 Output      : None.
 Return      : ret_t - If the mapping is successful, it will return 0; else error code.
 ******************************************************************************/
 ret_t UVM_Pgtbl_Des(cid_t Cap_Pgtbl, ptr_t Pos)
 {
-    13ac:	f3 0f 1e fa          	endbr64 
-    13b0:	55                   	push   %rbp
-    13b1:	48 89 e5             	mov    %rsp,%rbp
-    13b4:	48 83 ec 10          	sub    $0x10,%rsp
-    13b8:	48 89 7d f8          	mov    %rdi,-0x8(%rbp)
-    13bc:	48 89 75 f0          	mov    %rsi,-0x10(%rbp)
+     cc0:	f3 0f 1e fa          	endbr64 
+     cc4:	48 89 f2             	mov    %rsi,%rdx
     return UVM_CAP_OP(RME_SVC_PGT_DES, 0,
-    13c0:	48 8b 45 f8          	mov    -0x8(%rbp),%rax
-    13c4:	48 8b 55 f0          	mov    -0x10(%rbp),%rdx
-    13c8:	b9 00 00 00 00       	mov    $0x0,%ecx
-    13cd:	48 89 c6             	mov    %rax,%rsi
-    13d0:	48 b8 00 00 00 00 14 	movabs $0x1400000000,%rax
-    13d7:	00 00 00 
-    13da:	48 89 c7             	mov    %rax,%rdi
-    13dd:	e8 0b ed ff ff       	call   ed <UVM_Svc>
-                      Cap_Pgtbl,
-                      Pos,
-                      0);
-}
-    13e2:	c9                   	leave  
-    13e3:	c3                   	ret    
+     cc7:	31 c9                	xor    %ecx,%ecx
+     cc9:	48 89 fe             	mov    %rdi,%rsi
+     ccc:	48 bf 00 00 00 00 14 	movabs $0x1400000000,%rdi
+     cd3:	00 00 00 
+     cd6:	e9 12 f4 ff ff       	jmp    ed <UVM_Svc>
+     cdb:	0f 1f 44 00 00       	nopl   0x0(%rax,%rax,1)
 
-00000000000013e4 <UVM_Proc_Crt>:
+0000000000000ce0 <UVM_Proc_Crt>:
 Output      : None.
 Return      : ret_t - If successful, 0; or an error code.
 ******************************************************************************/
 ret_t UVM_Proc_Crt(cid_t Cap_Captbl_Crt, cid_t Cap_Kmem, cid_t Cap_Proc,
                    cid_t Cap_Captbl, cid_t Cap_Pgtbl, ptr_t Vaddr)
 {
-    13e4:	f3 0f 1e fa          	endbr64 
-    13e8:	55                   	push   %rbp
-    13e9:	48 89 e5             	mov    %rsp,%rbp
-    13ec:	48 83 ec 30          	sub    $0x30,%rsp
-    13f0:	48 89 7d f8          	mov    %rdi,-0x8(%rbp)
-    13f4:	48 89 75 f0          	mov    %rsi,-0x10(%rbp)
-    13f8:	48 89 55 e8          	mov    %rdx,-0x18(%rbp)
-    13fc:	48 89 4d e0          	mov    %rcx,-0x20(%rbp)
-    1400:	4c 89 45 d8          	mov    %r8,-0x28(%rbp)
-    1404:	4c 89 4d d0          	mov    %r9,-0x30(%rbp)
+     ce0:	f3 0f 1e fa          	endbr64 
     return UVM_CAP_OP(RME_SVC_PRC_CRT, Cap_Captbl_Crt,
-    1408:	48 8b 4d d8          	mov    -0x28(%rbp),%rcx
-    140c:	48 8b 55 e0          	mov    -0x20(%rbp),%rdx
-    1410:	48 8b 45 e8          	mov    -0x18(%rbp),%rax
-    1414:	48 8b 75 f8          	mov    -0x8(%rbp),%rsi
-    1418:	48 bf 00 00 00 00 15 	movabs $0x1500000000,%rdi
-    141f:	00 00 00 
-    1422:	48 09 f7             	or     %rsi,%rdi
-    1425:	48 89 c6             	mov    %rax,%rsi
-    1428:	e8 c0 ec ff ff       	call   ed <UVM_Svc>
-                      Cap_Proc,
-                      Cap_Captbl,
-                      Cap_Pgtbl);
-}
-    142d:	c9                   	leave  
-    142e:	c3                   	ret    
+     ce4:	48 b8 00 00 00 00 15 	movabs $0x1500000000,%rax
+     ceb:	00 00 00 
+{
+     cee:	48 89 d6             	mov    %rdx,%rsi
+     cf1:	48 89 ca             	mov    %rcx,%rdx
+     cf4:	4c 89 c1             	mov    %r8,%rcx
+    return UVM_CAP_OP(RME_SVC_PRC_CRT, Cap_Captbl_Crt,
+     cf7:	48 09 c7             	or     %rax,%rdi
+     cfa:	e9 ee f3 ff ff       	jmp    ed <UVM_Svc>
+     cff:	90                   	nop
 
-000000000000142f <UVM_Proc_Del>:
+0000000000000d00 <UVM_Proc_Del>:
               cid_t Cap_Proc - The capability to the process. 1-Level.
 Output      : None.
 Return      : ret_t - If successful, 0; or an error code.
 ******************************************************************************/
 ret_t UVM_Proc_Del(cid_t Cap_Captbl, cid_t Cap_Proc)
 {
-    142f:	f3 0f 1e fa          	endbr64 
-    1433:	55                   	push   %rbp
-    1434:	48 89 e5             	mov    %rsp,%rbp
-    1437:	48 83 ec 10          	sub    $0x10,%rsp
-    143b:	48 89 7d f8          	mov    %rdi,-0x8(%rbp)
-    143f:	48 89 75 f0          	mov    %rsi,-0x10(%rbp)
+     d00:	f3 0f 1e fa          	endbr64 
     return UVM_CAP_OP(RME_SVC_PRC_DEL, Cap_Captbl,
-    1443:	48 8b 45 f0          	mov    -0x10(%rbp),%rax
-    1447:	48 8b 55 f8          	mov    -0x8(%rbp),%rdx
-    144b:	48 b9 00 00 00 00 16 	movabs $0x1600000000,%rcx
-    1452:	00 00 00 
-    1455:	48 09 ca             	or     %rcx,%rdx
-    1458:	48 89 d7             	mov    %rdx,%rdi
-    145b:	b9 00 00 00 00       	mov    $0x0,%ecx
-    1460:	ba 00 00 00 00       	mov    $0x0,%edx
-    1465:	48 89 c6             	mov    %rax,%rsi
-    1468:	e8 80 ec ff ff       	call   ed <UVM_Svc>
-                      Cap_Proc,
-                      0,
-                      0);
-}
-    146d:	c9                   	leave  
-    146e:	c3                   	ret    
+     d04:	48 b8 00 00 00 00 16 	movabs $0x1600000000,%rax
+     d0b:	00 00 00 
+     d0e:	31 c9                	xor    %ecx,%ecx
+     d10:	31 d2                	xor    %edx,%edx
+     d12:	48 09 c7             	or     %rax,%rdi
+     d15:	e9 d3 f3 ff ff       	jmp    ed <UVM_Svc>
+     d1a:	66 0f 1f 44 00 00    	nopw   0x0(%rax,%rax,1)
 
-000000000000146f <UVM_Proc_Cpt>:
+0000000000000d20 <UVM_Proc_Cpt>:
                                  this process. 2-Level.
 Output      : None.
 Return      : ret_t - If successful, 0; or an error code.
 ******************************************************************************/
 ret_t UVM_Proc_Cpt(cid_t Cap_Proc, cid_t Cap_Captbl)
 {
-    146f:	f3 0f 1e fa          	endbr64 
-    1473:	55                   	push   %rbp
-    1474:	48 89 e5             	mov    %rsp,%rbp
-    1477:	48 83 ec 10          	sub    $0x10,%rsp
-    147b:	48 89 7d f8          	mov    %rdi,-0x8(%rbp)
-    147f:	48 89 75 f0          	mov    %rsi,-0x10(%rbp)
+     d20:	f3 0f 1e fa          	endbr64 
+     d24:	48 89 f2             	mov    %rsi,%rdx
     return UVM_CAP_OP(RME_SVC_PRC_CPT, 0,
-    1483:	48 8b 55 f0          	mov    -0x10(%rbp),%rdx
-    1487:	48 8b 45 f8          	mov    -0x8(%rbp),%rax
-    148b:	b9 00 00 00 00       	mov    $0x0,%ecx
-    1490:	48 89 c6             	mov    %rax,%rsi
-    1493:	48 b8 00 00 00 00 17 	movabs $0x1700000000,%rax
-    149a:	00 00 00 
-    149d:	48 89 c7             	mov    %rax,%rdi
-    14a0:	e8 48 ec ff ff       	call   ed <UVM_Svc>
-                      Cap_Proc,
-                      Cap_Captbl,
-                      0);
-}
-    14a5:	c9                   	leave  
-    14a6:	c3                   	ret    
+     d27:	31 c9                	xor    %ecx,%ecx
+     d29:	48 89 fe             	mov    %rdi,%rsi
+     d2c:	48 bf 00 00 00 00 17 	movabs $0x1700000000,%rdi
+     d33:	00 00 00 
+     d36:	e9 b2 f3 ff ff       	jmp    ed <UVM_Svc>
+     d3b:	0f 1f 44 00 00       	nopl   0x0(%rax,%rax,1)
 
-00000000000014a7 <UVM_Proc_Pgt>:
+0000000000000d40 <UVM_Proc_Pgt>:
                                 process. 2-Level.
 Output      : None.
 Return      : ret_t - If successful, 0; or an error code.
 ******************************************************************************/
 ret_t UVM_Proc_Pgt(cid_t Cap_Proc, cid_t Cap_Pgtbl)
 {
-    14a7:	f3 0f 1e fa          	endbr64 
-    14ab:	55                   	push   %rbp
-    14ac:	48 89 e5             	mov    %rsp,%rbp
-    14af:	48 83 ec 10          	sub    $0x10,%rsp
-    14b3:	48 89 7d f8          	mov    %rdi,-0x8(%rbp)
-    14b7:	48 89 75 f0          	mov    %rsi,-0x10(%rbp)
+     d40:	f3 0f 1e fa          	endbr64 
+     d44:	48 89 f2             	mov    %rsi,%rdx
     return UVM_CAP_OP(RME_SVC_PRC_PGT, 0,
-    14bb:	48 8b 55 f0          	mov    -0x10(%rbp),%rdx
-    14bf:	48 8b 45 f8          	mov    -0x8(%rbp),%rax
-    14c3:	b9 00 00 00 00       	mov    $0x0,%ecx
-    14c8:	48 89 c6             	mov    %rax,%rsi
-    14cb:	48 b8 00 00 00 00 18 	movabs $0x1800000000,%rax
-    14d2:	00 00 00 
-    14d5:	48 89 c7             	mov    %rax,%rdi
-    14d8:	e8 10 ec ff ff       	call   ed <UVM_Svc>
-                      Cap_Proc,
-                      Cap_Pgtbl,
-                      0);
-}
-    14dd:	c9                   	leave  
-    14de:	c3                   	ret    
+     d47:	31 c9                	xor    %ecx,%ecx
+     d49:	48 89 fe             	mov    %rdi,%rsi
+     d4c:	48 bf 00 00 00 00 18 	movabs $0x1800000000,%rdi
+     d53:	00 00 00 
+     d56:	e9 92 f3 ff ff       	jmp    ed <UVM_Svc>
+     d5b:	0f 1f 44 00 00       	nopl   0x0(%rax,%rax,1)
 
-00000000000014df <UVM_Thd_Crt>:
+0000000000000d60 <UVM_Thd_Crt>:
 Output      : None.
 Return      : ret_t - If successful, the Thread ID; or an error code.
 ******************************************************************************/
 ret_t UVM_Thd_Crt(cid_t Cap_Captbl, cid_t Cap_Kmem, cid_t Cap_Thd,
                   cid_t Cap_Proc, ptr_t Max_Prio, ptr_t Vaddr)
 {
-    14df:	f3 0f 1e fa          	endbr64 
-    14e3:	55                   	push   %rbp
-    14e4:	48 89 e5             	mov    %rsp,%rbp
-    14e7:	48 83 ec 30          	sub    $0x30,%rsp
-    14eb:	48 89 7d f8          	mov    %rdi,-0x8(%rbp)
-    14ef:	48 89 75 f0          	mov    %rsi,-0x10(%rbp)
-    14f3:	48 89 55 e8          	mov    %rdx,-0x18(%rbp)
-    14f7:	48 89 4d e0          	mov    %rcx,-0x20(%rbp)
-    14fb:	4c 89 45 d8          	mov    %r8,-0x28(%rbp)
-    14ff:	4c 89 4d d0          	mov    %r9,-0x30(%rbp)
+     d60:	f3 0f 1e fa          	endbr64 
     return UVM_CAP_OP(RME_SVC_THD_CRT, Cap_Captbl, 
-    1503:	48 8b 45 e0          	mov    -0x20(%rbp),%rax
-    1507:	48 c1 e0 20          	shl    $0x20,%rax
-    150b:	48 89 c2             	mov    %rax,%rdx
-    150e:	48 8b 45 d8          	mov    -0x28(%rbp),%rax
-    1512:	89 c0                	mov    %eax,%eax
-    1514:	48 09 c2             	or     %rax,%rdx
-    1517:	48 8b 45 f0          	mov    -0x10(%rbp),%rax
-    151b:	48 c1 e0 20          	shl    $0x20,%rax
-    151f:	48 89 c1             	mov    %rax,%rcx
-    1522:	48 8b 45 e8          	mov    -0x18(%rbp),%rax
-    1526:	89 c0                	mov    %eax,%eax
-    1528:	48 89 ce             	mov    %rcx,%rsi
-    152b:	48 09 c6             	or     %rax,%rsi
-    152e:	48 8b 45 f8          	mov    -0x8(%rbp),%rax
-    1532:	48 b9 00 00 00 00 19 	movabs $0x1900000000,%rcx
-    1539:	00 00 00 
-    153c:	48 09 c8             	or     %rcx,%rax
-    153f:	48 89 c7             	mov    %rax,%rdi
-    1542:	48 8b 45 d0          	mov    -0x30(%rbp),%rax
-    1546:	48 89 c1             	mov    %rax,%rcx
-    1549:	e8 9f eb ff ff       	call   ed <UVM_Svc>
-                      UVM_PARAM_D1(Cap_Kmem)|UVM_PARAM_D0(Cap_Thd),
-                      UVM_PARAM_D1(Cap_Proc)|UVM_PARAM_D0(Max_Prio),
-                      Vaddr);
-}
-    154e:	c9                   	leave  
-    154f:	c3                   	ret    
+     d64:	48 c1 e1 20          	shl    $0x20,%rcx
+{
+     d68:	49 89 d2             	mov    %rdx,%r10
+    return UVM_CAP_OP(RME_SVC_THD_CRT, Cap_Captbl, 
+     d6b:	45 89 c0             	mov    %r8d,%r8d
+     d6e:	48 c1 e6 20          	shl    $0x20,%rsi
+     d72:	48 b8 00 00 00 00 19 	movabs $0x1900000000,%rax
+     d79:	00 00 00 
+     d7c:	48 89 ca             	mov    %rcx,%rdx
+     d7f:	45 89 d2             	mov    %r10d,%r10d
+     d82:	4c 89 c9             	mov    %r9,%rcx
+     d85:	4c 09 c2             	or     %r8,%rdx
+     d88:	4c 09 d6             	or     %r10,%rsi
+     d8b:	48 09 c7             	or     %rax,%rdi
+     d8e:	e9 5a f3 ff ff       	jmp    ed <UVM_Svc>
+     d93:	66 66 2e 0f 1f 84 00 	data16 cs nopw 0x0(%rax,%rax,1)
+     d9a:	00 00 00 00 
+     d9e:	66 90                	xchg   %ax,%ax
 
-0000000000001550 <UVM_Thd_Del>:
+0000000000000da0 <UVM_Thd_Del>:
               cid_t Cap_Thd - The capability to the thread in the captbl. 1-Level.
 Output      : None.
 Return      : ret_t - If successful, 0; or an error code.
 ******************************************************************************/
 ret_t UVM_Thd_Del(cid_t Cap_Captbl, cid_t Cap_Thd)
 {
-    1550:	f3 0f 1e fa          	endbr64 
-    1554:	55                   	push   %rbp
-    1555:	48 89 e5             	mov    %rsp,%rbp
-    1558:	48 83 ec 10          	sub    $0x10,%rsp
-    155c:	48 89 7d f8          	mov    %rdi,-0x8(%rbp)
-    1560:	48 89 75 f0          	mov    %rsi,-0x10(%rbp)
+     da0:	f3 0f 1e fa          	endbr64 
     return UVM_CAP_OP(RME_SVC_THD_DEL, Cap_Captbl,
-    1564:	48 8b 45 f0          	mov    -0x10(%rbp),%rax
-    1568:	48 8b 55 f8          	mov    -0x8(%rbp),%rdx
-    156c:	48 b9 00 00 00 00 1a 	movabs $0x1a00000000,%rcx
-    1573:	00 00 00 
-    1576:	48 09 ca             	or     %rcx,%rdx
-    1579:	48 89 d7             	mov    %rdx,%rdi
-    157c:	b9 00 00 00 00       	mov    $0x0,%ecx
-    1581:	ba 00 00 00 00       	mov    $0x0,%edx
-    1586:	48 89 c6             	mov    %rax,%rsi
-    1589:	e8 5f eb ff ff       	call   ed <UVM_Svc>
-                      Cap_Thd,
-                      0,
-                      0);
-}
-    158e:	c9                   	leave  
-    158f:	c3                   	ret    
+     da4:	48 b8 00 00 00 00 1a 	movabs $0x1a00000000,%rax
+     dab:	00 00 00 
+     dae:	31 c9                	xor    %ecx,%ecx
+     db0:	31 d2                	xor    %edx,%edx
+     db2:	48 09 c7             	or     %rax,%rdi
+     db5:	e9 33 f3 ff ff       	jmp    ed <UVM_Svc>
+     dba:	66 0f 1f 44 00 00    	nopw   0x0(%rax,%rax,1)
 
-0000000000001590 <UVM_Thd_Exec_Set>:
+0000000000000dc0 <UVM_Thd_Exec_Set>:
               ptr_t Param - The parameter of the thread.
 Output      : None.
 Return      : ret_t - If successful, 0; or an error code.
 ******************************************************************************/
 ret_t UVM_Thd_Exec_Set(cid_t Cap_Thd, ptr_t Entry, ptr_t Stack, ptr_t Param)
 {
-    1590:	f3 0f 1e fa          	endbr64 
-    1594:	55                   	push   %rbp
-    1595:	48 89 e5             	mov    %rsp,%rbp
-    1598:	48 83 ec 20          	sub    $0x20,%rsp
-    159c:	48 89 7d f8          	mov    %rdi,-0x8(%rbp)
-    15a0:	48 89 75 f0          	mov    %rsi,-0x10(%rbp)
-    15a4:	48 89 55 e8          	mov    %rdx,-0x18(%rbp)
-    15a8:	48 89 4d e0          	mov    %rcx,-0x20(%rbp)
+     dc0:	f3 0f 1e fa          	endbr64 
     return UVM_CAP_OP(RME_SVC_THD_EXEC_SET, Cap_Thd,
-    15ac:	48 8b 45 f8          	mov    -0x8(%rbp),%rax
-    15b0:	48 ba 00 00 00 00 06 	movabs $0x600000000,%rdx
-    15b7:	00 00 00 
-    15ba:	48 09 d0             	or     %rdx,%rax
-    15bd:	48 89 c7             	mov    %rax,%rdi
-    15c0:	48 8b 4d e0          	mov    -0x20(%rbp),%rcx
-    15c4:	48 8b 55 e8          	mov    -0x18(%rbp),%rdx
-    15c8:	48 8b 45 f0          	mov    -0x10(%rbp),%rax
-    15cc:	48 89 c6             	mov    %rax,%rsi
-    15cf:	e8 19 eb ff ff       	call   ed <UVM_Svc>
-                      Entry, 
-                      Stack,
-                      Param);
-}
-    15d4:	c9                   	leave  
-    15d5:	c3                   	ret    
+     dc4:	48 b8 00 00 00 00 06 	movabs $0x600000000,%rax
+     dcb:	00 00 00 
+     dce:	48 09 c7             	or     %rax,%rdi
+     dd1:	e9 17 f3 ff ff       	jmp    ed <UVM_Svc>
+     dd6:	66 2e 0f 1f 84 00 00 	cs nopw 0x0(%rax,%rax,1)
+     ddd:	00 00 00 
 
-00000000000015d6 <UVM_Thd_Hyp_Set>:
+0000000000000de0 <UVM_Thd_Hyp_Set>:
                             thread's register sets.
 Output      : None.
 Return      : ret_t - If successful, 0; or an error code.
 ******************************************************************************/
 ret_t UVM_Thd_Hyp_Set(cid_t Cap_Thd, ptr_t Kaddr)
 {
-    15d6:	f3 0f 1e fa          	endbr64 
-    15da:	55                   	push   %rbp
-    15db:	48 89 e5             	mov    %rsp,%rbp
-    15de:	48 83 ec 10          	sub    $0x10,%rsp
-    15e2:	48 89 7d f8          	mov    %rdi,-0x8(%rbp)
-    15e6:	48 89 75 f0          	mov    %rsi,-0x10(%rbp)
+     de0:	f3 0f 1e fa          	endbr64 
+     de4:	48 89 f2             	mov    %rsi,%rdx
     return UVM_CAP_OP(RME_SVC_THD_EXEC_SET, 0,
-    15ea:	48 8b 45 f8          	mov    -0x8(%rbp),%rax
-    15ee:	48 8b 55 f0          	mov    -0x10(%rbp),%rdx
-    15f2:	b9 00 00 00 00       	mov    $0x0,%ecx
-    15f7:	48 89 c6             	mov    %rax,%rsi
-    15fa:	48 b8 00 00 00 00 06 	movabs $0x600000000,%rax
-    1601:	00 00 00 
-    1604:	48 89 c7             	mov    %rax,%rdi
-    1607:	e8 e1 ea ff ff       	call   ed <UVM_Svc>
-                      Cap_Thd,
-                      Kaddr,
-                      0);
-}
-    160c:	c9                   	leave  
-    160d:	c3                   	ret    
+     de7:	31 c9                	xor    %ecx,%ecx
+     de9:	48 89 fe             	mov    %rdi,%rsi
+     dec:	48 bf 00 00 00 00 06 	movabs $0x600000000,%rdi
+     df3:	00 00 00 
+     df6:	e9 f2 f2 ff ff       	jmp    ed <UVM_Svc>
+     dfb:	0f 1f 44 00 00       	nopl   0x0(%rax,%rax,1)
 
-000000000000160e <UVM_Thd_Sched_Bind>:
+0000000000000e00 <UVM_Thd_Sched_Bind>:
               ptr_t Prio - The priority level, higher is more critical.
 Output      : None.
 Return      : ret_t - If successful, 0; or an error code.
 ******************************************************************************/
 ret_t UVM_Thd_Sched_Bind(cid_t Cap_Thd, cid_t Cap_Thd_Sched, cid_t Cap_Sig, tid_t TID, ptr_t Prio)
 {
-    160e:	f3 0f 1e fa          	endbr64 
-    1612:	55                   	push   %rbp
-    1613:	48 89 e5             	mov    %rsp,%rbp
-    1616:	48 83 ec 30          	sub    $0x30,%rsp
-    161a:	48 89 7d f8          	mov    %rdi,-0x8(%rbp)
-    161e:	48 89 75 f0          	mov    %rsi,-0x10(%rbp)
-    1622:	48 89 55 e8          	mov    %rdx,-0x18(%rbp)
-    1626:	48 89 4d e0          	mov    %rcx,-0x20(%rbp)
-    162a:	4c 89 45 d8          	mov    %r8,-0x28(%rbp)
+     e00:	f3 0f 1e fa          	endbr64 
+     e04:	49 89 d1             	mov    %rdx,%r9
     return UVM_CAP_OP(RME_SVC_THD_SCHED_BIND, Cap_Thd,
-    162e:	48 8b 45 e0          	mov    -0x20(%rbp),%rax
-    1632:	48 8b 55 f0          	mov    -0x10(%rbp),%rdx
-    1636:	48 89 d1             	mov    %rdx,%rcx
-    1639:	48 c1 e1 20          	shl    $0x20,%rcx
-    163d:	48 8b 55 e8          	mov    -0x18(%rbp),%rdx
-    1641:	89 d2                	mov    %edx,%edx
-    1643:	48 89 ce             	mov    %rcx,%rsi
-    1646:	48 09 d6             	or     %rdx,%rsi
-    1649:	48 8b 55 f8          	mov    -0x8(%rbp),%rdx
-    164d:	48 b9 00 00 00 00 1b 	movabs $0x1b00000000,%rcx
-    1654:	00 00 00 
-    1657:	48 89 d7             	mov    %rdx,%rdi
-    165a:	48 09 cf             	or     %rcx,%rdi
-    165d:	48 8b 55 d8          	mov    -0x28(%rbp),%rdx
-    1661:	48 89 d1             	mov    %rdx,%rcx
-    1664:	48 89 c2             	mov    %rax,%rdx
-    1667:	e8 81 ea ff ff       	call   ed <UVM_Svc>
-                      UVM_PARAM_D1(Cap_Thd_Sched)|UVM_PARAM_D0(Cap_Sig),
-                      TID, 
-                      Prio);
-}
-    166c:	c9                   	leave  
-    166d:	c3                   	ret    
+     e07:	48 c1 e6 20          	shl    $0x20,%rsi
+{
+     e0b:	48 89 ca             	mov    %rcx,%rdx
+    return UVM_CAP_OP(RME_SVC_THD_SCHED_BIND, Cap_Thd,
+     e0e:	48 b8 00 00 00 00 1b 	movabs $0x1b00000000,%rax
+     e15:	00 00 00 
+     e18:	45 89 c9             	mov    %r9d,%r9d
+{
+     e1b:	4c 89 c1             	mov    %r8,%rcx
+    return UVM_CAP_OP(RME_SVC_THD_SCHED_BIND, Cap_Thd,
+     e1e:	48 09 c7             	or     %rax,%rdi
+     e21:	4c 09 ce             	or     %r9,%rsi
+     e24:	e9 c4 f2 ff ff       	jmp    ed <UVM_Svc>
+     e29:	0f 1f 80 00 00 00 00 	nopl   0x0(%rax)
 
-000000000000166e <UVM_Thd_Sched_Rcv>:
+0000000000000e30 <UVM_Thd_Sched_Rcv>:
                               is simply not allowed. 2-Level.
 Output      : None.
 Return      : ret_t - If successful, the thread ID; or an error code.
 ******************************************************************************/
 ret_t UVM_Thd_Sched_Rcv(cid_t Cap_Thd)
 {
-    166e:	f3 0f 1e fa          	endbr64 
-    1672:	55                   	push   %rbp
-    1673:	48 89 e5             	mov    %rsp,%rbp
-    1676:	48 83 ec 10          	sub    $0x10,%rsp
-    167a:	48 89 7d f8          	mov    %rdi,-0x8(%rbp)
+     e30:	f3 0f 1e fa          	endbr64 
+     e34:	48 89 fe             	mov    %rdi,%rsi
     return UVM_CAP_OP(RME_SVC_THD_SCHED_RCV, 0,
-    167e:	48 8b 45 f8          	mov    -0x8(%rbp),%rax
-    1682:	b9 00 00 00 00       	mov    $0x0,%ecx
-    1687:	ba 00 00 00 00       	mov    $0x0,%edx
-    168c:	48 89 c6             	mov    %rax,%rsi
-    168f:	48 b8 00 00 00 00 1c 	movabs $0x1c00000000,%rax
-    1696:	00 00 00 
-    1699:	48 89 c7             	mov    %rax,%rdi
-    169c:	e8 4c ea ff ff       	call   ed <UVM_Svc>
-                      Cap_Thd,
-                      0, 
-                      0);
-}
-    16a1:	c9                   	leave  
-    16a2:	c3                   	ret    
+     e37:	31 c9                	xor    %ecx,%ecx
+     e39:	31 d2                	xor    %edx,%edx
+     e3b:	48 bf 00 00 00 00 1c 	movabs $0x1c00000000,%rdi
+     e42:	00 00 00 
+     e45:	e9 a3 f2 ff ff       	jmp    ed <UVM_Svc>
+     e4a:	66 0f 1f 44 00 00    	nopw   0x0(%rax,%rax,1)
 
-00000000000016a3 <UVM_Thd_Sched_Prio>:
+0000000000000e50 <UVM_Thd_Sched_Prio>:
               ptr_t Prio - The priority level, higher is more critical.
 Output      : None.
 Return      : ret_t - If successful, 0; or an error code.
 ******************************************************************************/
 ret_t UVM_Thd_Sched_Prio(cid_t Cap_Thd, ptr_t Prio)
 {
-    16a3:	f3 0f 1e fa          	endbr64 
-    16a7:	55                   	push   %rbp
-    16a8:	48 89 e5             	mov    %rsp,%rbp
-    16ab:	48 83 ec 10          	sub    $0x10,%rsp
-    16af:	48 89 7d f8          	mov    %rdi,-0x8(%rbp)
-    16b3:	48 89 75 f0          	mov    %rsi,-0x10(%rbp)
+     e50:	f3 0f 1e fa          	endbr64 
+     e54:	48 89 f2             	mov    %rsi,%rdx
     return UVM_CAP_OP(RME_SVC_THD_SCHED_PRIO, 0,
-    16b7:	48 8b 45 f8          	mov    -0x8(%rbp),%rax
-    16bb:	48 8b 55 f0          	mov    -0x10(%rbp),%rdx
-    16bf:	b9 00 00 00 00       	mov    $0x0,%ecx
-    16c4:	48 89 c6             	mov    %rax,%rsi
-    16c7:	48 b8 00 00 00 00 07 	movabs $0x700000000,%rax
-    16ce:	00 00 00 
-    16d1:	48 89 c7             	mov    %rax,%rdi
-    16d4:	e8 14 ea ff ff       	call   ed <UVM_Svc>
-                      Cap_Thd,
-                      Prio, 
-                      0);
-}
-    16d9:	c9                   	leave  
-    16da:	c3                   	ret    
+     e57:	31 c9                	xor    %ecx,%ecx
+     e59:	48 89 fe             	mov    %rdi,%rsi
+     e5c:	48 bf 00 00 00 00 07 	movabs $0x700000000,%rdi
+     e63:	00 00 00 
+     e66:	e9 82 f2 ff ff       	jmp    ed <UVM_Svc>
+     e6b:	0f 1f 44 00 00       	nopl   0x0(%rax,%rax,1)
 
-00000000000016db <UVM_Thd_Sched_Free>:
+0000000000000e70 <UVM_Thd_Sched_Free>:
 Input       : cid_t Cap_Thd - The capability to the thread. 2-Level.
 Output      : None.
 Return      : ret_t - If successful, 0; or an error code.
 ******************************************************************************/
 ret_t UVM_Thd_Sched_Free(cid_t Cap_Thd)
 {
-    16db:	f3 0f 1e fa          	endbr64 
-    16df:	55                   	push   %rbp
-    16e0:	48 89 e5             	mov    %rsp,%rbp
-    16e3:	48 83 ec 10          	sub    $0x10,%rsp
-    16e7:	48 89 7d f8          	mov    %rdi,-0x8(%rbp)
+     e70:	f3 0f 1e fa          	endbr64 
+     e74:	48 89 fe             	mov    %rdi,%rsi
     return UVM_CAP_OP(RME_SVC_THD_SCHED_FREE, 0,
-    16eb:	48 8b 45 f8          	mov    -0x8(%rbp),%rax
-    16ef:	b9 00 00 00 00       	mov    $0x0,%ecx
-    16f4:	ba 00 00 00 00       	mov    $0x0,%edx
-    16f9:	48 89 c6             	mov    %rax,%rsi
-    16fc:	48 b8 00 00 00 00 05 	movabs $0x500000000,%rax
-    1703:	00 00 00 
-    1706:	48 89 c7             	mov    %rax,%rdi
-    1709:	e8 df e9 ff ff       	call   ed <UVM_Svc>
-                      Cap_Thd,
-                      0, 
-                      0);
-}
-    170e:	c9                   	leave  
-    170f:	c3                   	ret    
+     e77:	31 c9                	xor    %ecx,%ecx
+     e79:	31 d2                	xor    %edx,%edx
+     e7b:	48 bf 00 00 00 00 05 	movabs $0x500000000,%rdi
+     e82:	00 00 00 
+     e85:	e9 63 f2 ff ff       	jmp    ed <UVM_Svc>
+     e8a:	66 0f 1f 44 00 00    	nopw   0x0(%rax,%rax,1)
 
-0000000000001710 <UVM_Thd_Time_Xfer>:
+0000000000000e90 <UVM_Thd_Time_Xfer>:
                            order of 100us or 1ms.
 Output      : None.
 Return      : ret_t - If successful, the destination time amount; or an error code.
 ******************************************************************************/
 ret_t UVM_Thd_Time_Xfer(cid_t Cap_Thd_Dst, cid_t Cap_Thd_Src, ptr_t Time)
 {
-    1710:	f3 0f 1e fa          	endbr64 
-    1714:	55                   	push   %rbp
-    1715:	48 89 e5             	mov    %rsp,%rbp
-    1718:	48 83 ec 20          	sub    $0x20,%rsp
-    171c:	48 89 7d f8          	mov    %rdi,-0x8(%rbp)
-    1720:	48 89 75 f0          	mov    %rsi,-0x10(%rbp)
-    1724:	48 89 55 e8          	mov    %rdx,-0x18(%rbp)
+     e90:	f3 0f 1e fa          	endbr64 
+     e94:	48 89 d1             	mov    %rdx,%rcx
     return UVM_CAP_OP(RME_SVC_THD_TIME_XFER, 0,
-    1728:	48 8b 55 f0          	mov    -0x10(%rbp),%rdx
-    172c:	48 8b 45 f8          	mov    -0x8(%rbp),%rax
-    1730:	48 8b 4d e8          	mov    -0x18(%rbp),%rcx
-    1734:	48 89 c6             	mov    %rax,%rsi
-    1737:	48 b8 00 00 00 00 08 	movabs $0x800000000,%rax
-    173e:	00 00 00 
-    1741:	48 89 c7             	mov    %rax,%rdi
-    1744:	e8 a4 e9 ff ff       	call   ed <UVM_Svc>
-                      Cap_Thd_Dst,
-                      Cap_Thd_Src, 
-                      Time);
-}
-    1749:	c9                   	leave  
-    174a:	c3                   	ret    
+     e97:	48 89 f2             	mov    %rsi,%rdx
+     e9a:	48 89 fe             	mov    %rdi,%rsi
+     e9d:	48 bf 00 00 00 00 08 	movabs $0x800000000,%rdi
+     ea4:	00 00 00 
+     ea7:	e9 41 f2 ff ff       	jmp    ed <UVM_Svc>
+     eac:	0f 1f 40 00          	nopl   0x0(%rax)
 
-000000000000174b <UVM_Thd_Swt>:
+0000000000000eb0 <UVM_Thd_Swt>:
                                  this thread.
 Output      : None.
 Return      : ret_t - If successful, 0; or an error code.
 ******************************************************************************/
 ret_t UVM_Thd_Swt(cid_t Cap_Thd, ptr_t Full_Yield)
 {
-    174b:	f3 0f 1e fa          	endbr64 
-    174f:	55                   	push   %rbp
-    1750:	48 89 e5             	mov    %rsp,%rbp
-    1753:	48 83 ec 10          	sub    $0x10,%rsp
-    1757:	48 89 7d f8          	mov    %rdi,-0x8(%rbp)
-    175b:	48 89 75 f0          	mov    %rsi,-0x10(%rbp)
+     eb0:	f3 0f 1e fa          	endbr64 
+     eb4:	48 89 f2             	mov    %rsi,%rdx
     return UVM_CAP_OP(RME_SVC_THD_SWT, 0,
-    175f:	48 8b 45 f8          	mov    -0x8(%rbp),%rax
-    1763:	48 8b 55 f0          	mov    -0x10(%rbp),%rdx
-    1767:	b9 00 00 00 00       	mov    $0x0,%ecx
-    176c:	48 89 c6             	mov    %rax,%rsi
-    176f:	48 b8 00 00 00 00 09 	movabs $0x900000000,%rax
-    1776:	00 00 00 
-    1779:	48 89 c7             	mov    %rax,%rdi
-    177c:	e8 6c e9 ff ff       	call   ed <UVM_Svc>
-                      Cap_Thd,
-                      Full_Yield, 
-                      0);
-}
-    1781:	c9                   	leave  
-    1782:	c3                   	ret    
+     eb7:	31 c9                	xor    %ecx,%ecx
+     eb9:	48 89 fe             	mov    %rdi,%rsi
+     ebc:	48 bf 00 00 00 00 09 	movabs $0x900000000,%rdi
+     ec3:	00 00 00 
+     ec6:	e9 22 f2 ff ff       	jmp    ed <UVM_Svc>
+     ecb:	0f 1f 44 00 00       	nopl   0x0(%rax,%rax,1)
 
-0000000000001783 <UVM_Sig_Crt>:
+0000000000000ed0 <UVM_Sig_Crt>:
                             within the kernel virtual address.
 Output      : None.
 Return      : ret_t - If successful, 0; or an error code.
 ******************************************************************************/
 ret_t UVM_Sig_Crt(cid_t Cap_Captbl, cid_t Cap_Kmem, cid_t Cap_Sig, ptr_t Vaddr)
 {
-    1783:	f3 0f 1e fa          	endbr64 
-    1787:	55                   	push   %rbp
-    1788:	48 89 e5             	mov    %rsp,%rbp
-    178b:	48 83 ec 20          	sub    $0x20,%rsp
-    178f:	48 89 7d f8          	mov    %rdi,-0x8(%rbp)
-    1793:	48 89 75 f0          	mov    %rsi,-0x10(%rbp)
-    1797:	48 89 55 e8          	mov    %rdx,-0x18(%rbp)
-    179b:	48 89 4d e0          	mov    %rcx,-0x20(%rbp)
+     ed0:	f3 0f 1e fa          	endbr64 
     return UVM_CAP_OP(RME_SVC_SIG_CRT, Cap_Captbl,
-    179f:	48 8b 55 f0          	mov    -0x10(%rbp),%rdx
-    17a3:	48 8b 45 e8          	mov    -0x18(%rbp),%rax
-    17a7:	48 8b 4d f8          	mov    -0x8(%rbp),%rcx
-    17ab:	48 be 00 00 00 00 1d 	movabs $0x1d00000000,%rsi
-    17b2:	00 00 00 
-    17b5:	48 89 cf             	mov    %rcx,%rdi
-    17b8:	48 09 f7             	or     %rsi,%rdi
-    17bb:	48 8b 4d e0          	mov    -0x20(%rbp),%rcx
-    17bf:	48 89 c6             	mov    %rax,%rsi
-    17c2:	e8 26 e9 ff ff       	call   ed <UVM_Svc>
-                      Cap_Sig,
-                      Cap_Kmem,
-                      Vaddr);
-}
-    17c7:	c9                   	leave  
-    17c8:	c3                   	ret    
+     ed4:	48 b8 00 00 00 00 1d 	movabs $0x1d00000000,%rax
+     edb:	00 00 00 
+{
+     ede:	49 89 f0             	mov    %rsi,%r8
+     ee1:	48 89 d6             	mov    %rdx,%rsi
+    return UVM_CAP_OP(RME_SVC_SIG_CRT, Cap_Captbl,
+     ee4:	48 09 c7             	or     %rax,%rdi
+     ee7:	4c 89 c2             	mov    %r8,%rdx
+     eea:	e9 fe f1 ff ff       	jmp    ed <UVM_Svc>
+     eef:	90                   	nop
 
-00000000000017c9 <UVM_Sig_Del>:
+0000000000000ef0 <UVM_Sig_Del>:
               cid_t Cap_Sig - The capability to the signal. 1-Level.
 Output      : None.
 Return      : ret_t - If successful, 0; or an error code.
 ******************************************************************************/
 ret_t UVM_Sig_Del(cid_t Cap_Captbl, cid_t Cap_Sig)
 {
-    17c9:	f3 0f 1e fa          	endbr64 
-    17cd:	55                   	push   %rbp
-    17ce:	48 89 e5             	mov    %rsp,%rbp
-    17d1:	48 83 ec 10          	sub    $0x10,%rsp
-    17d5:	48 89 7d f8          	mov    %rdi,-0x8(%rbp)
-    17d9:	48 89 75 f0          	mov    %rsi,-0x10(%rbp)
+     ef0:	f3 0f 1e fa          	endbr64 
     return UVM_CAP_OP(RME_SVC_SIG_DEL, Cap_Captbl,
-    17dd:	48 8b 45 f0          	mov    -0x10(%rbp),%rax
-    17e1:	48 8b 55 f8          	mov    -0x8(%rbp),%rdx
-    17e5:	48 b9 00 00 00 00 1e 	movabs $0x1e00000000,%rcx
-    17ec:	00 00 00 
-    17ef:	48 09 ca             	or     %rcx,%rdx
-    17f2:	48 89 d7             	mov    %rdx,%rdi
-    17f5:	b9 00 00 00 00       	mov    $0x0,%ecx
-    17fa:	ba 00 00 00 00       	mov    $0x0,%edx
-    17ff:	48 89 c6             	mov    %rax,%rsi
-    1802:	e8 e6 e8 ff ff       	call   ed <UVM_Svc>
-                      Cap_Sig,
-                      0, 
-                      0);
-}
-    1807:	c9                   	leave  
-    1808:	c3                   	ret    
+     ef4:	48 b8 00 00 00 00 1e 	movabs $0x1e00000000,%rax
+     efb:	00 00 00 
+     efe:	31 c9                	xor    %ecx,%ecx
+     f00:	31 d2                	xor    %edx,%edx
+     f02:	48 09 c7             	or     %rax,%rdi
+     f05:	e9 e3 f1 ff ff       	jmp    ed <UVM_Svc>
+     f0a:	66 0f 1f 44 00 00    	nopw   0x0(%rax,%rax,1)
 
-0000000000001809 <UVM_Sig_Snd>:
+0000000000000f10 <UVM_Sig_Snd>:
 Input       : cid_t Cap_Sig - The capability to the signal. 2-Level.
 Output      : None.
 Return      : ret_t - If successful, 0, or an error code.
 ******************************************************************************/
 ret_t UVM_Sig_Snd(cid_t Cap_Sig)
 {
-    1809:	f3 0f 1e fa          	endbr64 
-    180d:	55                   	push   %rbp
-    180e:	48 89 e5             	mov    %rsp,%rbp
-    1811:	48 83 ec 10          	sub    $0x10,%rsp
-    1815:	48 89 7d f8          	mov    %rdi,-0x8(%rbp)
+     f10:	f3 0f 1e fa          	endbr64 
+     f14:	48 89 fe             	mov    %rdi,%rsi
     return UVM_CAP_OP(RME_SVC_SIG_SND, 0,
-    1819:	48 8b 45 f8          	mov    -0x8(%rbp),%rax
-    181d:	b9 00 00 00 00       	mov    $0x0,%ecx
-    1822:	ba 00 00 00 00       	mov    $0x0,%edx
-    1827:	48 89 c6             	mov    %rax,%rsi
-    182a:	48 b8 00 00 00 00 02 	movabs $0x200000000,%rax
-    1831:	00 00 00 
-    1834:	48 89 c7             	mov    %rax,%rdi
-    1837:	e8 b1 e8 ff ff       	call   ed <UVM_Svc>
-                      Cap_Sig,
-                      0, 
-                      0);
-}
-    183c:	c9                   	leave  
-    183d:	c3                   	ret    
+     f17:	31 c9                	xor    %ecx,%ecx
+     f19:	31 d2                	xor    %edx,%edx
+     f1b:	48 bf 00 00 00 00 02 	movabs $0x200000000,%rdi
+     f22:	00 00 00 
+     f25:	e9 c3 f1 ff ff       	jmp    ed <UVM_Svc>
+     f2a:	66 0f 1f 44 00 00    	nopw   0x0(%rax,%rax,1)
 
-000000000000183e <UVM_Sig_Rcv>:
+0000000000000f30 <UVM_Sig_Rcv>:
 Output      : None.
 Return      : ret_t - If successful, a non-negative number containing the number of signals
                       received will be returned; else an error code.
 ******************************************************************************/
 ret_t UVM_Sig_Rcv(cid_t Cap_Sig, ptr_t Option)
 {
-    183e:	f3 0f 1e fa          	endbr64 
-    1842:	55                   	push   %rbp
-    1843:	48 89 e5             	mov    %rsp,%rbp
-    1846:	48 83 ec 10          	sub    $0x10,%rsp
-    184a:	48 89 7d f8          	mov    %rdi,-0x8(%rbp)
-    184e:	48 89 75 f0          	mov    %rsi,-0x10(%rbp)
+     f30:	f3 0f 1e fa          	endbr64 
+     f34:	48 89 f2             	mov    %rsi,%rdx
     return UVM_CAP_OP(RME_SVC_SIG_RCV, 0,
-    1852:	48 8b 45 f8          	mov    -0x8(%rbp),%rax
-    1856:	48 8b 55 f0          	mov    -0x10(%rbp),%rdx
-    185a:	b9 00 00 00 00       	mov    $0x0,%ecx
-    185f:	48 89 c6             	mov    %rax,%rsi
-    1862:	48 b8 00 00 00 00 03 	movabs $0x300000000,%rax
-    1869:	00 00 00 
-    186c:	48 89 c7             	mov    %rax,%rdi
-    186f:	e8 79 e8 ff ff       	call   ed <UVM_Svc>
-                      Cap_Sig,
-                      Option, 
-                      0);
-}
-    1874:	c9                   	leave  
-    1875:	c3                   	ret    
+     f37:	31 c9                	xor    %ecx,%ecx
+     f39:	48 89 fe             	mov    %rdi,%rsi
+     f3c:	48 bf 00 00 00 00 03 	movabs $0x300000000,%rdi
+     f43:	00 00 00 
+     f46:	e9 a2 f1 ff ff       	jmp    ed <UVM_Svc>
+     f4b:	0f 1f 44 00 00       	nopl   0x0(%rax,%rax,1)
 
-0000000000001876 <UVM_Inv_Crt>:
+0000000000000f50 <UVM_Inv_Crt>:
 Output      : None.
 Return      : ret_t - If successful, 0; or an error code.
 ******************************************************************************/
 ret_t UVM_Inv_Crt(cid_t Cap_Captbl, cid_t Cap_Kmem, 
                   cid_t Cap_Inv, cid_t Cap_Proc, ptr_t Vaddr)
 {
-    1876:	f3 0f 1e fa          	endbr64 
-    187a:	55                   	push   %rbp
-    187b:	48 89 e5             	mov    %rsp,%rbp
-    187e:	48 83 ec 30          	sub    $0x30,%rsp
-    1882:	48 89 7d f8          	mov    %rdi,-0x8(%rbp)
-    1886:	48 89 75 f0          	mov    %rsi,-0x10(%rbp)
-    188a:	48 89 55 e8          	mov    %rdx,-0x18(%rbp)
-    188e:	48 89 4d e0          	mov    %rcx,-0x20(%rbp)
-    1892:	4c 89 45 d8          	mov    %r8,-0x28(%rbp)
+     f50:	f3 0f 1e fa          	endbr64 
+     f54:	49 89 d1             	mov    %rdx,%r9
     return UVM_CAP_OP(RME_SVC_INV_CRT, Cap_Captbl,
-    1896:	48 8b 45 e0          	mov    -0x20(%rbp),%rax
-    189a:	48 8b 55 f0          	mov    -0x10(%rbp),%rdx
-    189e:	48 89 d1             	mov    %rdx,%rcx
-    18a1:	48 c1 e1 20          	shl    $0x20,%rcx
-    18a5:	48 8b 55 e8          	mov    -0x18(%rbp),%rdx
-    18a9:	89 d2                	mov    %edx,%edx
-    18ab:	48 89 ce             	mov    %rcx,%rsi
-    18ae:	48 09 d6             	or     %rdx,%rsi
-    18b1:	48 8b 55 f8          	mov    -0x8(%rbp),%rdx
-    18b5:	48 b9 00 00 00 00 1f 	movabs $0x1f00000000,%rcx
-    18bc:	00 00 00 
-    18bf:	48 89 d7             	mov    %rdx,%rdi
-    18c2:	48 09 cf             	or     %rcx,%rdi
-    18c5:	48 8b 55 d8          	mov    -0x28(%rbp),%rdx
-    18c9:	48 89 d1             	mov    %rdx,%rcx
-    18cc:	48 89 c2             	mov    %rax,%rdx
-    18cf:	e8 19 e8 ff ff       	call   ed <UVM_Svc>
-                      UVM_PARAM_D1(Cap_Kmem)|UVM_PARAM_D0(Cap_Inv),
-                      Cap_Proc, 
-                      Vaddr);
-}
-    18d4:	c9                   	leave  
-    18d5:	c3                   	ret    
+     f57:	48 c1 e6 20          	shl    $0x20,%rsi
+{
+     f5b:	48 89 ca             	mov    %rcx,%rdx
+    return UVM_CAP_OP(RME_SVC_INV_CRT, Cap_Captbl,
+     f5e:	48 b8 00 00 00 00 1f 	movabs $0x1f00000000,%rax
+     f65:	00 00 00 
+     f68:	45 89 c9             	mov    %r9d,%r9d
+{
+     f6b:	4c 89 c1             	mov    %r8,%rcx
+    return UVM_CAP_OP(RME_SVC_INV_CRT, Cap_Captbl,
+     f6e:	48 09 c7             	or     %rax,%rdi
+     f71:	4c 09 ce             	or     %r9,%rsi
+     f74:	e9 74 f1 ff ff       	jmp    ed <UVM_Svc>
+     f79:	0f 1f 80 00 00 00 00 	nopl   0x0(%rax)
 
-00000000000018d6 <UVM_Inv_Del>:
+0000000000000f80 <UVM_Inv_Del>:
               cid_t Cap_Inv - The capability to the invocation stub. 1-Level.
 Output      : None.
 Return      : ret_t - If successful, 0; or an error code.
 ******************************************************************************/
 ret_t UVM_Inv_Del(cid_t Cap_Captbl, cid_t Cap_Inv)
 {
-    18d6:	f3 0f 1e fa          	endbr64 
-    18da:	55                   	push   %rbp
-    18db:	48 89 e5             	mov    %rsp,%rbp
-    18de:	48 83 ec 10          	sub    $0x10,%rsp
-    18e2:	48 89 7d f8          	mov    %rdi,-0x8(%rbp)
-    18e6:	48 89 75 f0          	mov    %rsi,-0x10(%rbp)
+     f80:	f3 0f 1e fa          	endbr64 
     return UVM_CAP_OP(RME_SVC_INV_DEL, Cap_Captbl,
-    18ea:	48 8b 45 f0          	mov    -0x10(%rbp),%rax
-    18ee:	48 8b 55 f8          	mov    -0x8(%rbp),%rdx
-    18f2:	48 b9 00 00 00 00 20 	movabs $0x2000000000,%rcx
-    18f9:	00 00 00 
-    18fc:	48 09 ca             	or     %rcx,%rdx
-    18ff:	48 89 d7             	mov    %rdx,%rdi
-    1902:	b9 00 00 00 00       	mov    $0x0,%ecx
-    1907:	ba 00 00 00 00       	mov    $0x0,%edx
-    190c:	48 89 c6             	mov    %rax,%rsi
-    190f:	e8 d9 e7 ff ff       	call   ed <UVM_Svc>
-                      Cap_Inv,
-                      0, 
-                      0);
-}
-    1914:	c9                   	leave  
-    1915:	c3                   	ret    
+     f84:	48 0f ba ef 25       	bts    $0x25,%rdi
+     f89:	31 c9                	xor    %ecx,%ecx
+     f8b:	31 d2                	xor    %edx,%edx
+     f8d:	e9 5b f1 ff ff       	jmp    ed <UVM_Svc>
+     f92:	66 66 2e 0f 1f 84 00 	data16 cs nopw 0x0(%rax,%rax,1)
+     f99:	00 00 00 00 
+     f9d:	0f 1f 00             	nopl   (%rax)
 
-0000000000001916 <UVM_Inv_Set>:
+0000000000000fa0 <UVM_Inv_Set>:
                                      immediately, or we wait for fault handling?
 Output      : None.
 Return      : ret_t - If successful, 0; or an error code.
 ******************************************************************************/
 ret_t UVM_Inv_Set(cid_t Cap_Inv, ptr_t Entry, ptr_t Stack, ptr_t Fault_Ret_Flag)
 {
-    1916:	f3 0f 1e fa          	endbr64 
-    191a:	55                   	push   %rbp
-    191b:	48 89 e5             	mov    %rsp,%rbp
-    191e:	48 83 ec 20          	sub    $0x20,%rsp
-    1922:	48 89 7d f8          	mov    %rdi,-0x8(%rbp)
-    1926:	48 89 75 f0          	mov    %rsi,-0x10(%rbp)
-    192a:	48 89 55 e8          	mov    %rdx,-0x18(%rbp)
-    192e:	48 89 4d e0          	mov    %rcx,-0x20(%rbp)
+     fa0:	f3 0f 1e fa          	endbr64 
     return UVM_CAP_OP(RME_SVC_INV_SET, 0,
-    1932:	48 8b 45 e0          	mov    -0x20(%rbp),%rax
-    1936:	48 c1 e0 20          	shl    $0x20,%rax
-    193a:	48 89 c2             	mov    %rax,%rdx
-    193d:	48 8b 45 f8          	mov    -0x8(%rbp),%rax
-    1941:	89 c0                	mov    %eax,%eax
-    1943:	48 89 d6             	mov    %rdx,%rsi
-    1946:	48 09 c6             	or     %rax,%rsi
-    1949:	48 8b 55 e8          	mov    -0x18(%rbp),%rdx
-    194d:	48 8b 45 f0          	mov    -0x10(%rbp),%rax
-    1951:	48 89 d1             	mov    %rdx,%rcx
-    1954:	48 89 c2             	mov    %rax,%rdx
-    1957:	48 b8 00 00 00 00 21 	movabs $0x2100000000,%rax
-    195e:	00 00 00 
-    1961:	48 89 c7             	mov    %rax,%rdi
-    1964:	e8 84 e7 ff ff       	call   ed <UVM_Svc>
-                      UVM_PARAM_D1(Fault_Ret_Flag)|UVM_PARAM_D0(Cap_Inv),
-                      Entry, 
-                      Stack);
-}
-    1969:	c9                   	leave  
-    196a:	c3                   	ret    
+     fa4:	48 c1 e1 20          	shl    $0x20,%rcx
+{
+     fa8:	49 89 f0             	mov    %rsi,%r8
+    return UVM_CAP_OP(RME_SVC_INV_SET, 0,
+     fab:	89 ff                	mov    %edi,%edi
+     fad:	48 89 ce             	mov    %rcx,%rsi
+     fb0:	48 89 d1             	mov    %rdx,%rcx
+     fb3:	4c 89 c2             	mov    %r8,%rdx
+     fb6:	48 09 fe             	or     %rdi,%rsi
+     fb9:	48 bf 00 00 00 00 21 	movabs $0x2100000000,%rdi
+     fc0:	00 00 00 
+     fc3:	e9 25 f1 ff ff       	jmp    ed <UVM_Svc>
+     fc8:	0f 1f 84 00 00 00 00 	nopl   0x0(%rax,%rax,1)
+     fcf:	00 
 
-000000000000196b <UVM_Putchar>:
+0000000000000fd0 <UVM_Putchar>:
 Input       : char Char - The character to print.
 Output      : None.
 Return      : ptr_t - Always 0.
 ******************************************************************************/
 ptr_t UVM_Putchar(char Char)
 {
-    196b:	f3 0f 1e fa          	endbr64 
-    196f:	55                   	push   %rbp
-    1970:	48 89 e5             	mov    %rsp,%rbp
-    1973:	48 83 ec 10          	sub    $0x10,%rsp
-    1977:	89 f8                	mov    %edi,%eax
-    1979:	88 45 fc             	mov    %al,-0x4(%rbp)
+     fd0:	f3 0f 1e fa          	endbr64 
+     fd4:	53                   	push   %rbx
+     fd5:	89 fb                	mov    %edi,%ebx
     /* Wait until we have transmitted */
     while((__UVM_X64_In(UVM_X64_COM1+5)&0x20)==0);
-    197c:	90                   	nop
-    197d:	bf fd 03 00 00       	mov    $0x3fd,%edi
-    1982:	e8 7e e6 ff ff       	call   5 <__UVM_X64_In>
-    1987:	83 e0 20             	and    $0x20,%eax
-    198a:	48 85 c0             	test   %rax,%rax
-    198d:	74 ee                	je     197d <UVM_Putchar+0x12>
+     fd7:	66 0f 1f 84 00 00 00 	nopw   0x0(%rax,%rax,1)
+     fde:	00 00 
+     fe0:	bf fd 03 00 00       	mov    $0x3fd,%edi
+     fe5:	e8 1b f0 ff ff       	call   5 <__UVM_X64_In>
+     fea:	a8 20                	test   $0x20,%al
+     fec:	74 f2                	je     fe0 <UVM_Putchar+0x10>
 
     __UVM_X64_Out(UVM_X64_COM1, Char);
-    198f:	48 0f be 45 fc       	movsbq -0x4(%rbp),%rax
-    1994:	48 89 c6             	mov    %rax,%rsi
-    1997:	bf f8 03 00 00       	mov    $0x3f8,%edi
-    199c:	e8 6e e6 ff ff       	call   f <__UVM_X64_Out>
+     fee:	48 0f be f3          	movsbq %bl,%rsi
+     ff2:	bf f8 03 00 00       	mov    $0x3f8,%edi
+     ff7:	e8 13 f0 ff ff       	call   f <__UVM_X64_Out>
 
     return 0;
-    19a1:	b8 00 00 00 00       	mov    $0x0,%eax
 }
-    19a6:	c9                   	leave  
-    19a7:	c3                   	ret    
+     ffc:	31 c0                	xor    %eax,%eax
+     ffe:	5b                   	pop    %rbx
+     fff:	c3                   	ret    
 
-00000000000019a8 <_UVM_Stack_Init>:
+0000000000001000 <_UVM_Stack_Init>:
 Output      : None.
 Return      : ptr_t - The actual stack address to use for system call.
 ******************************************************************************/
 ptr_t _UVM_Stack_Init(ptr_t Stack, ptr_t Size, ptr_t Stub, ptr_t Entry,
                       ptr_t Param1, ptr_t Param2, ptr_t Param3, ptr_t Param4)
 {
-    19a8:	f3 0f 1e fa          	endbr64 
-    19ac:	55                   	push   %rbp
-    19ad:	48 89 e5             	mov    %rsp,%rbp
-    19b0:	48 83 ec 40          	sub    $0x40,%rsp
-    19b4:	48 89 7d e8          	mov    %rdi,-0x18(%rbp)
-    19b8:	48 89 75 e0          	mov    %rsi,-0x20(%rbp)
-    19bc:	48 89 55 d8          	mov    %rdx,-0x28(%rbp)
-    19c0:	48 89 4d d0          	mov    %rcx,-0x30(%rbp)
-    19c4:	4c 89 45 c8          	mov    %r8,-0x38(%rbp)
-    19c8:	4c 89 4d c0          	mov    %r9,-0x40(%rbp)
+    1000:	f3 0f 1e fa          	endbr64 
 	ptr_t* Stack_Ptr;
 
     Stack_Ptr=(ptr_t*)(Stack+Size-UVM_STACK_SAFE_SIZE*sizeof(ptr_t));
-    19cc:	48 8b 55 e8          	mov    -0x18(%rbp),%rdx
-    19d0:	48 8b 45 e0          	mov    -0x20(%rbp),%rax
-    19d4:	48 01 d0             	add    %rdx,%rax
-    19d7:	48 2d 00 01 00 00    	sub    $0x100,%rax
-    19dd:	48 89 45 f8          	mov    %rax,-0x8(%rbp)
     Stack_Ptr[0]=Param1;
-    19e1:	48 8b 45 f8          	mov    -0x8(%rbp),%rax
-    19e5:	48 8b 55 c8          	mov    -0x38(%rbp),%rdx
-    19e9:	48 89 10             	mov    %rdx,(%rax)
+    1004:	66 49 0f 6e c0       	movq   %r8,%xmm0
+    1009:	66 49 0f 6e c9       	movq   %r9,%xmm1
+    Stack_Ptr=(ptr_t*)(Stack+Size-UVM_STACK_SAFE_SIZE*sizeof(ptr_t));
+    100e:	48 8d 84 37 00 ff ff 	lea    -0x100(%rdi,%rsi,1),%rax
+    1015:	ff 
+    Stack_Ptr[0]=Param1;
+    1016:	66 0f 6c c1          	punpcklqdq %xmm1,%xmm0
     Stack_Ptr[1]=Param2;
-    19ec:	48 8b 45 f8          	mov    -0x8(%rbp),%rax
-    19f0:	48 8d 50 08          	lea    0x8(%rax),%rdx
-    19f4:	48 8b 45 c0          	mov    -0x40(%rbp),%rax
-    19f8:	48 89 02             	mov    %rax,(%rdx)
     Stack_Ptr[2]=Param3;
-    19fb:	48 8b 45 f8          	mov    -0x8(%rbp),%rax
-    19ff:	48 8d 50 10          	lea    0x10(%rax),%rdx
-    1a03:	48 8b 45 10          	mov    0x10(%rbp),%rax
-    1a07:	48 89 02             	mov    %rax,(%rdx)
     Stack_Ptr[3]=Param4;
-    1a0a:	48 8b 45 f8          	mov    -0x8(%rbp),%rax
-    1a0e:	48 8d 50 18          	lea    0x18(%rax),%rdx
-    1a12:	48 8b 45 18          	mov    0x18(%rbp),%rax
-    1a16:	48 89 02             	mov    %rax,(%rdx)
     Stack_Ptr[4]=Entry;
-    1a19:	48 8b 45 f8          	mov    -0x8(%rbp),%rax
-    1a1d:	48 8d 50 20          	lea    0x20(%rax),%rdx
-    1a21:	48 8b 45 d0          	mov    -0x30(%rbp),%rax
-    1a25:	48 89 02             	mov    %rax,(%rdx)
+    101a:	48 89 48 20          	mov    %rcx,0x20(%rax)
+    Stack_Ptr[0]=Param1;
+    101e:	0f 11 00             	movups %xmm0,(%rax)
+    1021:	f3 0f 7e 44 24 08    	movq   0x8(%rsp),%xmm0
+    1027:	0f 16 44 24 10       	movhps 0x10(%rsp),%xmm0
+    102c:	0f 11 40 10          	movups %xmm0,0x10(%rax)
 
     return (ptr_t)Stack_Ptr;
-    1a28:	48 8b 45 f8          	mov    -0x8(%rbp),%rax
 }
-    1a2c:	c9                   	leave  
-    1a2d:	c3                   	ret    
+    1030:	c3                   	ret    
+    1031:	66 66 2e 0f 1f 84 00 	data16 cs nopw 0x0(%rax,%rax,1)
+    1038:	00 00 00 00 
+    103c:	0f 1f 40 00          	nopl   0x0(%rax)
 
-0000000000001a2e <_UVM_Idle>:
+0000000000001040 <_UVM_Idle>:
 Input       : None.
 Output      : None.
 Return      : None.
 ******************************************************************************/
 void _UVM_Idle(void)
 {
-    1a2e:	f3 0f 1e fa          	endbr64 
-    1a32:	55                   	push   %rbp
-    1a33:	48 89 e5             	mov    %rsp,%rbp
+    1040:	f3 0f 1e fa          	endbr64 
     /* Do nothing. In the future we may call a kernel function to put us to sleep */
 }
-    1a36:	90                   	nop
-    1a37:	5d                   	pop    %rbp
-    1a38:	c3                   	ret    
+    1044:	c3                   	ret    

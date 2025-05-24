@@ -26,24 +26,19 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="6325f417-13e6-4af5-b8d7-2d5af7a23565" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/../Include/Platform/X64/rme_platform_x64.h" beforeDir="false" afterPath="$PROJECT_DIR$/../Include/Platform/X64/rme_platform_x64.h" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/editor.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/editor.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Include/Platform/X64/uvmlib_x64.ld" beforeDir="false" afterPath="$PROJECT_DIR$/Include/Platform/X64/uvmlib_x64.ld" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Init/init.c" beforeDir="false" afterPath="$PROJECT_DIR$/Init/init.c" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Makefile" beforeDir="false" afterPath="$PROJECT_DIR$/Makefile" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Object/UVM" beforeDir="false" afterPath="$PROJECT_DIR$/Object/UVM" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/UVM.asm" beforeDir="false" afterPath="$PROJECT_DIR$/UVM.asm" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/UVM.bin" beforeDir="false" afterPath="$PROJECT_DIR$/UVM.bin" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/UVM.c" beforeDir="false" afterPath="$PROJECT_DIR$/UVM.c" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Project/GCC-X64/.idea/editor.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../Project/GCC-X64/.idea/editor.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../Project/GCC-X64/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../Project/GCC-X64/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../Project/GCC-X64/Object/RME" beforeDir="false" afterPath="$PROJECT_DIR$/../Project/GCC-X64/Object/RME" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../Project/GCC-X64/RME.asm" beforeDir="false" afterPath="$PROJECT_DIR$/../Project/GCC-X64/RME.asm" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../Project/GCC-X64/RME.iso" beforeDir="false" afterPath="$PROJECT_DIR$/../Project/GCC-X64/RME.iso" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../Project/GCC-X64/UVM.c" beforeDir="false" afterPath="$PROJECT_DIR$/../Project/GCC-X64/UVM.c" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../Project/GCC-X64/isofiles/boot/RME" beforeDir="false" afterPath="$PROJECT_DIR$/../Project/GCC-X64/isofiles/boot/RME" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Source/Kernel/rme_kernel.c" beforeDir="false" afterPath="$PROJECT_DIR$/../Source/Kernel/rme_kernel.c" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Source/Platform/X64/rme_platform_x64.c" beforeDir="false" afterPath="$PROJECT_DIR$/../Source/Platform/X64/rme_platform_x64.c" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -161,7 +156,7 @@
       <updated>1747199499124</updated>
       <workItem from="1747199500559" duration="1372000" />
       <workItem from="1747203409966" duration="10853000" />
-      <workItem from="1747823552945" duration="13868000" />
+      <workItem from="1747823552945" duration="17839000" />
     </task>
     <servers />
   </component>
