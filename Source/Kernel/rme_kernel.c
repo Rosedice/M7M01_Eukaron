@@ -6324,7 +6324,6 @@ static rme_ret_t _RME_Thd_Time_Xfer(struct RME_Cap_Cpt* Cpt,
     }
     
     Thd_Dst=RME_CAP_GETOBJ(Thd_Dst_Op,struct RME_Thd_Struct*);
-    
     if(Thd_Dst->Sched.Local!=Local)
     {
         RME_COV_MARKER();
@@ -6513,7 +6512,6 @@ static rme_ret_t _RME_Thd_Time_Xfer(struct RME_Cap_Cpt* Cpt,
     /* All possible kernel send (scheduler notifications) done,
      * now pick the highest priority thread to run */
     _RME_Kern_High(Reg,Local);
-
     return 0;
 }
 /* End Function:_RME_Thd_Time_Xfer *******************************************/

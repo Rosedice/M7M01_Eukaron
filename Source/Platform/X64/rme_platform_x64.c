@@ -135,8 +135,8 @@ struct RME_X64_ACPI_RDSP_Desc* __RME_X64_RDSP_Scan(rme_ptr_t Base, rme_ptr_t Len
 {
     rme_u8_t* Pos;
     rme_cnt_t Count;
-    rme_ptr_t Checksum;
     rme_cnt_t Check_Cnt;
+    volatile rme_ptr_t Checksum;
     Pos=(rme_u8_t*)RME_X64_PA2VA(Base);
     /* Search a word at a time */
     for(Count=0;Count<=Len-sizeof(struct RME_X64_ACPI_RDSP_Desc);Count+=16)
@@ -149,7 +149,7 @@ struct RME_X64_ACPI_RDSP_Desc* __RME_X64_RDSP_Scan(rme_ptr_t Base, rme_ptr_t Len
             /* 20 is the length of the first part of the table */
             for(Check_Cnt=0;Check_Cnt<20;Check_Cnt++)
             {
-                Checksum+=( rme_ptr_t)Pos[Count+Check_Cnt];
+                Checksum+=(rme_ptr_t)Pos[Count+Check_Cnt];
             }
             /* Is the checksum good? */
             if((Checksum&0xFF)==0)
@@ -373,7 +373,6 @@ rme_ret_t __RME_X64_ACPI_Init(void)
     struct RME_X64_ACPI_RSDT_Hdr* RSDT=RME_NULL;
     struct RME_X64_ACPI_MADT_Hdr* MADT=RME_NULL;
     struct RME_X64_ACPI_Desc_Hdr* Header=RME_NULL;
-
     /* Try to find RDSP */
     RDSP=__RME_X64_RDSP_Find();
     RME_DBG_S("\r\nRDSP address: ");
@@ -383,7 +382,6 @@ rme_ret_t __RME_X64_ACPI_Init(void)
     RME_DBG_S("\r\nRSDT address: ");
     RME_DBG_H((rme_ptr_t)RSDT);
     Table_Num=(RSDT->Header.Length-sizeof(struct RME_X64_ACPI_RSDT_Hdr))>>2;
-
     for(Count=0;Count<Table_Num;Count++)
     {
         /* See what did we find */
@@ -589,7 +587,6 @@ void __RME_X64_CPU_Local_Init(void)
     /* Clean up the whole IDT */
     for(Count=0;Count<256;Count++)
         IDT_Table[Count].Type_Attr=0;
-
     /* Install the vectors - only the INT3 is trap (for debugging), all other ones are interrupt */
     RME_X64_SET_IDT(IDT_Table, RME_X64_FAULT_DE, RME_X64_IDT_VECT, __RME_X64_FAULT_DE_Handler);
     RME_X64_SET_IDT(IDT_Table, RME_X64_TRAP_DB, RME_X64_IDT_VECT, __RME_X64_TRAP_DB_Handler);
@@ -611,7 +608,6 @@ void __RME_X64_CPU_Local_Init(void)
     RME_X64_SET_IDT(IDT_Table, RME_X64_ABORT_MC, RME_X64_IDT_VECT, __RME_X64_ABORT_MC_Handler);
     RME_X64_SET_IDT(IDT_Table, RME_X64_FAULT_XM, RME_X64_IDT_VECT, __RME_X64_FAULT_XM_Handler);
     RME_X64_SET_IDT(IDT_Table, RME_X64_FAULT_VE, RME_X64_IDT_VECT, __RME_X64_FAULT_VE_Handler);
-
     /* Install user handlers */
     RME_X64_USER_IDT(IDT_Table, 32); RME_X64_USER_IDT(IDT_Table, 33);
     RME_X64_USER_IDT(IDT_Table, 34); RME_X64_USER_IDT(IDT_Table, 35);
@@ -764,10 +760,8 @@ void __RME_X64_CPU_Local_Init(void)
     Desc[3]=((rme_ptr_t)IDT_Table)>>32;
     Desc[4]=((rme_ptr_t)IDT_Table)>>48;
     __RME_X64_IDT_Load((rme_ptr_t*)Desc);
-
     GDT_Table=(rme_ptr_t*)(RME_X64_CPU_LOCAL_BASE(RME_X64_CPU_Cnt)+RME_POW2(RME_PGT_SIZE_4K));
     TSS_Table=(rme_ptr_t)(RME_X64_CPU_LOCAL_BASE(RME_X64_CPU_Cnt)+RME_POW2(RME_PGT_SIZE_4K)+16*sizeof(rme_ptr_t));
-
     /* Dummy entry */
     GDT_Table[0]=0x0000000000000000ULL;
     /* Kernel code, DPL=0, R/X */
@@ -783,7 +777,6 @@ void __RME_X64_CPU_Local_Init(void)
     /* TSS */
     GDT_Table[6]=(0x0067)|((TSS_Table&0xFFFFFFULL)<<16)|(0x0089ULL<<40)|(((TSS_Table>>24)&0xFFULL)<<56);
     GDT_Table[7]=(TSS_Table>>32);
-
     /* Load the GDT */
     Desc[0]=8*sizeof(rme_ptr_t)-1;
     Desc[1]=(rme_ptr_t)GDT_Table;
@@ -797,7 +790,6 @@ void __RME_X64_CPU_Local_Init(void)
     /* IO Map Base = End of TSS (What's this?) */
     ((rme_u32_t*)TSS_Table)[16]=0x00680000;
     __RME_X64_TSS_Load(6*sizeof(rme_ptr_t));
-
     /* Initialize the RME per-cpu data here */
     CPU_Local=(struct RME_CPU_Local*)(RME_X64_CPU_LOCAL_BASE(RME_X64_CPU_Cnt)+
     		                          RME_POW2(RME_PGT_SIZE_4K)+
@@ -1121,11 +1113,11 @@ Return      : rme_ptr_t - If successful, 0; else RME_ERR_HAL_FAIL.
 ******************************************************************************/
 rme_ptr_t __RME_Pgt_Kom_Init(void)
 {
-    rme_cnt_t PML4_Cnt;
-    rme_cnt_t PDP_Cnt;
-    rme_cnt_t PDE_Cnt;
-    rme_cnt_t Addr_Cnt;
-    struct __RME_X64_Mem* Mem;
+    volatile rme_cnt_t PML4_Cnt;
+    volatile rme_cnt_t PDP_Cnt;
+    volatile rme_cnt_t PDE_Cnt;
+    volatile rme_cnt_t Addr_Cnt;
+    volatile struct __RME_X64_Mem* Mem;
 
     /* Now initialize the kernel object allocation table */
     _RME_Kot_Init(RME_X64_Layout.Kot_Size/sizeof(rme_ptr_t));

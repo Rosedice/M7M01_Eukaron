@@ -277,12 +277,10 @@ Boot_High_64:
     /* Pass the physical address of RSI to it */
     MOV                 %RSI,%RDI
     JMP                 main
-    JMP                 .
 Boot_SMP_64:
     MOV                 $0x7000,%RAX
     MOV                 -16(%RAX),%RSP
     JMP                 __RME_SMP_Low_Level_Init
-    JMP                 .
 
     /* The initial gdt. Later we will have one GDT per CPU */
     .align              16

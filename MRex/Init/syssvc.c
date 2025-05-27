@@ -786,9 +786,9 @@ Return      : ret_t - If successful, 0; or an error code.
 ******************************************************************************/
 ret_t UVM_Thd_Sched_Prio(cid_t Cap_Thd, ptr_t Prio)
 {
-    return UVM_CAP_OP(RME_SVC_THD_SCHED_PRIO, 0,
-                      Cap_Thd,
-                      Prio, 
+    return UVM_CAP_OP(RME_SVC_THD_SCHED_PRIO, 1,
+                      UVM_PARAM_D1(Prio)|UVM_PARAM_D0(Cap_Thd),
+                      0,
                       0);
 }
 /* End Function:UVM_Thd_Sched_Prio *******************************************/

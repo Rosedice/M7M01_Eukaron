@@ -3,7 +3,7 @@ TARGET=RME
 CPU=-m64
 
 CC=gcc
-CFLAGS=-O0 -mcmodel=kernel -static -fmessage-length=0 -ffreestanding -fno-pic -fno-builtin -fno-strict-aliasing -fno-common -nostdlib -fno-stack-protector -mtls-direct-seg-refs -mno-red-zone
+CFLAGS=-O2 -mcmodel=kernel -static -fmessage-length=0 -ffreestanding -fno-pic -fno-builtin -fno-strict-aliasing -fno-common -nostdlib -fno-stack-protector -mtls-direct-seg-refs -mno-red-zone
 WFLAGS=-Wall
 DFLAGS=-g3
 LDFLAGS=-T ../../Include/Platform/X64/rme_platform_x64.ld -static -ffreestanding -fno-pic -fno-builtin -fno-strict-aliasing -fno-common -nostdlib -Wl,--build-id=none -fno-stack-protector -z noexecstack
