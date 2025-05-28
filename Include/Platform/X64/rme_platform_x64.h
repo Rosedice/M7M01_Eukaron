@@ -139,6 +139,8 @@ typedef rme_s64_t rme_ret_t;
 #define RME_KOT_VA_BASE_ROUND(x)				RME_ROUND_UP(x,12)
 #define RME_CAPID_2L                        (((rme_cid_t)1)<<(sizeof(rme_ptr_t)*2-1))
 #define RME_CAPID(X,Y)                      (((X)<<(sizeof(rme_ptr_t)*2))|(Y)|RME_CAPID_2L)
+#define RME_X64_VGA_BASE						((volatile rme_u16_t*)(RME_X64_PA2VA(0xB8000)))
+
 /* Atomic instructions - The oficial release replaces all these with inline
  * assembly to boost speed. Sometimes this can harm compiler compatibility. If
  * you need normal assembly version, consider uncommenting the macro below. */
@@ -985,6 +987,8 @@ static volatile rme_ptr_t RME_X64_LAPIC_Addr;
 static volatile struct RME_X64_Features RME_X64_Feature;
 /* The PCID counter */
 static volatile rme_ptr_t RME_X64_PCID_Inc;
+/* The VGA buffer pointer */
+static volatile rme_u16_t* vga_buffer;
 
 /* Translate the flags into X64 specific ones - the STATIC bit will never be
  * set thus no need to consider about it here. The flag bits order is shown below:

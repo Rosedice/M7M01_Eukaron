@@ -423,7 +423,7 @@ void TEST_THD_FUNC4(void)
      1a4:	48 83 eb 01          	sub    $0x1,%rbx
      1a8:	75 be                	jne    168 <TEST_THD_FUNC1+0x18>
     UVM_LOG_S("\r\nThread Switching takes clock cycles:");
-     1aa:	bf a8 1f 00 00       	mov    $0x1fa8,%edi
+     1aa:	bf c8 1f 00 00       	mov    $0x1fc8,%edi
      1af:	e8 5c 17 00 00       	call   1910 <UVM_Print_String>
     UVM_LOG_I(sum/10000);
      1b4:	48 ba 4b 59 86 38 d6 	movabs $0x346dc5d63886594b,%rdx
@@ -476,7 +476,7 @@ void TEST_THD_FUNC4(void)
      244:	48 83 eb 01          	sub    $0x1,%rbx
      248:	75 be                	jne    208 <TEST_THD_FUNC3+0x18>
     UVM_LOG_S("\r\nCross-process thread Switching takes clock cycles:");
-     24a:	bf d0 1f 00 00       	mov    $0x1fd0,%edi
+     24a:	bf f0 1f 00 00       	mov    $0x1ff0,%edi
      24f:	e8 bc 16 00 00       	call   1910 <UVM_Print_String>
     UVM_LOG_I(sum/10000);
      254:	48 ba 4b 59 86 38 d6 	movabs $0x346dc5d63886594b,%rdx
@@ -540,29 +540,29 @@ void TEST_SIG_FUNC1(void)
      2ed:	e8 9e 1b 00 00       	call   1e90 <UVM_Sig_Rcv>
      2f2:	48 85 c0             	test   %rax,%rax
      2f5:	75 b9                	jne    2b0 <TEST_SIG_FUNC1+0x20>
-     2f7:	bf 08 20 00 00       	mov    $0x2008,%edi
+     2f7:	bf 28 20 00 00       	mov    $0x2028,%edi
      2fc:	e8 0f 16 00 00       	call   1910 <UVM_Print_String>
-     301:	bf 08 22 00 00       	mov    $0x2208,%edi
+     301:	bf 28 22 00 00       	mov    $0x2228,%edi
      306:	e8 05 16 00 00       	call   1910 <UVM_Print_String>
-     30b:	bf 14 22 00 00       	mov    $0x2214,%edi
+     30b:	bf 34 22 00 00       	mov    $0x2234,%edi
      310:	e8 fb 15 00 00       	call   1910 <UVM_Print_String>
      315:	bf 9b 00 00 00       	mov    $0x9b,%edi
      31a:	e8 c1 13 00 00       	call   16e0 <UVM_Print_Int>
-     31f:	bf 1c 22 00 00       	mov    $0x221c,%edi
+     31f:	bf 3c 22 00 00       	mov    $0x223c,%edi
      324:	e8 e7 15 00 00       	call   1910 <UVM_Print_String>
-     329:	bf 1f 22 00 00       	mov    $0x221f,%edi
+     329:	bf 3f 22 00 00       	mov    $0x223f,%edi
      32e:	e8 dd 15 00 00       	call   1910 <UVM_Print_String>
-     333:	bf 2b 22 00 00       	mov    $0x222b,%edi
+     333:	bf 4b 22 00 00       	mov    $0x224b,%edi
      338:	e8 d3 15 00 00       	call   1910 <UVM_Print_String>
-     33d:	bf 2e 22 00 00       	mov    $0x222e,%edi
+     33d:	bf 4e 22 00 00       	mov    $0x224e,%edi
      342:	e8 c9 15 00 00       	call   1910 <UVM_Print_String>
-     347:	bf 1c 22 00 00       	mov    $0x221c,%edi
+     347:	bf 3c 22 00 00       	mov    $0x223c,%edi
      34c:	e8 bf 15 00 00       	call   1910 <UVM_Print_String>
      351:	eb fe                	jmp    351 <TEST_SIG_FUNC1+0xc1>
      353:	0f 1f 44 00 00       	nopl   0x0(%rax,%rax,1)
     }
     UVM_LOG_S("\r\nSignal sending-receiving takes clock cycles:");
-     358:	bf 40 20 00 00       	mov    $0x2040,%edi
+     358:	bf 60 20 00 00       	mov    $0x2060,%edi
      35d:	e8 ae 15 00 00       	call   1910 <UVM_Print_String>
     UVM_LOG_I(sum/10000);
      362:	48 ba 4b 59 86 38 d6 	movabs $0x346dc5d63886594b,%rdx
@@ -582,23 +582,23 @@ void TEST_SIG_FUNC1(void)
      393:	5b                   	pop    %rbx
      394:	c3                   	ret    
     UVM_ASSERT(UVM_Sig_Rcv(TEST_SIG1,RME_RCV_BS));
-     395:	bf 08 20 00 00       	mov    $0x2008,%edi
+     395:	bf 28 20 00 00       	mov    $0x2028,%edi
      39a:	e8 71 15 00 00       	call   1910 <UVM_Print_String>
-     39f:	bf 08 22 00 00       	mov    $0x2208,%edi
+     39f:	bf 28 22 00 00       	mov    $0x2228,%edi
      3a4:	e8 67 15 00 00       	call   1910 <UVM_Print_String>
-     3a9:	bf 14 22 00 00       	mov    $0x2214,%edi
+     3a9:	bf 34 22 00 00       	mov    $0x2234,%edi
      3ae:	e8 5d 15 00 00       	call   1910 <UVM_Print_String>
      3b3:	bf a1 00 00 00       	mov    $0xa1,%edi
      3b8:	e8 23 13 00 00       	call   16e0 <UVM_Print_Int>
-     3bd:	bf 1c 22 00 00       	mov    $0x221c,%edi
+     3bd:	bf 3c 22 00 00       	mov    $0x223c,%edi
      3c2:	e8 49 15 00 00       	call   1910 <UVM_Print_String>
-     3c7:	bf 1f 22 00 00       	mov    $0x221f,%edi
+     3c7:	bf 3f 22 00 00       	mov    $0x223f,%edi
      3cc:	e8 3f 15 00 00       	call   1910 <UVM_Print_String>
-     3d1:	bf 2b 22 00 00       	mov    $0x222b,%edi
+     3d1:	bf 4b 22 00 00       	mov    $0x224b,%edi
      3d6:	e8 35 15 00 00       	call   1910 <UVM_Print_String>
-     3db:	bf 2e 22 00 00       	mov    $0x222e,%edi
+     3db:	bf 4e 22 00 00       	mov    $0x224e,%edi
      3e0:	e8 2b 15 00 00       	call   1910 <UVM_Print_String>
-     3e5:	bf 1c 22 00 00       	mov    $0x221c,%edi
+     3e5:	bf 3c 22 00 00       	mov    $0x223c,%edi
      3ea:	e8 21 15 00 00       	call   1910 <UVM_Print_String>
      3ef:	eb fe                	jmp    3ef <TEST_SIG_FUNC1+0x15f>
      3f1:	66 66 2e 0f 1f 84 00 	data16 cs nopw 0x0(%rax,%rax,1)
@@ -646,29 +646,29 @@ void TEST_SIG_FUNC2(void)
      45d:	e8 2e 1a 00 00       	call   1e90 <UVM_Sig_Rcv>
      462:	48 85 c0             	test   %rax,%rax
      465:	75 b9                	jne    420 <TEST_SIG_FUNC2+0x20>
-     467:	bf 08 20 00 00       	mov    $0x2008,%edi
+     467:	bf 28 20 00 00       	mov    $0x2028,%edi
      46c:	e8 9f 14 00 00       	call   1910 <UVM_Print_String>
-     471:	bf 08 22 00 00       	mov    $0x2208,%edi
+     471:	bf 28 22 00 00       	mov    $0x2228,%edi
      476:	e8 95 14 00 00       	call   1910 <UVM_Print_String>
-     47b:	bf 14 22 00 00       	mov    $0x2214,%edi
+     47b:	bf 34 22 00 00       	mov    $0x2234,%edi
      480:	e8 8b 14 00 00       	call   1910 <UVM_Print_String>
      485:	bf ac 00 00 00       	mov    $0xac,%edi
      48a:	e8 51 12 00 00       	call   16e0 <UVM_Print_Int>
-     48f:	bf 1c 22 00 00       	mov    $0x221c,%edi
+     48f:	bf 3c 22 00 00       	mov    $0x223c,%edi
      494:	e8 77 14 00 00       	call   1910 <UVM_Print_String>
-     499:	bf 1f 22 00 00       	mov    $0x221f,%edi
+     499:	bf 3f 22 00 00       	mov    $0x223f,%edi
      49e:	e8 6d 14 00 00       	call   1910 <UVM_Print_String>
-     4a3:	bf 2b 22 00 00       	mov    $0x222b,%edi
+     4a3:	bf 4b 22 00 00       	mov    $0x224b,%edi
      4a8:	e8 63 14 00 00       	call   1910 <UVM_Print_String>
-     4ad:	bf 2e 22 00 00       	mov    $0x222e,%edi
+     4ad:	bf 4e 22 00 00       	mov    $0x224e,%edi
      4b2:	e8 59 14 00 00       	call   1910 <UVM_Print_String>
-     4b7:	bf 1c 22 00 00       	mov    $0x221c,%edi
+     4b7:	bf 3c 22 00 00       	mov    $0x223c,%edi
      4bc:	e8 4f 14 00 00       	call   1910 <UVM_Print_String>
      4c1:	eb fe                	jmp    4c1 <TEST_SIG_FUNC2+0xc1>
      4c3:	0f 1f 44 00 00       	nopl   0x0(%rax,%rax,1)
     }
     UVM_LOG_S("\r\nCross-process signal sending-receiving takes clock cycles:");
-     4c8:	bf 70 20 00 00       	mov    $0x2070,%edi
+     4c8:	bf 90 20 00 00       	mov    $0x2090,%edi
      4cd:	e8 3e 14 00 00       	call   1910 <UVM_Print_String>
     UVM_LOG_I(sum/10000);
      4d2:	48 ba 4b 59 86 38 d6 	movabs $0x346dc5d63886594b,%rdx
@@ -688,23 +688,23 @@ void TEST_SIG_FUNC2(void)
      503:	5b                   	pop    %rbx
      504:	c3                   	ret    
     UVM_ASSERT(UVM_Sig_Rcv(TEST_SIG2,RME_RCV_BS));
-     505:	bf 08 20 00 00       	mov    $0x2008,%edi
+     505:	bf 28 20 00 00       	mov    $0x2028,%edi
      50a:	e8 01 14 00 00       	call   1910 <UVM_Print_String>
-     50f:	bf 08 22 00 00       	mov    $0x2208,%edi
+     50f:	bf 28 22 00 00       	mov    $0x2228,%edi
      514:	e8 f7 13 00 00       	call   1910 <UVM_Print_String>
-     519:	bf 14 22 00 00       	mov    $0x2214,%edi
+     519:	bf 34 22 00 00       	mov    $0x2234,%edi
      51e:	e8 ed 13 00 00       	call   1910 <UVM_Print_String>
      523:	bf b2 00 00 00       	mov    $0xb2,%edi
      528:	e8 b3 11 00 00       	call   16e0 <UVM_Print_Int>
-     52d:	bf 1c 22 00 00       	mov    $0x221c,%edi
+     52d:	bf 3c 22 00 00       	mov    $0x223c,%edi
      532:	e8 d9 13 00 00       	call   1910 <UVM_Print_String>
-     537:	bf 1f 22 00 00       	mov    $0x221f,%edi
+     537:	bf 3f 22 00 00       	mov    $0x223f,%edi
      53c:	e8 cf 13 00 00       	call   1910 <UVM_Print_String>
-     541:	bf 2b 22 00 00       	mov    $0x222b,%edi
+     541:	bf 4b 22 00 00       	mov    $0x224b,%edi
      546:	e8 c5 13 00 00       	call   1910 <UVM_Print_String>
-     54b:	bf 2e 22 00 00       	mov    $0x222e,%edi
+     54b:	bf 4e 22 00 00       	mov    $0x224e,%edi
      550:	e8 bb 13 00 00       	call   1910 <UVM_Print_String>
-     555:	bf 1c 22 00 00       	mov    $0x221c,%edi
+     555:	bf 3c 22 00 00       	mov    $0x223c,%edi
      55a:	e8 b1 13 00 00       	call   1910 <UVM_Print_String>
      55f:	eb fe                	jmp    55f <TEST_SIG_FUNC2+0x15f>
      561:	66 66 2e 0f 1f 84 00 	data16 cs nopw 0x0(%rax,%rax,1)
@@ -744,13 +744,13 @@ int main(ptr_t CPUID)
     ptr_t Cur_Addr;
     cnt_t Count;
     UVM_LOG_S("\r\nEnter user mode success!Welcome to RME system!");
-     599:	bf b0 20 00 00       	mov    $0x20b0,%edi
+     599:	bf d0 20 00 00       	mov    $0x20d0,%edi
 {
      59e:	48 83 ec 08          	sub    $0x8,%rsp
     UVM_LOG_S("\r\nEnter user mode success!Welcome to RME system!");
      5a2:	e8 69 13 00 00       	call   1910 <UVM_Print_String>
     UVM_LOG_S("\r\nNow we are running init thread on cpu:");
-     5a7:	bf e8 20 00 00       	mov    $0x20e8,%edi
+     5a7:	bf 08 21 00 00       	mov    $0x2108,%edi
      5ac:	e8 5f 13 00 00       	call   1910 <UVM_Print_String>
     UVM_LOG_I(CPUID);
      5b1:	48 89 df             	mov    %rbx,%rdi
@@ -783,7 +783,7 @@ int main(ptr_t CPUID)
      60c:	75 ca                	jne    5d8 <main+0x48>
         }
         UVM_LOG_S("\r\nEmpty test takes clock cycles:");
-     60e:	bf 18 21 00 00       	mov    $0x2118,%edi
+     60e:	bf 38 21 00 00       	mov    $0x2138,%edi
         UVM_LOG_I(sum/10000);
         /*Empty test ends here*/
 
@@ -829,7 +829,7 @@ int main(ptr_t CPUID)
      69d:	75 a9                	jne    648 <main+0xb8>
         }
         UVM_LOG_S("\r\nEmpty system call takes clock cycles:");
-     69f:	bf 40 21 00 00       	mov    $0x2140,%edi
+     69f:	bf 60 21 00 00       	mov    $0x2160,%edi
      6a4:	e8 67 12 00 00       	call   1910 <UVM_Print_String>
         UVM_LOG_I(sum/10000);
      6a9:	48 8b 05 60 29 00 00 	mov    0x2960(%rip),%rax        # 3010 <sum>
@@ -945,14 +945,14 @@ int main(ptr_t CPUID)
      830:	0f 88 cf 06 00 00    	js     f05 <main+0x975>
         Cur_Addr+=UVM_THD_SIZE;
         UVM_LOG_S("\r\nSwtching thread...");
-     836:	bf 37 22 00 00       	mov    $0x2237,%edi
+     836:	bf 57 22 00 00       	mov    $0x2257,%edi
      83b:	e8 d0 10 00 00       	call   1910 <UVM_Print_String>
         UVM_Thd_Swt(UVM_CAPID(TEST_THD_TBL,TEST_THD1),0);
      840:	31 f6                	xor    %esi,%esi
      842:	bf 00 80 09 00       	mov    $0x98000,%edi
      847:	e8 c4 15 00 00       	call   1e10 <UVM_Thd_Swt>
         UVM_LOG_S("\r\nBack to main thread!");
-     84c:	bf 4c 22 00 00       	mov    $0x224c,%edi
+     84c:	bf 6c 22 00 00       	mov    $0x226c,%edi
      851:	e8 ba 10 00 00       	call   1910 <UVM_Print_String>
         /*Thread switching test ends here*/
         
@@ -1126,14 +1126,14 @@ int main(ptr_t CPUID)
         Cur_Addr+=UVM_THD_SIZE;
 
         UVM_LOG_S("\r\nCross-process swtching thread...");
-     a6a:	bf 68 21 00 00       	mov    $0x2168,%edi
+     a6a:	bf 88 21 00 00       	mov    $0x2188,%edi
      a6f:	e8 9c 0e 00 00       	call   1910 <UVM_Print_String>
         UVM_Thd_Swt(UVM_CAPID(TEST_THD_TBL,TEST_THD3),0);
      a74:	31 f6                	xor    %esi,%esi
      a76:	bf 02 80 09 00       	mov    $0x98002,%edi
      a7b:	e8 90 13 00 00       	call   1e10 <UVM_Thd_Swt>
         UVM_LOG_S("\r\nBack to main thread!");
-     a80:	bf 4c 22 00 00       	mov    $0x224c,%edi
+     a80:	bf 6c 22 00 00       	mov    $0x226c,%edi
      a85:	e8 86 0e 00 00       	call   1910 <UVM_Print_String>
 
         /*Cross-process thread switching test ends here*/
@@ -1266,7 +1266,7 @@ int main(ptr_t CPUID)
      c0e:	75 8c                	jne    b9c <main+0x60c>
         }
         UVM_LOG_S("\r\nInvocation total takes clock cycles:");
-     c10:	bf 90 21 00 00       	mov    $0x2190,%edi
+     c10:	bf b0 21 00 00       	mov    $0x21b0,%edi
         UVM_LOG_I(sum/10000);
      c15:	bb 10 27 00 00       	mov    $0x2710,%ebx
         UVM_LOG_S("\r\nInvocation total takes clock cycles:");
@@ -1278,7 +1278,7 @@ int main(ptr_t CPUID)
      c2b:	48 89 c7             	mov    %rax,%rdi
      c2e:	e8 ad 0a 00 00       	call   16e0 <UVM_Print_Int>
         UVM_LOG_S("\r\nInvocation entry takes clock cycles:");
-     c33:	bf b8 21 00 00       	mov    $0x21b8,%edi
+     c33:	bf d8 21 00 00       	mov    $0x21d8,%edi
      c38:	e8 d3 0c 00 00       	call   1910 <UVM_Print_String>
         UVM_LOG_I(sumin/10000);
      c3d:	48 8b 05 c4 23 00 00 	mov    0x23c4(%rip),%rax        # 3008 <sumin>
@@ -1287,7 +1287,7 @@ int main(ptr_t CPUID)
      c49:	48 89 c7             	mov    %rax,%rdi
      c4c:	e8 8f 0a 00 00       	call   16e0 <UVM_Print_Int>
         UVM_LOG_S("\r\nInvocation return takes clock cycles:");
-     c51:	bf e0 21 00 00       	mov    $0x21e0,%edi
+     c51:	bf 00 22 00 00       	mov    $0x2200,%edi
      c56:	e8 b5 0c 00 00       	call   1910 <UVM_Print_String>
         UVM_LOG_I(sumout/10000);
      c5b:	48 8b 05 9e 23 00 00 	mov    0x239e(%rip),%rax        # 3000 <sumout>
@@ -1300,7 +1300,7 @@ int main(ptr_t CPUID)
 
         /*Idle*/
         UVM_LOG_S("\r\nIdle......");
-     c6f:	bf 63 22 00 00       	mov    $0x2263,%edi
+     c6f:	bf 83 22 00 00       	mov    $0x2283,%edi
      c74:	e8 97 0c 00 00       	call   1910 <UVM_Print_String>
         while (1);
      c79:	eb fe                	jmp    c79 <main+0x6e9>
@@ -1313,563 +1313,563 @@ int main(ptr_t CPUID)
      c7f:	5d                   	pop    %rbp
      c80:	c3                   	ret    
         UVM_ASSERT(UVM_Captbl_Crt(UVM_BOOT_CAPTBL,UVM_CAPID(UVM_BOOT_TBL_KMEM,0),TEST_THD_TBL,Cur_Addr,16)>=0);
-     c81:	bf 08 20 00 00       	mov    $0x2008,%edi
+     c81:	bf 28 20 00 00       	mov    $0x2028,%edi
      c86:	e8 85 0c 00 00       	call   1910 <UVM_Print_String>
-     c8b:	bf 08 22 00 00       	mov    $0x2208,%edi
+     c8b:	bf 28 22 00 00       	mov    $0x2228,%edi
      c90:	e8 7b 0c 00 00       	call   1910 <UVM_Print_String>
-     c95:	bf 14 22 00 00       	mov    $0x2214,%edi
+     c95:	bf 34 22 00 00       	mov    $0x2234,%edi
      c9a:	e8 71 0c 00 00       	call   1910 <UVM_Print_String>
      c9f:	bf e8 00 00 00       	mov    $0xe8,%edi
      ca4:	e8 37 0a 00 00       	call   16e0 <UVM_Print_Int>
-     ca9:	bf 1c 22 00 00       	mov    $0x221c,%edi
+     ca9:	bf 3c 22 00 00       	mov    $0x223c,%edi
      cae:	e8 5d 0c 00 00       	call   1910 <UVM_Print_String>
-     cb3:	bf 1f 22 00 00       	mov    $0x221f,%edi
+     cb3:	bf 3f 22 00 00       	mov    $0x223f,%edi
      cb8:	e8 53 0c 00 00       	call   1910 <UVM_Print_String>
-     cbd:	bf 2b 22 00 00       	mov    $0x222b,%edi
+     cbd:	bf 4b 22 00 00       	mov    $0x224b,%edi
      cc2:	e8 49 0c 00 00       	call   1910 <UVM_Print_String>
-     cc7:	bf 2e 22 00 00       	mov    $0x222e,%edi
+     cc7:	bf 4e 22 00 00       	mov    $0x224e,%edi
      ccc:	e8 3f 0c 00 00       	call   1910 <UVM_Print_String>
-     cd1:	bf 1c 22 00 00       	mov    $0x221c,%edi
+     cd1:	bf 3c 22 00 00       	mov    $0x223c,%edi
      cd6:	e8 35 0c 00 00       	call   1910 <UVM_Print_String>
      cdb:	eb fe                	jmp    cdb <main+0x74b>
         UVM_ASSERT(UVM_Thd_Crt(TEST_THD_TBL, UVM_CAPID(UVM_BOOT_TBL_KMEM,0),TEST_THD1, UVM_BOOT_INIT_PROC, 10, Cur_Addr)>=0);
-     cdd:	bf 08 20 00 00       	mov    $0x2008,%edi
+     cdd:	bf 28 20 00 00       	mov    $0x2028,%edi
      ce2:	e8 29 0c 00 00       	call   1910 <UVM_Print_String>
-     ce7:	bf 08 22 00 00       	mov    $0x2208,%edi
+     ce7:	bf 28 22 00 00       	mov    $0x2228,%edi
      cec:	e8 1f 0c 00 00       	call   1910 <UVM_Print_String>
-     cf1:	bf 14 22 00 00       	mov    $0x2214,%edi
+     cf1:	bf 34 22 00 00       	mov    $0x2234,%edi
      cf6:	e8 15 0c 00 00       	call   1910 <UVM_Print_String>
      cfb:	bf ea 00 00 00       	mov    $0xea,%edi
      d00:	e8 db 09 00 00       	call   16e0 <UVM_Print_Int>
-     d05:	bf 1c 22 00 00       	mov    $0x221c,%edi
+     d05:	bf 3c 22 00 00       	mov    $0x223c,%edi
      d0a:	e8 01 0c 00 00       	call   1910 <UVM_Print_String>
-     d0f:	bf 1f 22 00 00       	mov    $0x221f,%edi
+     d0f:	bf 3f 22 00 00       	mov    $0x223f,%edi
      d14:	e8 f7 0b 00 00       	call   1910 <UVM_Print_String>
-     d19:	bf 2b 22 00 00       	mov    $0x222b,%edi
+     d19:	bf 4b 22 00 00       	mov    $0x224b,%edi
      d1e:	e8 ed 0b 00 00       	call   1910 <UVM_Print_String>
-     d23:	bf 2e 22 00 00       	mov    $0x222e,%edi
+     d23:	bf 4e 22 00 00       	mov    $0x224e,%edi
      d28:	e8 e3 0b 00 00       	call   1910 <UVM_Print_String>
-     d2d:	bf 1c 22 00 00       	mov    $0x221c,%edi
+     d2d:	bf 3c 22 00 00       	mov    $0x223c,%edi
      d32:	e8 d9 0b 00 00       	call   1910 <UVM_Print_String>
      d37:	eb fe                	jmp    d37 <main+0x7a7>
         UVM_ASSERT(UVM_Thd_Sched_Bind(UVM_CAPID(TEST_THD_TBL,TEST_THD1),UVM_CAPID(UVM_BOOT_TBL_THD,0),UVM_CAPID_NULL,0,0)>=0);
-     d39:	bf 08 20 00 00       	mov    $0x2008,%edi
+     d39:	bf 28 20 00 00       	mov    $0x2028,%edi
      d3e:	e8 cd 0b 00 00       	call   1910 <UVM_Print_String>
-     d43:	bf 08 22 00 00       	mov    $0x2208,%edi
+     d43:	bf 28 22 00 00       	mov    $0x2228,%edi
      d48:	e8 c3 0b 00 00       	call   1910 <UVM_Print_String>
-     d4d:	bf 14 22 00 00       	mov    $0x2214,%edi
+     d4d:	bf 34 22 00 00       	mov    $0x2234,%edi
      d52:	e8 b9 0b 00 00       	call   1910 <UVM_Print_String>
      d57:	bf eb 00 00 00       	mov    $0xeb,%edi
      d5c:	e8 7f 09 00 00       	call   16e0 <UVM_Print_Int>
-     d61:	bf 1c 22 00 00       	mov    $0x221c,%edi
+     d61:	bf 3c 22 00 00       	mov    $0x223c,%edi
      d66:	e8 a5 0b 00 00       	call   1910 <UVM_Print_String>
-     d6b:	bf 1f 22 00 00       	mov    $0x221f,%edi
+     d6b:	bf 3f 22 00 00       	mov    $0x223f,%edi
      d70:	e8 9b 0b 00 00       	call   1910 <UVM_Print_String>
-     d75:	bf 2b 22 00 00       	mov    $0x222b,%edi
+     d75:	bf 4b 22 00 00       	mov    $0x224b,%edi
      d7a:	e8 91 0b 00 00       	call   1910 <UVM_Print_String>
-     d7f:	bf 2e 22 00 00       	mov    $0x222e,%edi
+     d7f:	bf 4e 22 00 00       	mov    $0x224e,%edi
      d84:	e8 87 0b 00 00       	call   1910 <UVM_Print_String>
-     d89:	bf 1c 22 00 00       	mov    $0x221c,%edi
+     d89:	bf 3c 22 00 00       	mov    $0x223c,%edi
      d8e:	e8 7d 0b 00 00       	call   1910 <UVM_Print_String>
      d93:	eb fe                	jmp    d93 <main+0x803>
         UVM_ASSERT(UVM_Thd_Exec_Set(UVM_CAPID(TEST_THD_TBL,TEST_THD1),(ptr_t)TEST_THD_FUNC1,12*UVM_POW2(RME_PGT_SIZE_1M),0)>=0);
-     d95:	bf 08 20 00 00       	mov    $0x2008,%edi
+     d95:	bf 28 20 00 00       	mov    $0x2028,%edi
      d9a:	e8 71 0b 00 00       	call   1910 <UVM_Print_String>
-     d9f:	bf 08 22 00 00       	mov    $0x2208,%edi
+     d9f:	bf 28 22 00 00       	mov    $0x2228,%edi
      da4:	e8 67 0b 00 00       	call   1910 <UVM_Print_String>
-     da9:	bf 14 22 00 00       	mov    $0x2214,%edi
+     da9:	bf 34 22 00 00       	mov    $0x2234,%edi
      dae:	e8 5d 0b 00 00       	call   1910 <UVM_Print_String>
      db3:	bf ee 00 00 00       	mov    $0xee,%edi
      db8:	e8 23 09 00 00       	call   16e0 <UVM_Print_Int>
-     dbd:	bf 1c 22 00 00       	mov    $0x221c,%edi
+     dbd:	bf 3c 22 00 00       	mov    $0x223c,%edi
      dc2:	e8 49 0b 00 00       	call   1910 <UVM_Print_String>
-     dc7:	bf 1f 22 00 00       	mov    $0x221f,%edi
+     dc7:	bf 3f 22 00 00       	mov    $0x223f,%edi
      dcc:	e8 3f 0b 00 00       	call   1910 <UVM_Print_String>
-     dd1:	bf 2b 22 00 00       	mov    $0x222b,%edi
+     dd1:	bf 4b 22 00 00       	mov    $0x224b,%edi
      dd6:	e8 35 0b 00 00       	call   1910 <UVM_Print_String>
-     ddb:	bf 2e 22 00 00       	mov    $0x222e,%edi
+     ddb:	bf 4e 22 00 00       	mov    $0x224e,%edi
      de0:	e8 2b 0b 00 00       	call   1910 <UVM_Print_String>
-     de5:	bf 1c 22 00 00       	mov    $0x221c,%edi
+     de5:	bf 3c 22 00 00       	mov    $0x223c,%edi
      dea:	e8 21 0b 00 00       	call   1910 <UVM_Print_String>
      def:	eb fe                	jmp    def <main+0x85f>
         UVM_ASSERT(UVM_Thd_Time_Xfer(UVM_CAPID(TEST_THD_TBL,TEST_THD1),UVM_CAPID(UVM_BOOT_TBL_THD,0),UVM_THD_INF_TIME)>=0);
-     df1:	bf 08 20 00 00       	mov    $0x2008,%edi
+     df1:	bf 28 20 00 00       	mov    $0x2028,%edi
      df6:	e8 15 0b 00 00       	call   1910 <UVM_Print_String>
-     dfb:	bf 08 22 00 00       	mov    $0x2208,%edi
+     dfb:	bf 28 22 00 00       	mov    $0x2228,%edi
      e00:	e8 0b 0b 00 00       	call   1910 <UVM_Print_String>
-     e05:	bf 14 22 00 00       	mov    $0x2214,%edi
+     e05:	bf 34 22 00 00       	mov    $0x2234,%edi
      e0a:	e8 01 0b 00 00       	call   1910 <UVM_Print_String>
      e0f:	bf ec 00 00 00       	mov    $0xec,%edi
      e14:	e8 c7 08 00 00       	call   16e0 <UVM_Print_Int>
-     e19:	bf 1c 22 00 00       	mov    $0x221c,%edi
+     e19:	bf 3c 22 00 00       	mov    $0x223c,%edi
      e1e:	e8 ed 0a 00 00       	call   1910 <UVM_Print_String>
-     e23:	bf 1f 22 00 00       	mov    $0x221f,%edi
+     e23:	bf 3f 22 00 00       	mov    $0x223f,%edi
      e28:	e8 e3 0a 00 00       	call   1910 <UVM_Print_String>
-     e2d:	bf 2b 22 00 00       	mov    $0x222b,%edi
+     e2d:	bf 4b 22 00 00       	mov    $0x224b,%edi
      e32:	e8 d9 0a 00 00       	call   1910 <UVM_Print_String>
-     e37:	bf 2e 22 00 00       	mov    $0x222e,%edi
+     e37:	bf 4e 22 00 00       	mov    $0x224e,%edi
      e3c:	e8 cf 0a 00 00       	call   1910 <UVM_Print_String>
-     e41:	bf 1c 22 00 00       	mov    $0x221c,%edi
+     e41:	bf 3c 22 00 00       	mov    $0x223c,%edi
      e46:	e8 c5 0a 00 00       	call   1910 <UVM_Print_String>
      e4b:	eb fe                	jmp    e4b <main+0x8bb>
         UVM_ASSERT(UVM_Thd_Crt(TEST_THD_TBL, UVM_CAPID(UVM_BOOT_TBL_KMEM,0), TEST_THD2, UVM_BOOT_INIT_PROC, 10, Cur_Addr)>=0);
-     e4d:	bf 08 20 00 00       	mov    $0x2008,%edi
+     e4d:	bf 28 20 00 00       	mov    $0x2028,%edi
      e52:	e8 b9 0a 00 00       	call   1910 <UVM_Print_String>
-     e57:	bf 08 22 00 00       	mov    $0x2208,%edi
+     e57:	bf 28 22 00 00       	mov    $0x2228,%edi
      e5c:	e8 af 0a 00 00       	call   1910 <UVM_Print_String>
-     e61:	bf 14 22 00 00       	mov    $0x2214,%edi
+     e61:	bf 34 22 00 00       	mov    $0x2234,%edi
      e66:	e8 a5 0a 00 00       	call   1910 <UVM_Print_String>
      e6b:	bf f0 00 00 00       	mov    $0xf0,%edi
      e70:	e8 6b 08 00 00       	call   16e0 <UVM_Print_Int>
-     e75:	bf 1c 22 00 00       	mov    $0x221c,%edi
+     e75:	bf 3c 22 00 00       	mov    $0x223c,%edi
      e7a:	e8 91 0a 00 00       	call   1910 <UVM_Print_String>
-     e7f:	bf 1f 22 00 00       	mov    $0x221f,%edi
+     e7f:	bf 3f 22 00 00       	mov    $0x223f,%edi
      e84:	e8 87 0a 00 00       	call   1910 <UVM_Print_String>
-     e89:	bf 2b 22 00 00       	mov    $0x222b,%edi
+     e89:	bf 4b 22 00 00       	mov    $0x224b,%edi
      e8e:	e8 7d 0a 00 00       	call   1910 <UVM_Print_String>
-     e93:	bf 2e 22 00 00       	mov    $0x222e,%edi
+     e93:	bf 4e 22 00 00       	mov    $0x224e,%edi
      e98:	e8 73 0a 00 00       	call   1910 <UVM_Print_String>
-     e9d:	bf 1c 22 00 00       	mov    $0x221c,%edi
+     e9d:	bf 3c 22 00 00       	mov    $0x223c,%edi
      ea2:	e8 69 0a 00 00       	call   1910 <UVM_Print_String>
      ea7:	eb fe                	jmp    ea7 <main+0x917>
         UVM_ASSERT(UVM_Thd_Sched_Bind(UVM_CAPID(TEST_THD_TBL,TEST_THD2),UVM_CAPID(UVM_BOOT_TBL_THD,0),UVM_CAPID_NULL,0,0)>=0);
-     ea9:	bf 08 20 00 00       	mov    $0x2008,%edi
+     ea9:	bf 28 20 00 00       	mov    $0x2028,%edi
      eae:	e8 5d 0a 00 00       	call   1910 <UVM_Print_String>
-     eb3:	bf 08 22 00 00       	mov    $0x2208,%edi
+     eb3:	bf 28 22 00 00       	mov    $0x2228,%edi
      eb8:	e8 53 0a 00 00       	call   1910 <UVM_Print_String>
-     ebd:	bf 14 22 00 00       	mov    $0x2214,%edi
+     ebd:	bf 34 22 00 00       	mov    $0x2234,%edi
      ec2:	e8 49 0a 00 00       	call   1910 <UVM_Print_String>
      ec7:	bf f1 00 00 00       	mov    $0xf1,%edi
      ecc:	e8 0f 08 00 00       	call   16e0 <UVM_Print_Int>
-     ed1:	bf 1c 22 00 00       	mov    $0x221c,%edi
+     ed1:	bf 3c 22 00 00       	mov    $0x223c,%edi
      ed6:	e8 35 0a 00 00       	call   1910 <UVM_Print_String>
-     edb:	bf 1f 22 00 00       	mov    $0x221f,%edi
+     edb:	bf 3f 22 00 00       	mov    $0x223f,%edi
      ee0:	e8 2b 0a 00 00       	call   1910 <UVM_Print_String>
-     ee5:	bf 2b 22 00 00       	mov    $0x222b,%edi
+     ee5:	bf 4b 22 00 00       	mov    $0x224b,%edi
      eea:	e8 21 0a 00 00       	call   1910 <UVM_Print_String>
-     eef:	bf 2e 22 00 00       	mov    $0x222e,%edi
+     eef:	bf 4e 22 00 00       	mov    $0x224e,%edi
      ef4:	e8 17 0a 00 00       	call   1910 <UVM_Print_String>
-     ef9:	bf 1c 22 00 00       	mov    $0x221c,%edi
+     ef9:	bf 3c 22 00 00       	mov    $0x223c,%edi
      efe:	e8 0d 0a 00 00       	call   1910 <UVM_Print_String>
      f03:	eb fe                	jmp    f03 <main+0x973>
         UVM_ASSERT(UVM_Thd_Exec_Set(UVM_CAPID(TEST_THD_TBL,TEST_THD2),(ptr_t)TEST_THD_FUNC2,13*UVM_POW2(RME_PGT_SIZE_1M),1)>=0);
-     f05:	bf 08 20 00 00       	mov    $0x2008,%edi
+     f05:	bf 28 20 00 00       	mov    $0x2028,%edi
      f0a:	e8 01 0a 00 00       	call   1910 <UVM_Print_String>
-     f0f:	bf 08 22 00 00       	mov    $0x2208,%edi
+     f0f:	bf 28 22 00 00       	mov    $0x2228,%edi
      f14:	e8 f7 09 00 00       	call   1910 <UVM_Print_String>
-     f19:	bf 14 22 00 00       	mov    $0x2214,%edi
+     f19:	bf 34 22 00 00       	mov    $0x2234,%edi
      f1e:	e8 ed 09 00 00       	call   1910 <UVM_Print_String>
      f23:	bf f4 00 00 00       	mov    $0xf4,%edi
      f28:	e8 b3 07 00 00       	call   16e0 <UVM_Print_Int>
-     f2d:	bf 1c 22 00 00       	mov    $0x221c,%edi
+     f2d:	bf 3c 22 00 00       	mov    $0x223c,%edi
      f32:	e8 d9 09 00 00       	call   1910 <UVM_Print_String>
-     f37:	bf 1f 22 00 00       	mov    $0x221f,%edi
+     f37:	bf 3f 22 00 00       	mov    $0x223f,%edi
      f3c:	e8 cf 09 00 00       	call   1910 <UVM_Print_String>
-     f41:	bf 2b 22 00 00       	mov    $0x222b,%edi
+     f41:	bf 4b 22 00 00       	mov    $0x224b,%edi
      f46:	e8 c5 09 00 00       	call   1910 <UVM_Print_String>
-     f4b:	bf 2e 22 00 00       	mov    $0x222e,%edi
+     f4b:	bf 4e 22 00 00       	mov    $0x224e,%edi
      f50:	e8 bb 09 00 00       	call   1910 <UVM_Print_String>
-     f55:	bf 1c 22 00 00       	mov    $0x221c,%edi
+     f55:	bf 3c 22 00 00       	mov    $0x223c,%edi
      f5a:	e8 b1 09 00 00       	call   1910 <UVM_Print_String>
      f5f:	eb fe                	jmp    f5f <main+0x9cf>
         UVM_ASSERT(UVM_Thd_Time_Xfer(UVM_CAPID(TEST_THD_TBL,TEST_THD2),UVM_CAPID(UVM_BOOT_TBL_THD,0),UVM_THD_INF_TIME)>=0);
-     f61:	bf 08 20 00 00       	mov    $0x2008,%edi
+     f61:	bf 28 20 00 00       	mov    $0x2028,%edi
      f66:	e8 a5 09 00 00       	call   1910 <UVM_Print_String>
-     f6b:	bf 08 22 00 00       	mov    $0x2208,%edi
+     f6b:	bf 28 22 00 00       	mov    $0x2228,%edi
      f70:	e8 9b 09 00 00       	call   1910 <UVM_Print_String>
-     f75:	bf 14 22 00 00       	mov    $0x2214,%edi
+     f75:	bf 34 22 00 00       	mov    $0x2234,%edi
      f7a:	e8 91 09 00 00       	call   1910 <UVM_Print_String>
      f7f:	bf f2 00 00 00       	mov    $0xf2,%edi
      f84:	e8 57 07 00 00       	call   16e0 <UVM_Print_Int>
-     f89:	bf 1c 22 00 00       	mov    $0x221c,%edi
+     f89:	bf 3c 22 00 00       	mov    $0x223c,%edi
      f8e:	e8 7d 09 00 00       	call   1910 <UVM_Print_String>
-     f93:	bf 1f 22 00 00       	mov    $0x221f,%edi
+     f93:	bf 3f 22 00 00       	mov    $0x223f,%edi
      f98:	e8 73 09 00 00       	call   1910 <UVM_Print_String>
-     f9d:	bf 2b 22 00 00       	mov    $0x222b,%edi
+     f9d:	bf 4b 22 00 00       	mov    $0x224b,%edi
      fa2:	e8 69 09 00 00       	call   1910 <UVM_Print_String>
-     fa7:	bf 2e 22 00 00       	mov    $0x222e,%edi
+     fa7:	bf 4e 22 00 00       	mov    $0x224e,%edi
      fac:	e8 5f 09 00 00       	call   1910 <UVM_Print_String>
-     fb1:	bf 1c 22 00 00       	mov    $0x221c,%edi
+     fb1:	bf 3c 22 00 00       	mov    $0x223c,%edi
      fb6:	e8 55 09 00 00       	call   1910 <UVM_Print_String>
      fbb:	eb fe                	jmp    fbb <main+0xa2b>
         UVM_ASSERT(UVM_Sig_Crt(UVM_BOOT_CAPTBL,UVM_CAPID(UVM_BOOT_TBL_KMEM,0),TEST_SIG1, Cur_Addr)>=0);
-     fbd:	bf 08 20 00 00       	mov    $0x2008,%edi
+     fbd:	bf 28 20 00 00       	mov    $0x2028,%edi
      fc2:	e8 49 09 00 00       	call   1910 <UVM_Print_String>
-     fc7:	bf 08 22 00 00       	mov    $0x2208,%edi
+     fc7:	bf 28 22 00 00       	mov    $0x2228,%edi
      fcc:	e8 3f 09 00 00       	call   1910 <UVM_Print_String>
-     fd1:	bf 14 22 00 00       	mov    $0x2214,%edi
+     fd1:	bf 34 22 00 00       	mov    $0x2234,%edi
      fd6:	e8 35 09 00 00       	call   1910 <UVM_Print_String>
      fdb:	bf fd 00 00 00       	mov    $0xfd,%edi
      fe0:	e8 fb 06 00 00       	call   16e0 <UVM_Print_Int>
-     fe5:	bf 1c 22 00 00       	mov    $0x221c,%edi
+     fe5:	bf 3c 22 00 00       	mov    $0x223c,%edi
      fea:	e8 21 09 00 00       	call   1910 <UVM_Print_String>
-     fef:	bf 1f 22 00 00       	mov    $0x221f,%edi
+     fef:	bf 3f 22 00 00       	mov    $0x223f,%edi
      ff4:	e8 17 09 00 00       	call   1910 <UVM_Print_String>
-     ff9:	bf 2b 22 00 00       	mov    $0x222b,%edi
+     ff9:	bf 4b 22 00 00       	mov    $0x224b,%edi
      ffe:	e8 0d 09 00 00       	call   1910 <UVM_Print_String>
-    1003:	bf 2e 22 00 00       	mov    $0x222e,%edi
+    1003:	bf 4e 22 00 00       	mov    $0x224e,%edi
     1008:	e8 03 09 00 00       	call   1910 <UVM_Print_String>
-    100d:	bf 1c 22 00 00       	mov    $0x221c,%edi
+    100d:	bf 3c 22 00 00       	mov    $0x223c,%edi
     1012:	e8 f9 08 00 00       	call   1910 <UVM_Print_String>
     1017:	eb fe                	jmp    1017 <main+0xa87>
         UVM_ASSERT(UVM_Thd_Sched_Prio(UVM_CAPID(TEST_THD_TBL,TEST_THD1),1)>=0);
-    1019:	bf 08 20 00 00       	mov    $0x2008,%edi
+    1019:	bf 28 20 00 00       	mov    $0x2028,%edi
     101e:	e8 ed 08 00 00       	call   1910 <UVM_Print_String>
-    1023:	bf 08 22 00 00       	mov    $0x2208,%edi
+    1023:	bf 28 22 00 00       	mov    $0x2228,%edi
     1028:	e8 e3 08 00 00       	call   1910 <UVM_Print_String>
-    102d:	bf 14 22 00 00       	mov    $0x2214,%edi
+    102d:	bf 34 22 00 00       	mov    $0x2234,%edi
     1032:	e8 d9 08 00 00       	call   1910 <UVM_Print_String>
     1037:	bf 05 01 00 00       	mov    $0x105,%edi
     103c:	e8 9f 06 00 00       	call   16e0 <UVM_Print_Int>
-    1041:	bf 1c 22 00 00       	mov    $0x221c,%edi
+    1041:	bf 3c 22 00 00       	mov    $0x223c,%edi
     1046:	e8 c5 08 00 00       	call   1910 <UVM_Print_String>
-    104b:	bf 1f 22 00 00       	mov    $0x221f,%edi
+    104b:	bf 3f 22 00 00       	mov    $0x223f,%edi
     1050:	e8 bb 08 00 00       	call   1910 <UVM_Print_String>
-    1055:	bf 2b 22 00 00       	mov    $0x222b,%edi
+    1055:	bf 4b 22 00 00       	mov    $0x224b,%edi
     105a:	e8 b1 08 00 00       	call   1910 <UVM_Print_String>
-    105f:	bf 2e 22 00 00       	mov    $0x222e,%edi
+    105f:	bf 4e 22 00 00       	mov    $0x224e,%edi
     1064:	e8 a7 08 00 00       	call   1910 <UVM_Print_String>
-    1069:	bf 1c 22 00 00       	mov    $0x221c,%edi
+    1069:	bf 3c 22 00 00       	mov    $0x223c,%edi
     106e:	e8 9d 08 00 00       	call   1910 <UVM_Print_String>
     1073:	eb fe                	jmp    1073 <main+0xae3>
         UVM_ASSERT(UVM_Thd_Exec_Set(UVM_CAPID(TEST_THD_TBL,TEST_THD1),(ptr_t)TEST_SIG_FUNC1,12*UVM_POW2(RME_PGT_SIZE_1M),0)>=0);
-    1075:	bf 08 20 00 00       	mov    $0x2008,%edi
+    1075:	bf 28 20 00 00       	mov    $0x2028,%edi
     107a:	e8 91 08 00 00       	call   1910 <UVM_Print_String>
-    107f:	bf 08 22 00 00       	mov    $0x2208,%edi
+    107f:	bf 28 22 00 00       	mov    $0x2228,%edi
     1084:	e8 87 08 00 00       	call   1910 <UVM_Print_String>
-    1089:	bf 14 22 00 00       	mov    $0x2214,%edi
+    1089:	bf 34 22 00 00       	mov    $0x2234,%edi
     108e:	e8 7d 08 00 00       	call   1910 <UVM_Print_String>
     1093:	bf 01 01 00 00       	mov    $0x101,%edi
     1098:	e8 43 06 00 00       	call   16e0 <UVM_Print_Int>
-    109d:	bf 1c 22 00 00       	mov    $0x221c,%edi
+    109d:	bf 3c 22 00 00       	mov    $0x223c,%edi
     10a2:	e8 69 08 00 00       	call   1910 <UVM_Print_String>
-    10a7:	bf 1f 22 00 00       	mov    $0x221f,%edi
+    10a7:	bf 3f 22 00 00       	mov    $0x223f,%edi
     10ac:	e8 5f 08 00 00       	call   1910 <UVM_Print_String>
-    10b1:	bf 2b 22 00 00       	mov    $0x222b,%edi
+    10b1:	bf 4b 22 00 00       	mov    $0x224b,%edi
     10b6:	e8 55 08 00 00       	call   1910 <UVM_Print_String>
-    10bb:	bf 2e 22 00 00       	mov    $0x222e,%edi
+    10bb:	bf 4e 22 00 00       	mov    $0x224e,%edi
     10c0:	e8 4b 08 00 00       	call   1910 <UVM_Print_String>
-    10c5:	bf 1c 22 00 00       	mov    $0x221c,%edi
+    10c5:	bf 3c 22 00 00       	mov    $0x223c,%edi
     10ca:	e8 41 08 00 00       	call   1910 <UVM_Print_String>
     10cf:	eb fe                	jmp    10cf <main+0xb3f>
         UVM_ASSERT(UVM_Thd_Time_Xfer(UVM_CAPID(TEST_THD_TBL,TEST_THD3),UVM_CAPID(UVM_BOOT_TBL_THD,0),UVM_THD_INF_TIME)>=0);
-    10d1:	bf 08 20 00 00       	mov    $0x2008,%edi
+    10d1:	bf 28 20 00 00       	mov    $0x2028,%edi
     10d6:	e8 35 08 00 00       	call   1910 <UVM_Print_String>
-    10db:	bf 08 22 00 00       	mov    $0x2208,%edi
+    10db:	bf 28 22 00 00       	mov    $0x2228,%edi
     10e0:	e8 2b 08 00 00       	call   1910 <UVM_Print_String>
-    10e5:	bf 14 22 00 00       	mov    $0x2214,%edi
+    10e5:	bf 34 22 00 00       	mov    $0x2234,%edi
     10ea:	e8 21 08 00 00       	call   1910 <UVM_Print_String>
     10ef:	bf 3e 01 00 00       	mov    $0x13e,%edi
     10f4:	e8 e7 05 00 00       	call   16e0 <UVM_Print_Int>
-    10f9:	bf 1c 22 00 00       	mov    $0x221c,%edi
+    10f9:	bf 3c 22 00 00       	mov    $0x223c,%edi
     10fe:	e8 0d 08 00 00       	call   1910 <UVM_Print_String>
-    1103:	bf 1f 22 00 00       	mov    $0x221f,%edi
+    1103:	bf 3f 22 00 00       	mov    $0x223f,%edi
     1108:	e8 03 08 00 00       	call   1910 <UVM_Print_String>
-    110d:	bf 2b 22 00 00       	mov    $0x222b,%edi
+    110d:	bf 4b 22 00 00       	mov    $0x224b,%edi
     1112:	e8 f9 07 00 00       	call   1910 <UVM_Print_String>
-    1117:	bf 2e 22 00 00       	mov    $0x222e,%edi
+    1117:	bf 4e 22 00 00       	mov    $0x224e,%edi
     111c:	e8 ef 07 00 00       	call   1910 <UVM_Print_String>
-    1121:	bf 1c 22 00 00       	mov    $0x221c,%edi
+    1121:	bf 3c 22 00 00       	mov    $0x223c,%edi
     1126:	e8 e5 07 00 00       	call   1910 <UVM_Print_String>
     112b:	eb fe                	jmp    112b <main+0xb9b>
         UVM_ASSERT(UVM_Thd_Time_Xfer(UVM_CAPID(TEST_THD_TBL,TEST_THD4),UVM_CAPID(UVM_BOOT_TBL_THD,0),UVM_THD_INF_TIME)>=0);
-    112d:	bf 08 20 00 00       	mov    $0x2008,%edi
+    112d:	bf 28 20 00 00       	mov    $0x2028,%edi
     1132:	e8 d9 07 00 00       	call   1910 <UVM_Print_String>
-    1137:	bf 08 22 00 00       	mov    $0x2208,%edi
+    1137:	bf 28 22 00 00       	mov    $0x2228,%edi
     113c:	e8 cf 07 00 00       	call   1910 <UVM_Print_String>
-    1141:	bf 14 22 00 00       	mov    $0x2214,%edi
+    1141:	bf 34 22 00 00       	mov    $0x2234,%edi
     1146:	e8 c5 07 00 00       	call   1910 <UVM_Print_String>
     114b:	bf 45 01 00 00       	mov    $0x145,%edi
     1150:	e8 8b 05 00 00       	call   16e0 <UVM_Print_Int>
-    1155:	bf 1c 22 00 00       	mov    $0x221c,%edi
+    1155:	bf 3c 22 00 00       	mov    $0x223c,%edi
     115a:	e8 b1 07 00 00       	call   1910 <UVM_Print_String>
-    115f:	bf 1f 22 00 00       	mov    $0x221f,%edi
+    115f:	bf 3f 22 00 00       	mov    $0x223f,%edi
     1164:	e8 a7 07 00 00       	call   1910 <UVM_Print_String>
-    1169:	bf 2b 22 00 00       	mov    $0x222b,%edi
+    1169:	bf 4b 22 00 00       	mov    $0x224b,%edi
     116e:	e8 9d 07 00 00       	call   1910 <UVM_Print_String>
-    1173:	bf 2e 22 00 00       	mov    $0x222e,%edi
+    1173:	bf 4e 22 00 00       	mov    $0x224e,%edi
     1178:	e8 93 07 00 00       	call   1910 <UVM_Print_String>
-    117d:	bf 1c 22 00 00       	mov    $0x221c,%edi
+    117d:	bf 3c 22 00 00       	mov    $0x223c,%edi
     1182:	e8 89 07 00 00       	call   1910 <UVM_Print_String>
     1187:	eb fe                	jmp    1187 <main+0xbf7>
         UVM_ASSERT(UVM_Thd_Crt(TEST_THD_TBL, UVM_CAPID(UVM_BOOT_TBL_KMEM,0),TEST_THD4, UVM_BOOT_INIT_PROC, 10, Cur_Addr)>=0);
-    1189:	bf 08 20 00 00       	mov    $0x2008,%edi
+    1189:	bf 28 20 00 00       	mov    $0x2028,%edi
     118e:	e8 7d 07 00 00       	call   1910 <UVM_Print_String>
-    1193:	bf 08 22 00 00       	mov    $0x2208,%edi
+    1193:	bf 28 22 00 00       	mov    $0x2228,%edi
     1198:	e8 73 07 00 00       	call   1910 <UVM_Print_String>
-    119d:	bf 14 22 00 00       	mov    $0x2214,%edi
+    119d:	bf 34 22 00 00       	mov    $0x2234,%edi
     11a2:	e8 69 07 00 00       	call   1910 <UVM_Print_String>
     11a7:	bf 43 01 00 00       	mov    $0x143,%edi
     11ac:	e8 2f 05 00 00       	call   16e0 <UVM_Print_Int>
-    11b1:	bf 1c 22 00 00       	mov    $0x221c,%edi
+    11b1:	bf 3c 22 00 00       	mov    $0x223c,%edi
     11b6:	e8 55 07 00 00       	call   1910 <UVM_Print_String>
-    11bb:	bf 1f 22 00 00       	mov    $0x221f,%edi
+    11bb:	bf 3f 22 00 00       	mov    $0x223f,%edi
     11c0:	e8 4b 07 00 00       	call   1910 <UVM_Print_String>
-    11c5:	bf 2b 22 00 00       	mov    $0x222b,%edi
+    11c5:	bf 4b 22 00 00       	mov    $0x224b,%edi
     11ca:	e8 41 07 00 00       	call   1910 <UVM_Print_String>
-    11cf:	bf 2e 22 00 00       	mov    $0x222e,%edi
+    11cf:	bf 4e 22 00 00       	mov    $0x224e,%edi
     11d4:	e8 37 07 00 00       	call   1910 <UVM_Print_String>
-    11d9:	bf 1c 22 00 00       	mov    $0x221c,%edi
+    11d9:	bf 3c 22 00 00       	mov    $0x223c,%edi
     11de:	e8 2d 07 00 00       	call   1910 <UVM_Print_String>
     11e3:	eb fe                	jmp    11e3 <main+0xc53>
         UVM_ASSERT(UVM_Thd_Exec_Set(UVM_CAPID(TEST_THD_TBL,TEST_THD3),(ptr_t)TEST_THD_FUNC3,14*UVM_POW2(RME_PGT_SIZE_1M),0)>=0);
-    11e5:	bf 08 20 00 00       	mov    $0x2008,%edi
+    11e5:	bf 28 20 00 00       	mov    $0x2028,%edi
     11ea:	e8 21 07 00 00       	call   1910 <UVM_Print_String>
-    11ef:	bf 08 22 00 00       	mov    $0x2208,%edi
+    11ef:	bf 28 22 00 00       	mov    $0x2228,%edi
     11f4:	e8 17 07 00 00       	call   1910 <UVM_Print_String>
-    11f9:	bf 14 22 00 00       	mov    $0x2214,%edi
+    11f9:	bf 34 22 00 00       	mov    $0x2234,%edi
     11fe:	e8 0d 07 00 00       	call   1910 <UVM_Print_String>
     1203:	bf 40 01 00 00       	mov    $0x140,%edi
     1208:	e8 d3 04 00 00       	call   16e0 <UVM_Print_Int>
-    120d:	bf 1c 22 00 00       	mov    $0x221c,%edi
+    120d:	bf 3c 22 00 00       	mov    $0x223c,%edi
     1212:	e8 f9 06 00 00       	call   1910 <UVM_Print_String>
-    1217:	bf 1f 22 00 00       	mov    $0x221f,%edi
+    1217:	bf 3f 22 00 00       	mov    $0x223f,%edi
     121c:	e8 ef 06 00 00       	call   1910 <UVM_Print_String>
-    1221:	bf 2b 22 00 00       	mov    $0x222b,%edi
+    1221:	bf 4b 22 00 00       	mov    $0x224b,%edi
     1226:	e8 e5 06 00 00       	call   1910 <UVM_Print_String>
-    122b:	bf 2e 22 00 00       	mov    $0x222e,%edi
+    122b:	bf 4e 22 00 00       	mov    $0x224e,%edi
     1230:	e8 db 06 00 00       	call   1910 <UVM_Print_String>
-    1235:	bf 1c 22 00 00       	mov    $0x221c,%edi
+    1235:	bf 3c 22 00 00       	mov    $0x223c,%edi
     123a:	e8 d1 06 00 00       	call   1910 <UVM_Print_String>
     123f:	eb fe                	jmp    123f <main+0xcaf>
         UVM_ASSERT(UVM_Thd_Sched_Bind(UVM_CAPID(TEST_THD_TBL,TEST_THD3),UVM_CAPID(UVM_BOOT_TBL_THD,0),UVM_CAPID_NULL,0,0)>=0);
-    1241:	bf 08 20 00 00       	mov    $0x2008,%edi
+    1241:	bf 28 20 00 00       	mov    $0x2028,%edi
     1246:	e8 c5 06 00 00       	call   1910 <UVM_Print_String>
-    124b:	bf 08 22 00 00       	mov    $0x2208,%edi
+    124b:	bf 28 22 00 00       	mov    $0x2228,%edi
     1250:	e8 bb 06 00 00       	call   1910 <UVM_Print_String>
-    1255:	bf 14 22 00 00       	mov    $0x2214,%edi
+    1255:	bf 34 22 00 00       	mov    $0x2234,%edi
     125a:	e8 b1 06 00 00       	call   1910 <UVM_Print_String>
     125f:	bf 3d 01 00 00       	mov    $0x13d,%edi
     1264:	e8 77 04 00 00       	call   16e0 <UVM_Print_Int>
-    1269:	bf 1c 22 00 00       	mov    $0x221c,%edi
+    1269:	bf 3c 22 00 00       	mov    $0x223c,%edi
     126e:	e8 9d 06 00 00       	call   1910 <UVM_Print_String>
-    1273:	bf 1f 22 00 00       	mov    $0x221f,%edi
+    1273:	bf 3f 22 00 00       	mov    $0x223f,%edi
     1278:	e8 93 06 00 00       	call   1910 <UVM_Print_String>
-    127d:	bf 2b 22 00 00       	mov    $0x222b,%edi
+    127d:	bf 4b 22 00 00       	mov    $0x224b,%edi
     1282:	e8 89 06 00 00       	call   1910 <UVM_Print_String>
-    1287:	bf 2e 22 00 00       	mov    $0x222e,%edi
+    1287:	bf 4e 22 00 00       	mov    $0x224e,%edi
     128c:	e8 7f 06 00 00       	call   1910 <UVM_Print_String>
-    1291:	bf 1c 22 00 00       	mov    $0x221c,%edi
+    1291:	bf 3c 22 00 00       	mov    $0x223c,%edi
     1296:	e8 75 06 00 00       	call   1910 <UVM_Print_String>
     129b:	eb fe                	jmp    129b <main+0xd0b>
         UVM_ASSERT(UVM_Thd_Crt(TEST_THD_TBL, UVM_CAPID(UVM_BOOT_TBL_KMEM,0),TEST_THD3, TEST_PROCESS, 10, Cur_Addr)>=0);
-    129d:	bf 08 20 00 00       	mov    $0x2008,%edi
+    129d:	bf 28 20 00 00       	mov    $0x2028,%edi
     12a2:	e8 69 06 00 00       	call   1910 <UVM_Print_String>
-    12a7:	bf 08 22 00 00       	mov    $0x2208,%edi
+    12a7:	bf 28 22 00 00       	mov    $0x2228,%edi
     12ac:	e8 5f 06 00 00       	call   1910 <UVM_Print_String>
-    12b1:	bf 14 22 00 00       	mov    $0x2214,%edi
+    12b1:	bf 34 22 00 00       	mov    $0x2234,%edi
     12b6:	e8 55 06 00 00       	call   1910 <UVM_Print_String>
     12bb:	bf 3c 01 00 00       	mov    $0x13c,%edi
     12c0:	e8 1b 04 00 00       	call   16e0 <UVM_Print_Int>
-    12c5:	bf 1c 22 00 00       	mov    $0x221c,%edi
+    12c5:	bf 3c 22 00 00       	mov    $0x223c,%edi
     12ca:	e8 41 06 00 00       	call   1910 <UVM_Print_String>
-    12cf:	bf 1f 22 00 00       	mov    $0x221f,%edi
+    12cf:	bf 3f 22 00 00       	mov    $0x223f,%edi
     12d4:	e8 37 06 00 00       	call   1910 <UVM_Print_String>
-    12d9:	bf 2b 22 00 00       	mov    $0x222b,%edi
+    12d9:	bf 4b 22 00 00       	mov    $0x224b,%edi
     12de:	e8 2d 06 00 00       	call   1910 <UVM_Print_String>
-    12e3:	bf 2e 22 00 00       	mov    $0x222e,%edi
+    12e3:	bf 4e 22 00 00       	mov    $0x224e,%edi
     12e8:	e8 23 06 00 00       	call   1910 <UVM_Print_String>
-    12ed:	bf 1c 22 00 00       	mov    $0x221c,%edi
+    12ed:	bf 3c 22 00 00       	mov    $0x223c,%edi
     12f2:	e8 19 06 00 00       	call   1910 <UVM_Print_String>
     12f7:	eb fe                	jmp    12f7 <main+0xd67>
         UVM_ASSERT(UVM_Proc_Crt(UVM_BOOT_CAPTBL,UVM_CAPID(UVM_BOOT_TBL_KMEM,0),TEST_PROCESS,UVM_BOOT_CAPTBL,
-    12f9:	bf 08 20 00 00       	mov    $0x2008,%edi
+    12f9:	bf 28 20 00 00       	mov    $0x2028,%edi
     12fe:	e8 0d 06 00 00       	call   1910 <UVM_Print_String>
-    1303:	bf 08 22 00 00       	mov    $0x2208,%edi
+    1303:	bf 28 22 00 00       	mov    $0x2228,%edi
     1308:	e8 03 06 00 00       	call   1910 <UVM_Print_String>
-    130d:	bf 14 22 00 00       	mov    $0x2214,%edi
+    130d:	bf 34 22 00 00       	mov    $0x2234,%edi
     1312:	e8 f9 05 00 00       	call   1910 <UVM_Print_String>
     1317:	bf 39 01 00 00       	mov    $0x139,%edi
     131c:	e8 bf 03 00 00       	call   16e0 <UVM_Print_Int>
-    1321:	bf 1c 22 00 00       	mov    $0x221c,%edi
+    1321:	bf 3c 22 00 00       	mov    $0x223c,%edi
     1326:	e8 e5 05 00 00       	call   1910 <UVM_Print_String>
-    132b:	bf 1f 22 00 00       	mov    $0x221f,%edi
+    132b:	bf 3f 22 00 00       	mov    $0x223f,%edi
     1330:	e8 db 05 00 00       	call   1910 <UVM_Print_String>
-    1335:	bf 2b 22 00 00       	mov    $0x222b,%edi
+    1335:	bf 4b 22 00 00       	mov    $0x224b,%edi
     133a:	e8 d1 05 00 00       	call   1910 <UVM_Print_String>
-    133f:	bf 2e 22 00 00       	mov    $0x222e,%edi
+    133f:	bf 4e 22 00 00       	mov    $0x224e,%edi
     1344:	e8 c7 05 00 00       	call   1910 <UVM_Print_String>
-    1349:	bf 1c 22 00 00       	mov    $0x221c,%edi
+    1349:	bf 3c 22 00 00       	mov    $0x223c,%edi
     134e:	e8 bd 05 00 00       	call   1910 <UVM_Print_String>
     1353:	eb fe                	jmp    1353 <main+0xdc3>
         UVM_ASSERT(UVM_Thd_Sched_Prio(UVM_CAPID(TEST_THD_TBL,TEST_THD1),0)>=0);
-    1355:	bf 08 20 00 00       	mov    $0x2008,%edi
+    1355:	bf 28 20 00 00       	mov    $0x2028,%edi
     135a:	e8 b1 05 00 00       	call   1910 <UVM_Print_String>
-    135f:	bf 08 22 00 00       	mov    $0x2208,%edi
+    135f:	bf 28 22 00 00       	mov    $0x2228,%edi
     1364:	e8 a7 05 00 00       	call   1910 <UVM_Print_String>
-    1369:	bf 14 22 00 00       	mov    $0x2214,%edi
+    1369:	bf 34 22 00 00       	mov    $0x2234,%edi
     136e:	e8 9d 05 00 00       	call   1910 <UVM_Print_String>
     1373:	bf 0a 01 00 00       	mov    $0x10a,%edi
     1378:	e8 63 03 00 00       	call   16e0 <UVM_Print_Int>
-    137d:	bf 1c 22 00 00       	mov    $0x221c,%edi
+    137d:	bf 3c 22 00 00       	mov    $0x223c,%edi
     1382:	e8 89 05 00 00       	call   1910 <UVM_Print_String>
-    1387:	bf 1f 22 00 00       	mov    $0x221f,%edi
+    1387:	bf 3f 22 00 00       	mov    $0x223f,%edi
     138c:	e8 7f 05 00 00       	call   1910 <UVM_Print_String>
-    1391:	bf 2b 22 00 00       	mov    $0x222b,%edi
+    1391:	bf 4b 22 00 00       	mov    $0x224b,%edi
     1396:	e8 75 05 00 00       	call   1910 <UVM_Print_String>
-    139b:	bf 2e 22 00 00       	mov    $0x222e,%edi
+    139b:	bf 4e 22 00 00       	mov    $0x224e,%edi
     13a0:	e8 6b 05 00 00       	call   1910 <UVM_Print_String>
-    13a5:	bf 1c 22 00 00       	mov    $0x221c,%edi
+    13a5:	bf 3c 22 00 00       	mov    $0x223c,%edi
     13aa:	e8 61 05 00 00       	call   1910 <UVM_Print_String>
     13af:	eb fe                	jmp    13af <main+0xe1f>
         UVM_ASSERT(UVM_Thd_Sched_Bind(UVM_CAPID(TEST_THD_TBL,TEST_THD4),UVM_CAPID(UVM_BOOT_TBL_THD,0),UVM_CAPID_NULL,0,0)>=0);
-    13b1:	bf 08 20 00 00       	mov    $0x2008,%edi
+    13b1:	bf 28 20 00 00       	mov    $0x2028,%edi
     13b6:	e8 55 05 00 00       	call   1910 <UVM_Print_String>
-    13bb:	bf 08 22 00 00       	mov    $0x2208,%edi
+    13bb:	bf 28 22 00 00       	mov    $0x2228,%edi
     13c0:	e8 4b 05 00 00       	call   1910 <UVM_Print_String>
-    13c5:	bf 14 22 00 00       	mov    $0x2214,%edi
+    13c5:	bf 34 22 00 00       	mov    $0x2234,%edi
     13ca:	e8 41 05 00 00       	call   1910 <UVM_Print_String>
     13cf:	bf 44 01 00 00       	mov    $0x144,%edi
     13d4:	e8 07 03 00 00       	call   16e0 <UVM_Print_Int>
-    13d9:	bf 1c 22 00 00       	mov    $0x221c,%edi
+    13d9:	bf 3c 22 00 00       	mov    $0x223c,%edi
     13de:	e8 2d 05 00 00       	call   1910 <UVM_Print_String>
-    13e3:	bf 1f 22 00 00       	mov    $0x221f,%edi
+    13e3:	bf 3f 22 00 00       	mov    $0x223f,%edi
     13e8:	e8 23 05 00 00       	call   1910 <UVM_Print_String>
-    13ed:	bf 2b 22 00 00       	mov    $0x222b,%edi
+    13ed:	bf 4b 22 00 00       	mov    $0x224b,%edi
     13f2:	e8 19 05 00 00       	call   1910 <UVM_Print_String>
-    13f7:	bf 2e 22 00 00       	mov    $0x222e,%edi
+    13f7:	bf 4e 22 00 00       	mov    $0x224e,%edi
     13fc:	e8 0f 05 00 00       	call   1910 <UVM_Print_String>
-    1401:	bf 1c 22 00 00       	mov    $0x221c,%edi
+    1401:	bf 3c 22 00 00       	mov    $0x223c,%edi
     1406:	e8 05 05 00 00       	call   1910 <UVM_Print_String>
     140b:	eb fe                	jmp    140b <main+0xe7b>
         UVM_ASSERT(UVM_Sig_Crt(UVM_BOOT_CAPTBL,UVM_CAPID(UVM_BOOT_TBL_KMEM,0),TEST_SIG2, Cur_Addr)>=0);
-    140d:	bf 08 20 00 00       	mov    $0x2008,%edi
+    140d:	bf 28 20 00 00       	mov    $0x2028,%edi
     1412:	e8 f9 04 00 00       	call   1910 <UVM_Print_String>
-    1417:	bf 08 22 00 00       	mov    $0x2208,%edi
+    1417:	bf 28 22 00 00       	mov    $0x2228,%edi
     141c:	e8 ef 04 00 00       	call   1910 <UVM_Print_String>
-    1421:	bf 14 22 00 00       	mov    $0x2214,%edi
+    1421:	bf 34 22 00 00       	mov    $0x2234,%edi
     1426:	e8 e5 04 00 00       	call   1910 <UVM_Print_String>
     142b:	bf 52 01 00 00       	mov    $0x152,%edi
     1430:	e8 ab 02 00 00       	call   16e0 <UVM_Print_Int>
-    1435:	bf 1c 22 00 00       	mov    $0x221c,%edi
+    1435:	bf 3c 22 00 00       	mov    $0x223c,%edi
     143a:	e8 d1 04 00 00       	call   1910 <UVM_Print_String>
-    143f:	bf 1f 22 00 00       	mov    $0x221f,%edi
+    143f:	bf 3f 22 00 00       	mov    $0x223f,%edi
     1444:	e8 c7 04 00 00       	call   1910 <UVM_Print_String>
-    1449:	bf 2b 22 00 00       	mov    $0x222b,%edi
+    1449:	bf 4b 22 00 00       	mov    $0x224b,%edi
     144e:	e8 bd 04 00 00       	call   1910 <UVM_Print_String>
-    1453:	bf 2e 22 00 00       	mov    $0x222e,%edi
+    1453:	bf 4e 22 00 00       	mov    $0x224e,%edi
     1458:	e8 b3 04 00 00       	call   1910 <UVM_Print_String>
-    145d:	bf 1c 22 00 00       	mov    $0x221c,%edi
+    145d:	bf 3c 22 00 00       	mov    $0x223c,%edi
     1462:	e8 a9 04 00 00       	call   1910 <UVM_Print_String>
     1467:	eb fe                	jmp    1467 <main+0xed7>
         UVM_ASSERT(UVM_Thd_Exec_Set(UVM_CAPID(TEST_THD_TBL,TEST_THD4),(ptr_t)TEST_THD_FUNC4,15*UVM_POW2(RME_PGT_SIZE_1M),0)>=0);
-    1469:	bf 08 20 00 00       	mov    $0x2008,%edi
+    1469:	bf 28 20 00 00       	mov    $0x2028,%edi
     146e:	e8 9d 04 00 00       	call   1910 <UVM_Print_String>
-    1473:	bf 08 22 00 00       	mov    $0x2208,%edi
+    1473:	bf 28 22 00 00       	mov    $0x2228,%edi
     1478:	e8 93 04 00 00       	call   1910 <UVM_Print_String>
-    147d:	bf 14 22 00 00       	mov    $0x2214,%edi
+    147d:	bf 34 22 00 00       	mov    $0x2234,%edi
     1482:	e8 89 04 00 00       	call   1910 <UVM_Print_String>
     1487:	bf 47 01 00 00       	mov    $0x147,%edi
     148c:	e8 4f 02 00 00       	call   16e0 <UVM_Print_Int>
-    1491:	bf 1c 22 00 00       	mov    $0x221c,%edi
+    1491:	bf 3c 22 00 00       	mov    $0x223c,%edi
     1496:	e8 75 04 00 00       	call   1910 <UVM_Print_String>
-    149b:	bf 1f 22 00 00       	mov    $0x221f,%edi
+    149b:	bf 3f 22 00 00       	mov    $0x223f,%edi
     14a0:	e8 6b 04 00 00       	call   1910 <UVM_Print_String>
-    14a5:	bf 2b 22 00 00       	mov    $0x222b,%edi
+    14a5:	bf 4b 22 00 00       	mov    $0x224b,%edi
     14aa:	e8 61 04 00 00       	call   1910 <UVM_Print_String>
-    14af:	bf 2e 22 00 00       	mov    $0x222e,%edi
+    14af:	bf 4e 22 00 00       	mov    $0x224e,%edi
     14b4:	e8 57 04 00 00       	call   1910 <UVM_Print_String>
-    14b9:	bf 1c 22 00 00       	mov    $0x221c,%edi
+    14b9:	bf 3c 22 00 00       	mov    $0x223c,%edi
     14be:	e8 4d 04 00 00       	call   1910 <UVM_Print_String>
     14c3:	eb fe                	jmp    14c3 <main+0xf33>
         UVM_ASSERT(UVM_Thd_Sched_Prio(UVM_CAPID(TEST_THD_TBL,TEST_THD3),1)>=0);
-    14c5:	bf 08 20 00 00       	mov    $0x2008,%edi
+    14c5:	bf 28 20 00 00       	mov    $0x2028,%edi
     14ca:	e8 41 04 00 00       	call   1910 <UVM_Print_String>
-    14cf:	bf 08 22 00 00       	mov    $0x2208,%edi
+    14cf:	bf 28 22 00 00       	mov    $0x2228,%edi
     14d4:	e8 37 04 00 00       	call   1910 <UVM_Print_String>
-    14d9:	bf 14 22 00 00       	mov    $0x2214,%edi
+    14d9:	bf 34 22 00 00       	mov    $0x2234,%edi
     14de:	e8 2d 04 00 00       	call   1910 <UVM_Print_String>
     14e3:	bf 57 01 00 00       	mov    $0x157,%edi
     14e8:	e8 f3 01 00 00       	call   16e0 <UVM_Print_Int>
-    14ed:	bf 1c 22 00 00       	mov    $0x221c,%edi
+    14ed:	bf 3c 22 00 00       	mov    $0x223c,%edi
     14f2:	e8 19 04 00 00       	call   1910 <UVM_Print_String>
-    14f7:	bf 1f 22 00 00       	mov    $0x221f,%edi
+    14f7:	bf 3f 22 00 00       	mov    $0x223f,%edi
     14fc:	e8 0f 04 00 00       	call   1910 <UVM_Print_String>
-    1501:	bf 2b 22 00 00       	mov    $0x222b,%edi
+    1501:	bf 4b 22 00 00       	mov    $0x224b,%edi
     1506:	e8 05 04 00 00       	call   1910 <UVM_Print_String>
-    150b:	bf 2e 22 00 00       	mov    $0x222e,%edi
+    150b:	bf 4e 22 00 00       	mov    $0x224e,%edi
     1510:	e8 fb 03 00 00       	call   1910 <UVM_Print_String>
-    1515:	bf 1c 22 00 00       	mov    $0x221c,%edi
+    1515:	bf 3c 22 00 00       	mov    $0x223c,%edi
     151a:	e8 f1 03 00 00       	call   1910 <UVM_Print_String>
     151f:	eb fe                	jmp    151f <main+0xf8f>
         UVM_ASSERT(UVM_Thd_Exec_Set(UVM_CAPID(TEST_THD_TBL,TEST_THD3),(ptr_t)TEST_SIG_FUNC2,14*UVM_POW2(RME_PGT_SIZE_1M),0)>=0);
-    1521:	bf 08 20 00 00       	mov    $0x2008,%edi
+    1521:	bf 28 20 00 00       	mov    $0x2028,%edi
     1526:	e8 e5 03 00 00       	call   1910 <UVM_Print_String>
-    152b:	bf 08 22 00 00       	mov    $0x2208,%edi
+    152b:	bf 28 22 00 00       	mov    $0x2228,%edi
     1530:	e8 db 03 00 00       	call   1910 <UVM_Print_String>
-    1535:	bf 14 22 00 00       	mov    $0x2214,%edi
+    1535:	bf 34 22 00 00       	mov    $0x2234,%edi
     153a:	e8 d1 03 00 00       	call   1910 <UVM_Print_String>
     153f:	bf 55 01 00 00       	mov    $0x155,%edi
     1544:	e8 97 01 00 00       	call   16e0 <UVM_Print_Int>
-    1549:	bf 1c 22 00 00       	mov    $0x221c,%edi
+    1549:	bf 3c 22 00 00       	mov    $0x223c,%edi
     154e:	e8 bd 03 00 00       	call   1910 <UVM_Print_String>
-    1553:	bf 1f 22 00 00       	mov    $0x221f,%edi
+    1553:	bf 3f 22 00 00       	mov    $0x223f,%edi
     1558:	e8 b3 03 00 00       	call   1910 <UVM_Print_String>
-    155d:	bf 2b 22 00 00       	mov    $0x222b,%edi
+    155d:	bf 4b 22 00 00       	mov    $0x224b,%edi
     1562:	e8 a9 03 00 00       	call   1910 <UVM_Print_String>
-    1567:	bf 2e 22 00 00       	mov    $0x222e,%edi
+    1567:	bf 4e 22 00 00       	mov    $0x224e,%edi
     156c:	e8 9f 03 00 00       	call   1910 <UVM_Print_String>
-    1571:	bf 1c 22 00 00       	mov    $0x221c,%edi
+    1571:	bf 3c 22 00 00       	mov    $0x223c,%edi
     1576:	e8 95 03 00 00       	call   1910 <UVM_Print_String>
     157b:	eb fe                	jmp    157b <main+0xfeb>
         UVM_ASSERT(UVM_Inv_Crt(UVM_BOOT_CAPTBL, UVM_CAPID(UVM_BOOT_TBL_KMEM,0), TEST_INV1, TEST_PROCESS, Cur_Addr)>=0);
-    157d:	bf 08 20 00 00       	mov    $0x2008,%edi
+    157d:	bf 28 20 00 00       	mov    $0x2028,%edi
     1582:	e8 89 03 00 00       	call   1910 <UVM_Print_String>
-    1587:	bf 08 22 00 00       	mov    $0x2208,%edi
+    1587:	bf 28 22 00 00       	mov    $0x2228,%edi
     158c:	e8 7f 03 00 00       	call   1910 <UVM_Print_String>
-    1591:	bf 14 22 00 00       	mov    $0x2214,%edi
+    1591:	bf 34 22 00 00       	mov    $0x2234,%edi
     1596:	e8 75 03 00 00       	call   1910 <UVM_Print_String>
     159b:	bf 62 01 00 00       	mov    $0x162,%edi
     15a0:	e8 3b 01 00 00       	call   16e0 <UVM_Print_Int>
-    15a5:	bf 1c 22 00 00       	mov    $0x221c,%edi
+    15a5:	bf 3c 22 00 00       	mov    $0x223c,%edi
     15aa:	e8 61 03 00 00       	call   1910 <UVM_Print_String>
-    15af:	bf 1f 22 00 00       	mov    $0x221f,%edi
+    15af:	bf 3f 22 00 00       	mov    $0x223f,%edi
     15b4:	e8 57 03 00 00       	call   1910 <UVM_Print_String>
-    15b9:	bf 2b 22 00 00       	mov    $0x222b,%edi
+    15b9:	bf 4b 22 00 00       	mov    $0x224b,%edi
     15be:	e8 4d 03 00 00       	call   1910 <UVM_Print_String>
-    15c3:	bf 2e 22 00 00       	mov    $0x222e,%edi
+    15c3:	bf 4e 22 00 00       	mov    $0x224e,%edi
     15c8:	e8 43 03 00 00       	call   1910 <UVM_Print_String>
-    15cd:	bf 1c 22 00 00       	mov    $0x221c,%edi
+    15cd:	bf 3c 22 00 00       	mov    $0x223c,%edi
     15d2:	e8 39 03 00 00       	call   1910 <UVM_Print_String>
     15d7:	eb fe                	jmp    15d7 <main+0x1047>
         UVM_ASSERT(UVM_Thd_Sched_Prio(UVM_CAPID(TEST_THD_TBL,TEST_THD3),0)>=0);
-    15d9:	bf 08 20 00 00       	mov    $0x2008,%edi
+    15d9:	bf 28 20 00 00       	mov    $0x2028,%edi
     15de:	e8 2d 03 00 00       	call   1910 <UVM_Print_String>
-    15e3:	bf 08 22 00 00       	mov    $0x2208,%edi
+    15e3:	bf 28 22 00 00       	mov    $0x2228,%edi
     15e8:	e8 23 03 00 00       	call   1910 <UVM_Print_String>
-    15ed:	bf 14 22 00 00       	mov    $0x2214,%edi
+    15ed:	bf 34 22 00 00       	mov    $0x2234,%edi
     15f2:	e8 19 03 00 00       	call   1910 <UVM_Print_String>
     15f7:	bf 5c 01 00 00       	mov    $0x15c,%edi
     15fc:	e8 df 00 00 00       	call   16e0 <UVM_Print_Int>
-    1601:	bf 1c 22 00 00       	mov    $0x221c,%edi
+    1601:	bf 3c 22 00 00       	mov    $0x223c,%edi
     1606:	e8 05 03 00 00       	call   1910 <UVM_Print_String>
-    160b:	bf 1f 22 00 00       	mov    $0x221f,%edi
+    160b:	bf 3f 22 00 00       	mov    $0x223f,%edi
     1610:	e8 fb 02 00 00       	call   1910 <UVM_Print_String>
-    1615:	bf 2b 22 00 00       	mov    $0x222b,%edi
+    1615:	bf 4b 22 00 00       	mov    $0x224b,%edi
     161a:	e8 f1 02 00 00       	call   1910 <UVM_Print_String>
-    161f:	bf 2e 22 00 00       	mov    $0x222e,%edi
+    161f:	bf 4e 22 00 00       	mov    $0x224e,%edi
     1624:	e8 e7 02 00 00       	call   1910 <UVM_Print_String>
-    1629:	bf 1c 22 00 00       	mov    $0x221c,%edi
+    1629:	bf 3c 22 00 00       	mov    $0x223c,%edi
     162e:	e8 dd 02 00 00       	call   1910 <UVM_Print_String>
     1633:	eb fe                	jmp    1633 <main+0x10a3>
         UVM_ASSERT(UVM_Inv_Set(TEST_INV1,(ptr_t)TEST_INV1_FUNC,15*UVM_POW2(RME_PGT_SIZE_1M),0)>=0);
-    1635:	bf 08 20 00 00       	mov    $0x2008,%edi
+    1635:	bf 28 20 00 00       	mov    $0x2028,%edi
     163a:	e8 d1 02 00 00       	call   1910 <UVM_Print_String>
-    163f:	bf 08 22 00 00       	mov    $0x2208,%edi
+    163f:	bf 28 22 00 00       	mov    $0x2228,%edi
     1644:	e8 c7 02 00 00       	call   1910 <UVM_Print_String>
-    1649:	bf 14 22 00 00       	mov    $0x2214,%edi
+    1649:	bf 34 22 00 00       	mov    $0x2234,%edi
     164e:	e8 bd 02 00 00       	call   1910 <UVM_Print_String>
     1653:	bf 65 01 00 00       	mov    $0x165,%edi
     1658:	e8 83 00 00 00       	call   16e0 <UVM_Print_Int>
-    165d:	bf 1c 22 00 00       	mov    $0x221c,%edi
+    165d:	bf 3c 22 00 00       	mov    $0x223c,%edi
     1662:	e8 a9 02 00 00       	call   1910 <UVM_Print_String>
-    1667:	bf 1f 22 00 00       	mov    $0x221f,%edi
+    1667:	bf 3f 22 00 00       	mov    $0x223f,%edi
     166c:	e8 9f 02 00 00       	call   1910 <UVM_Print_String>
-    1671:	bf 2b 22 00 00       	mov    $0x222b,%edi
+    1671:	bf 4b 22 00 00       	mov    $0x224b,%edi
     1676:	e8 95 02 00 00       	call   1910 <UVM_Print_String>
-    167b:	bf 2e 22 00 00       	mov    $0x222e,%edi
+    167b:	bf 4e 22 00 00       	mov    $0x224e,%edi
     1680:	e8 8b 02 00 00       	call   1910 <UVM_Print_String>
-    1685:	bf 1c 22 00 00       	mov    $0x221c,%edi
+    1685:	bf 3c 22 00 00       	mov    $0x223c,%edi
     168a:	e8 81 02 00 00       	call   1910 <UVM_Print_String>
     168f:	eb fe                	jmp    168f <main+0x10ff>
     1691:	66 2e 0f 1f 84 00 00 	cs nopw 0x0(%rax,%rax,1)
@@ -3037,73 +3037,81 @@ Return      : ptr_t - Always 0.
 ptr_t UVM_Putchar(char Char)
 {
     1f30:	f3 0f 1e fa          	endbr64 
-    1f34:	53                   	push   %rbx
-    1f35:	89 fb                	mov    %edi,%ebx
+    1f34:	41 54                	push   %r12
+    1f36:	41 89 fc             	mov    %edi,%r12d
     /* Wait until we have transmitted */
     while((__UVM_X64_In(UVM_X64_COM1+5)&0x20)==0);
-    1f37:	66 0f 1f 84 00 00 00 	nopw   0x0(%rax,%rax,1)
-    1f3e:	00 00 
+    1f39:	0f 1f 80 00 00 00 00 	nopl   0x0(%rax)
     1f40:	bf fd 03 00 00       	mov    $0x3fd,%edi
     1f45:	e8 bb e0 ff ff       	call   5 <__UVM_X64_In>
     1f4a:	a8 20                	test   $0x20,%al
     1f4c:	74 f2                	je     1f40 <UVM_Putchar+0x10>
 
     __UVM_X64_Out(UVM_X64_COM1, Char);
-    1f4e:	48 0f be f3          	movsbq %bl,%rsi
+    1f4e:	4d 0f be e4          	movsbq %r12b,%r12
     1f52:	bf f8 03 00 00       	mov    $0x3f8,%edi
-    1f57:	e8 b3 e0 ff ff       	call   f <__UVM_X64_Out>
-
+    1f57:	4c 89 e6             	mov    %r12,%rsi
+    1f5a:	e8 b0 e0 ff ff       	call   f <__UVM_X64_Out>
+    UVM_Kern_Act(UVM_BOOT_INIT_KERN,0,0,(ptr_t)Char,0);
+    1f5f:	4c 89 e1             	mov    %r12,%rcx
+    1f62:	45 31 c0             	xor    %r8d,%r8d
+    1f65:	31 d2                	xor    %edx,%edx
+    1f67:	31 f6                	xor    %esi,%esi
+    1f69:	bf 04 00 00 00       	mov    $0x4,%edi
+    1f6e:	e8 8d fb ff ff       	call   1b00 <UVM_Kern_Act>
     return 0;
 }
-    1f5c:	31 c0                	xor    %eax,%eax
-    1f5e:	5b                   	pop    %rbx
-    1f5f:	c3                   	ret    
+    1f73:	31 c0                	xor    %eax,%eax
+    1f75:	41 5c                	pop    %r12
+    1f77:	c3                   	ret    
+    1f78:	0f 1f 84 00 00 00 00 	nopl   0x0(%rax,%rax,1)
+    1f7f:	00 
 
-0000000000001f60 <_UVM_Stack_Init>:
+0000000000001f80 <_UVM_Stack_Init>:
 Output      : None.
 Return      : ptr_t - The actual stack address to use for system call.
 ******************************************************************************/
 ptr_t _UVM_Stack_Init(ptr_t Stack, ptr_t Size, ptr_t Stub, ptr_t Entry,
                       ptr_t Param1, ptr_t Param2, ptr_t Param3, ptr_t Param4)
 {
-    1f60:	f3 0f 1e fa          	endbr64 
+    1f80:	f3 0f 1e fa          	endbr64 
 	ptr_t* Stack_Ptr;
 
     Stack_Ptr=(ptr_t*)(Stack+Size-UVM_STACK_SAFE_SIZE*sizeof(ptr_t));
     Stack_Ptr[0]=Param1;
-    1f64:	66 49 0f 6e c0       	movq   %r8,%xmm0
-    1f69:	66 49 0f 6e c9       	movq   %r9,%xmm1
+    1f84:	66 49 0f 6e c0       	movq   %r8,%xmm0
+    1f89:	66 49 0f 6e c9       	movq   %r9,%xmm1
     Stack_Ptr=(ptr_t*)(Stack+Size-UVM_STACK_SAFE_SIZE*sizeof(ptr_t));
-    1f6e:	48 8d 84 37 00 ff ff 	lea    -0x100(%rdi,%rsi,1),%rax
-    1f75:	ff 
+    1f8e:	48 8d 84 37 00 ff ff 	lea    -0x100(%rdi,%rsi,1),%rax
+    1f95:	ff 
     Stack_Ptr[0]=Param1;
-    1f76:	66 0f 6c c1          	punpcklqdq %xmm1,%xmm0
+    1f96:	66 0f 6c c1          	punpcklqdq %xmm1,%xmm0
     Stack_Ptr[1]=Param2;
     Stack_Ptr[2]=Param3;
     Stack_Ptr[3]=Param4;
     Stack_Ptr[4]=Entry;
-    1f7a:	48 89 48 20          	mov    %rcx,0x20(%rax)
+    1f9a:	48 89 48 20          	mov    %rcx,0x20(%rax)
     Stack_Ptr[0]=Param1;
-    1f7e:	0f 11 00             	movups %xmm0,(%rax)
-    1f81:	f3 0f 7e 44 24 08    	movq   0x8(%rsp),%xmm0
-    1f87:	0f 16 44 24 10       	movhps 0x10(%rsp),%xmm0
-    1f8c:	0f 11 40 10          	movups %xmm0,0x10(%rax)
+    1f9e:	0f 11 00             	movups %xmm0,(%rax)
+    1fa1:	f3 0f 7e 44 24 08    	movq   0x8(%rsp),%xmm0
+    1fa7:	0f 16 44 24 10       	movhps 0x10(%rsp),%xmm0
+    1fac:	0f 11 40 10          	movups %xmm0,0x10(%rax)
 
     return (ptr_t)Stack_Ptr;
 }
-    1f90:	c3                   	ret    
-    1f91:	66 66 2e 0f 1f 84 00 	data16 cs nopw 0x0(%rax,%rax,1)
-    1f98:	00 00 00 00 
-    1f9c:	0f 1f 40 00          	nopl   0x0(%rax)
+    1fb0:	c3                   	ret    
+    1fb1:	66 66 2e 0f 1f 84 00 	data16 cs nopw 0x0(%rax,%rax,1)
+    1fb8:	00 00 00 00 
+    1fbc:	0f 1f 40 00          	nopl   0x0(%rax)
 
-0000000000001fa0 <_UVM_Idle>:
+0000000000001fc0 <_UVM_Idle>:
 Input       : None.
 Output      : None.
 Return      : None.
 ******************************************************************************/
 void _UVM_Idle(void)
 {
-    1fa0:	f3 0f 1e fa          	endbr64 
+    1fc0:	f3 0f 1e fa          	endbr64 
     /* Do nothing. In the future we may call a kernel function to put us to sleep */
 }
-    1fa4:	c3                   	ret    
+    1fc4:	c3                   	ret    

@@ -11,6 +11,7 @@
   <component name="CMakeRunConfigurationManager">
     <generated>
       <config projectName="GCC-X64" targetName="mkdir" />
+      <config projectName="GCC-X64" targetName="Makefile" />
       <config projectName="GCC-X64" targetName="RME" />
       <config projectName="GCC-X64" targetName="user" />
       <config projectName="GCC-X64" targetName="all" />
@@ -23,10 +24,11 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="ac4fed31-378c-48ff-aa30-57d690a7c470" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/../../Include/Platform/X64/rme_platform_x64.h" beforeDir="false" afterPath="$PROJECT_DIR$/../../Include/Platform/X64/rme_platform_x64.h" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../../MRex/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../../MRex/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../MRex/Init/init.c" beforeDir="false" afterPath="$PROJECT_DIR$/../../MRex/Init/init.c" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../MRex/Makefile" beforeDir="false" afterPath="$PROJECT_DIR$/../../MRex/Makefile" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../MRex/Include/Platform/X64/uvmlib_x64.h" beforeDir="false" afterPath="$PROJECT_DIR$/../../MRex/Include/Platform/X64/uvmlib_x64.h" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../../MRex/Object/UVM" beforeDir="false" afterPath="$PROJECT_DIR$/../../MRex/Object/UVM" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../MRex/Platform/X64/uvmlib_x64.c" beforeDir="false" afterPath="$PROJECT_DIR$/../../MRex/Platform/X64/uvmlib_x64.c" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../../MRex/UVM.asm" beforeDir="false" afterPath="$PROJECT_DIR$/../../MRex/UVM.asm" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../../MRex/UVM.bin" beforeDir="false" afterPath="$PROJECT_DIR$/../../MRex/UVM.bin" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../../MRex/UVM.c" beforeDir="false" afterPath="$PROJECT_DIR$/../../MRex/UVM.c" afterDir="false" />
@@ -36,6 +38,8 @@
       <change beforePath="$PROJECT_DIR$/RME.iso" beforeDir="false" afterPath="$PROJECT_DIR$/RME.iso" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/UVM.c" beforeDir="false" afterPath="$PROJECT_DIR$/UVM.c" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/isofiles/boot/RME" beforeDir="false" afterPath="$PROJECT_DIR$/isofiles/boot/RME" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../Source/Platform/X64/rme_platform_x64.c" beforeDir="false" afterPath="$PROJECT_DIR$/../../Source/Platform/X64/rme_platform_x64.c" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../Source/Platform/X64/rme_platform_x64_gcc.s" beforeDir="false" afterPath="$PROJECT_DIR$/../../Source/Platform/X64/rme_platform_x64_gcc.s" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -44,6 +48,11 @@
   </component>
   <component name="ClangdSettings">
     <option name="formatViaClangd" value="false" />
+  </component>
+  <component name="ExternalProjectsData">
+    <projectState path="$PROJECT_DIR$">
+      <ProjectState />
+    </projectState>
   </component>
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/../.." />
@@ -90,28 +99,39 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">{
-  &quot;keyToString&quot;: {
-    &quot;ModuleVcsDetector.initialDetectionPerformed&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.RadMigrateCodeStyle&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.cidr.known.project.marker&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.readMode.enableVisualFormatting&quot;: &quot;true&quot;,
-    &quot;cf.first.check.clang-format&quot;: &quot;false&quot;,
-    &quot;cidr.known.project.marker&quot;: &quot;true&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;main&quot;,
-    &quot;last_opened_file_path&quot;: &quot;/home/kevin/M7M01_Eukaron/MRex/Makefile&quot;,
-    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
-    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
-    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
-    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
-    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
-    &quot;settings.editor.selected.configurable&quot;: &quot;preferences.lookFeel&quot;,
-    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "ModuleVcsDetector.initialDetectionPerformed": "true",
+    "RunOnceActivity.RadMigrateCodeStyle": "true",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "RunOnceActivity.cidr.known.project.marker": "true",
+    "RunOnceActivity.git.unshallow": "true",
+    "RunOnceActivity.readMode.enableVisualFormatting": "true",
+    "SHELLCHECK.PATH": "我会在意",
+    "cf.first.check.clang-format": "false",
+    "cidr.known.project.marker": "true",
+    "git-widget-placeholder": "main",
+    "last_opened_file_path": "/home/kevin/M7M01_Eukaron/MRex/Makefile",
+    "node.js.detected.package.eslint": "true",
+    "node.js.detected.package.tslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "node.js.selected.package.tslint": "(autodetect)",
+    "nodejs_package_manager_path": "npm",
+    "settings.editor.selected.configurable": "preferences.lookFeel",
+    "vue.rearranger.settings.migration": "true"
   }
-}</component>
+}]]></component>
   <component name="RunManager" selected="原生应用程序.RME">
+    <configuration default="true" type="CLionExternalRunConfiguration" factoryName="Application" REDIRECT_INPUT="false" ELEVATE="false" USE_EXTERNAL_CONSOLE="false" EMULATE_TERMINAL="false" PASS_PARENT_ENVS_2="true">
+      <method v="2">
+        <option name="CLION.EXTERNAL.BUILD" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="Makefile" type="CLionNativeAppRunConfigurationType" REDIRECT_INPUT="false" ELEVATE="false" USE_EXTERNAL_CONSOLE="false" EMULATE_TERMINAL="false" PASS_PARENT_ENVS_2="true" PROJECT_NAME="GCC-X64" TARGET_NAME="Makefile" CONFIG_NAME="Makefile" version="1">
+      <method v="2">
+        <option name="CLION.COMPOUND.BUILD" enabled="true" />
+      </method>
+    </configuration>
     <configuration name="RME" type="CLionNativeAppRunConfigurationType" REDIRECT_INPUT="false" ELEVATE="false" USE_EXTERNAL_CONSOLE="false" EMULATE_TERMINAL="false" PASS_PARENT_ENVS_2="true" PROJECT_NAME="GCC-X64" TARGET_NAME="RME" CONFIG_NAME="RME" version="1">
       <method v="2">
         <option name="CLION.COMPOUND.BUILD" enabled="true" />
@@ -135,6 +155,7 @@
     <list>
       <item itemvalue="原生应用程序.RME" />
       <item itemvalue="原生应用程序.all" />
+      <item itemvalue="原生应用程序.Makefile" />
       <item itemvalue="原生应用程序.mkdir" />
       <item itemvalue="原生应用程序.user" />
     </list>
@@ -150,7 +171,7 @@
       <workItem from="1747203004640" duration="307000" />
       <workItem from="1747203427580" duration="13309000" />
       <workItem from="1747795292525" duration="24945000" />
-      <workItem from="1747823549156" duration="30750000" />
+      <workItem from="1747823549156" duration="47860000" />
     </task>
     <servers />
   </component>

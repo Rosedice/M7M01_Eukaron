@@ -61,6 +61,7 @@ typedef unsigned char u8;
 #define UVM_STACK_SAFE_SIZE                 0x20
 /* The COM1 I/O address */
 #define UVM_X64_COM1                        0x3F8
+/**/
 
 /* Platform-specific includes */
 #include "Platform/X64/uvmlib_x64_conf.h"
