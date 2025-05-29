@@ -97,7 +97,7 @@ void TEST_THD_FUNC1(void)
 {
     cnt_t Cnt;
     sum=0;
-    for(Cnt=0;Cnt<10000;Cnt++)
+    for(Cnt=0;Cnt<1000000;Cnt++)
     {
         start=__UVM_X64_Read_TSC();
         UVM_Thd_Swt(UVM_CAPID(TEST_THD_TBL,TEST_THD2),0);
@@ -105,7 +105,7 @@ void TEST_THD_FUNC1(void)
         sum+=end-start;
     }
     UVM_LOG_S("\r\nThread Switching takes clock cycles:");
-    UVM_LOG_I(sum/10000);
+    UVM_LOG_I(sum/1000000);
     UVM_Thd_Swt(UVM_CAPID(UVM_BOOT_TBL_THD,0),0);
 }
 
@@ -123,7 +123,7 @@ void TEST_THD_FUNC3(void)
 {
     cnt_t Cnt;
     sum=0;
-    for(Cnt=0;Cnt<10000;Cnt++)
+    for(Cnt=0;Cnt<1000000;Cnt++)
     {
         start=__UVM_X64_Read_TSC();
         UVM_Thd_Swt(UVM_CAPID(TEST_THD_TBL,TEST_THD4),0);
@@ -131,7 +131,7 @@ void TEST_THD_FUNC3(void)
         sum+=end-start;
     }
     UVM_LOG_S("\r\nCross-process thread Switching takes clock cycles:");
-    UVM_LOG_I(sum/10000);
+    UVM_LOG_I(sum/1000000);
     UVM_Thd_Swt(UVM_CAPID(UVM_BOOT_TBL_THD,0),0);
 }
 
@@ -149,7 +149,7 @@ void TEST_SIG_FUNC1(void)
 {
     cnt_t Cnt;
     sum=0;
-    for(Cnt=0;Cnt<10000;Cnt++)
+    for(Cnt=0;Cnt<1000000;Cnt++)
     {
         start=__UVM_X64_Read_TSC();
         UVM_ASSERT(UVM_Sig_Rcv(TEST_SIG1,RME_RCV_BS));
@@ -157,7 +157,7 @@ void TEST_SIG_FUNC1(void)
         sum+=end-start;
     }
     UVM_LOG_S("\r\nSignal sending-receiving takes clock cycles:");
-    UVM_LOG_I(sum/10000);
+    UVM_LOG_I(sum/1000000);
     UVM_ASSERT(UVM_Sig_Rcv(TEST_SIG1,RME_RCV_BS));
 }
 
@@ -166,7 +166,7 @@ void TEST_SIG_FUNC2(void)
 {
     cnt_t Cnt;
     sum=0;
-    for(Cnt=0;Cnt<10000;Cnt++)
+    for(Cnt=0;Cnt<1000000;Cnt++)
     {
         start=__UVM_X64_Read_TSC();
         UVM_ASSERT(UVM_Sig_Rcv(TEST_SIG2,RME_RCV_BS));
@@ -174,7 +174,7 @@ void TEST_SIG_FUNC2(void)
         sum+=end-start;
     }
     UVM_LOG_S("\r\nCross-process signal sending-receiving takes clock cycles:");
-    UVM_LOG_I(sum/10000);
+    UVM_LOG_I(sum/1000000);
     UVM_ASSERT(UVM_Sig_Rcv(TEST_SIG2,RME_RCV_BS));
 }
 
@@ -202,19 +202,19 @@ int main(ptr_t CPUID)
     {
         /*Empty test begins here*/
         sum=0;
-        for(Count=0;Count<10000;Count++)
+        for(Count=0;Count<1000000;Count++)
         {
             start=__UVM_X64_Read_TSC();
             end=__UVM_X64_Read_TSC();
             sum+=end-start;
         }
         UVM_LOG_S("\r\nEmpty test takes clock cycles:");
-        UVM_LOG_I(sum/10000);
+        UVM_LOG_I(sum/1000000);
         /*Empty test ends here*/
 
         /*Empty system call test begins here*/
         sum=0;
-        for(Count=0;Count<10000;Count++)
+        for(Count=0;Count<1000000;Count++)
         {
             start=__UVM_X64_Read_TSC();
             UVM_Svc(-1,-1,-1,-1);
@@ -222,7 +222,7 @@ int main(ptr_t CPUID)
             sum+=end-start;
         }
         UVM_LOG_S("\r\nEmpty system call takes clock cycles:");
-        UVM_LOG_I(sum/10000);
+        UVM_LOG_I(sum/1000000);
         /*Empty system call test ends here*/
 
         /*Now we begin to create UVM kernel objects*/
@@ -260,7 +260,7 @@ int main(ptr_t CPUID)
         //UVM_ASSERT(UVM_Thd_Time_Xfer(UVM_CAPID(UVM_BOOT_TBL_THD,0),TEST_THD1,UVM_THD_INIT_TIME)>=0);
         //UVM_ASSERT(UVM_Thd_Time_Xfer(TEST_THD1,UVM_CAPID(UVM_BOOT_TBL_THD,0),100)>=0);
         UVM_ASSERT(UVM_Thd_Sched_Prio(UVM_CAPID(TEST_THD_TBL,TEST_THD1),1)>=0);
-        for(Count=0;Count<10000;Count++)
+        for(Count=0;Count<1000000;Count++)
         {
             UVM_Sig_Snd(TEST_SIG1);
         }
@@ -342,7 +342,7 @@ int main(ptr_t CPUID)
         UVM_ASSERT(UVM_Thd_Exec_Set(UVM_CAPID(TEST_THD_TBL,TEST_THD3),(ptr_t)TEST_SIG_FUNC2,14*UVM_POW2(RME_PGT_SIZE_1M),0)>=0);
 
         UVM_ASSERT(UVM_Thd_Sched_Prio(UVM_CAPID(TEST_THD_TBL,TEST_THD3),1)>=0);
-        for(Count=0;Count<10000;Count++)
+        for(Count=0;Count<1000000;Count++)
         {
             UVM_Sig_Snd(TEST_SIG2);
         }
@@ -359,7 +359,7 @@ int main(ptr_t CPUID)
         sum=0;
         sumin=0;
         sumout=0;
-        for(Count=0;Count<10000;Count++)
+        for(Count=0;Count<1000000;Count++)
         {
             start=__UVM_X64_Read_TSC();
             UVM_Inv_Act(TEST_INV1,0,0);
@@ -369,11 +369,11 @@ int main(ptr_t CPUID)
             sumout+=end-middle;
         }
         UVM_LOG_S("\r\nInvocation total takes clock cycles:");
-        UVM_LOG_I(sum/10000);
+        UVM_LOG_I(sum/1000000);
         UVM_LOG_S("\r\nInvocation entry takes clock cycles:");
-        UVM_LOG_I(sumin/10000);
+        UVM_LOG_I(sumin/1000000);
         UVM_LOG_S("\r\nInvocation return takes clock cycles:");
-        UVM_LOG_I(sumout/10000);
+        UVM_LOG_I(sumout/1000000);
         
         /*Invocation stub test ends here*/
 

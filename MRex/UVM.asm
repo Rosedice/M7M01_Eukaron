@@ -400,7 +400,7 @@ void TEST_THD_FUNC4(void)
 {
      15f:	53                   	push   %rbx
     sum=0;
-     160:	bb 10 27 00 00       	mov    $0x2710,%ebx
+     160:	bb 40 42 0f 00       	mov    $0xf4240,%ebx
      165:	0f 1f 00             	nopl   (%rax)
         start=__UVM_X64_Read_TSC();
      168:	e8 ae fe ff ff       	call   1b <__UVM_X64_Read_TSC>
@@ -419,19 +419,19 @@ void TEST_THD_FUNC4(void)
      193:	48 8b 15 8e 2e 00 00 	mov    0x2e8e(%rip),%rdx        # 3028 <start>
      19a:	48 29 d0             	sub    %rdx,%rax
      19d:	48 01 05 6c 2e 00 00 	add    %rax,0x2e6c(%rip)        # 3010 <sum>
-    for(Cnt=0;Cnt<10000;Cnt++)
+    for(Cnt=0;Cnt<1000000;Cnt++)
      1a4:	48 83 eb 01          	sub    $0x1,%rbx
      1a8:	75 be                	jne    168 <TEST_THD_FUNC1+0x18>
     UVM_LOG_S("\r\nThread Switching takes clock cycles:");
      1aa:	bf c8 1f 00 00       	mov    $0x1fc8,%edi
      1af:	e8 5c 17 00 00       	call   1910 <UVM_Print_String>
-    UVM_LOG_I(sum/10000);
-     1b4:	48 ba 4b 59 86 38 d6 	movabs $0x346dc5d63886594b,%rdx
-     1bb:	c5 6d 34 
+    UVM_LOG_I(sum/1000000);
+     1b4:	48 ba db 34 b6 d7 82 	movabs $0x431bde82d7b634db,%rdx
+     1bb:	de 1b 43 
      1be:	48 89 d0             	mov    %rdx,%rax
      1c1:	48 f7 25 48 2e 00 00 	mulq   0x2e48(%rip)        # 3010 <sum>
      1c8:	48 89 d7             	mov    %rdx,%rdi
-     1cb:	48 c1 ef 0b          	shr    $0xb,%rdi
+     1cb:	48 c1 ef 12          	shr    $0x12,%rdi
      1cf:	e8 0c 15 00 00       	call   16e0 <UVM_Print_Int>
     UVM_Thd_Swt(UVM_CAPID(UVM_BOOT_TBL_THD,0),0);
      1d4:	31 f6                	xor    %esi,%esi
@@ -453,7 +453,7 @@ void TEST_THD_FUNC4(void)
 {
      1ff:	53                   	push   %rbx
     sum=0;
-     200:	bb 10 27 00 00       	mov    $0x2710,%ebx
+     200:	bb 40 42 0f 00       	mov    $0xf4240,%ebx
      205:	0f 1f 00             	nopl   (%rax)
         start=__UVM_X64_Read_TSC();
      208:	e8 0e fe ff ff       	call   1b <__UVM_X64_Read_TSC>
@@ -472,19 +472,19 @@ void TEST_THD_FUNC4(void)
      233:	48 8b 15 ee 2d 00 00 	mov    0x2dee(%rip),%rdx        # 3028 <start>
      23a:	48 29 d0             	sub    %rdx,%rax
      23d:	48 01 05 cc 2d 00 00 	add    %rax,0x2dcc(%rip)        # 3010 <sum>
-    for(Cnt=0;Cnt<10000;Cnt++)
+    for(Cnt=0;Cnt<1000000;Cnt++)
      244:	48 83 eb 01          	sub    $0x1,%rbx
      248:	75 be                	jne    208 <TEST_THD_FUNC3+0x18>
     UVM_LOG_S("\r\nCross-process thread Switching takes clock cycles:");
      24a:	bf f0 1f 00 00       	mov    $0x1ff0,%edi
      24f:	e8 bc 16 00 00       	call   1910 <UVM_Print_String>
-    UVM_LOG_I(sum/10000);
-     254:	48 ba 4b 59 86 38 d6 	movabs $0x346dc5d63886594b,%rdx
-     25b:	c5 6d 34 
+    UVM_LOG_I(sum/1000000);
+     254:	48 ba db 34 b6 d7 82 	movabs $0x431bde82d7b634db,%rdx
+     25b:	de 1b 43 
      25e:	48 89 d0             	mov    %rdx,%rax
      261:	48 f7 25 a8 2d 00 00 	mulq   0x2da8(%rip)        # 3010 <sum>
      268:	48 89 d7             	mov    %rdx,%rdi
-     26b:	48 c1 ef 0b          	shr    $0xb,%rdi
+     26b:	48 c1 ef 12          	shr    $0x12,%rdi
      26f:	e8 6c 14 00 00       	call   16e0 <UVM_Print_Int>
     UVM_Thd_Swt(UVM_CAPID(UVM_BOOT_TBL_THD,0),0);
      274:	31 f6                	xor    %esi,%esi
@@ -508,10 +508,10 @@ void TEST_SIG_FUNC1(void)
      294:	53                   	push   %rbx
     cnt_t Cnt;
     sum=0;
-     295:	bb 10 27 00 00       	mov    $0x2710,%ebx
+     295:	bb 40 42 0f 00       	mov    $0xf4240,%ebx
      29a:	48 c7 05 6b 2d 00 00 	movq   $0x0,0x2d6b(%rip)        # 3010 <sum>
      2a1:	00 00 00 00 
-    for(Cnt=0;Cnt<10000;Cnt++)
+    for(Cnt=0;Cnt<1000000;Cnt++)
      2a5:	eb 33                	jmp    2da <TEST_SIG_FUNC1+0x4a>
      2a7:	66 0f 1f 84 00 00 00 	nopw   0x0(%rax,%rax,1)
      2ae:	00 00 
@@ -526,7 +526,7 @@ void TEST_SIG_FUNC1(void)
      2c3:	48 8b 15 5e 2d 00 00 	mov    0x2d5e(%rip),%rdx        # 3028 <start>
      2ca:	48 29 d0             	sub    %rdx,%rax
      2cd:	48 01 05 3c 2d 00 00 	add    %rax,0x2d3c(%rip)        # 3010 <sum>
-    for(Cnt=0;Cnt<10000;Cnt++)
+    for(Cnt=0;Cnt<1000000;Cnt++)
      2d4:	48 83 eb 01          	sub    $0x1,%rbx
      2d8:	74 7e                	je     358 <TEST_SIG_FUNC1+0xc8>
         start=__UVM_X64_Read_TSC();
@@ -564,13 +564,13 @@ void TEST_SIG_FUNC1(void)
     UVM_LOG_S("\r\nSignal sending-receiving takes clock cycles:");
      358:	bf 60 20 00 00       	mov    $0x2060,%edi
      35d:	e8 ae 15 00 00       	call   1910 <UVM_Print_String>
-    UVM_LOG_I(sum/10000);
-     362:	48 ba 4b 59 86 38 d6 	movabs $0x346dc5d63886594b,%rdx
-     369:	c5 6d 34 
+    UVM_LOG_I(sum/1000000);
+     362:	48 ba db 34 b6 d7 82 	movabs $0x431bde82d7b634db,%rdx
+     369:	de 1b 43 
      36c:	48 89 d0             	mov    %rdx,%rax
      36f:	48 f7 25 9a 2c 00 00 	mulq   0x2c9a(%rip)        # 3010 <sum>
      376:	48 89 d7             	mov    %rdx,%rdi
-     379:	48 c1 ef 0b          	shr    $0xb,%rdi
+     379:	48 c1 ef 12          	shr    $0x12,%rdi
      37d:	e8 5e 13 00 00       	call   16e0 <UVM_Print_Int>
     UVM_ASSERT(UVM_Sig_Rcv(TEST_SIG1,RME_RCV_BS));
      382:	31 f6                	xor    %esi,%esi
@@ -614,10 +614,10 @@ void TEST_SIG_FUNC2(void)
      404:	53                   	push   %rbx
     cnt_t Cnt;
     sum=0;
-     405:	bb 10 27 00 00       	mov    $0x2710,%ebx
+     405:	bb 40 42 0f 00       	mov    $0xf4240,%ebx
      40a:	48 c7 05 fb 2b 00 00 	movq   $0x0,0x2bfb(%rip)        # 3010 <sum>
      411:	00 00 00 00 
-    for(Cnt=0;Cnt<10000;Cnt++)
+    for(Cnt=0;Cnt<1000000;Cnt++)
      415:	eb 33                	jmp    44a <TEST_SIG_FUNC2+0x4a>
      417:	66 0f 1f 84 00 00 00 	nopw   0x0(%rax,%rax,1)
      41e:	00 00 
@@ -632,7 +632,7 @@ void TEST_SIG_FUNC2(void)
      433:	48 8b 15 ee 2b 00 00 	mov    0x2bee(%rip),%rdx        # 3028 <start>
      43a:	48 29 d0             	sub    %rdx,%rax
      43d:	48 01 05 cc 2b 00 00 	add    %rax,0x2bcc(%rip)        # 3010 <sum>
-    for(Cnt=0;Cnt<10000;Cnt++)
+    for(Cnt=0;Cnt<1000000;Cnt++)
      444:	48 83 eb 01          	sub    $0x1,%rbx
      448:	74 7e                	je     4c8 <TEST_SIG_FUNC2+0xc8>
         start=__UVM_X64_Read_TSC();
@@ -670,13 +670,13 @@ void TEST_SIG_FUNC2(void)
     UVM_LOG_S("\r\nCross-process signal sending-receiving takes clock cycles:");
      4c8:	bf 90 20 00 00       	mov    $0x2090,%edi
      4cd:	e8 3e 14 00 00       	call   1910 <UVM_Print_String>
-    UVM_LOG_I(sum/10000);
-     4d2:	48 ba 4b 59 86 38 d6 	movabs $0x346dc5d63886594b,%rdx
-     4d9:	c5 6d 34 
+    UVM_LOG_I(sum/1000000);
+     4d2:	48 ba db 34 b6 d7 82 	movabs $0x431bde82d7b634db,%rdx
+     4d9:	de 1b 43 
      4dc:	48 89 d0             	mov    %rdx,%rax
      4df:	48 f7 25 2a 2b 00 00 	mulq   0x2b2a(%rip)        # 3010 <sum>
      4e6:	48 89 d7             	mov    %rdx,%rdi
-     4e9:	48 c1 ef 0b          	shr    $0xb,%rdi
+     4e9:	48 c1 ef 12          	shr    $0x12,%rdi
      4ed:	e8 ee 11 00 00       	call   16e0 <UVM_Print_Int>
     UVM_ASSERT(UVM_Sig_Rcv(TEST_SIG2,RME_RCV_BS));
      4f2:	31 f6                	xor    %esi,%esi
@@ -766,9 +766,9 @@ int main(ptr_t CPUID)
         sum=0;
      5cc:	48 c7 05 39 2a 00 00 	movq   $0x0,0x2a39(%rip)        # 3010 <sum>
      5d3:	00 00 00 00 
-     5d7:	bb 10 27 00 00       	mov    $0x2710,%ebx
+     5d7:	bb 40 42 0f 00       	mov    $0xf4240,%ebx
      5dc:	0f 1f 40 00          	nopl   0x0(%rax)
-        for(Count=0;Count<10000;Count++)
+        for(Count=0;Count<1000000;Count++)
         {
             start=__UVM_X64_Read_TSC();
      5e0:	e8 36 fa ff ff       	call   1b <__UVM_X64_Read_TSC>
@@ -781,23 +781,23 @@ int main(ptr_t CPUID)
      5ff:	48 8b 15 22 2a 00 00 	mov    0x2a22(%rip),%rdx        # 3028 <start>
      606:	48 29 d0             	sub    %rdx,%rax
      609:	48 01 05 00 2a 00 00 	add    %rax,0x2a00(%rip)        # 3010 <sum>
-        for(Count=0;Count<10000;Count++)
+        for(Count=0;Count<1000000;Count++)
      610:	48 83 eb 01          	sub    $0x1,%rbx
      614:	75 ca                	jne    5e0 <main+0x50>
         }
         UVM_LOG_S("\r\nEmpty test takes clock cycles:");
      616:	bf 60 21 00 00       	mov    $0x2160,%edi
-        UVM_LOG_I(sum/10000);
+        UVM_LOG_I(sum/1000000);
         /*Empty test ends here*/
 
         /*Empty system call test begins here*/
         sum=0;
-     61b:	bb 10 27 00 00       	mov    $0x2710,%ebx
+     61b:	bb 40 42 0f 00       	mov    $0xf4240,%ebx
         UVM_LOG_S("\r\nEmpty test takes clock cycles:");
      620:	e8 eb 12 00 00       	call   1910 <UVM_Print_String>
-        UVM_LOG_I(sum/10000);
+        UVM_LOG_I(sum/1000000);
      625:	48 8b 05 e4 29 00 00 	mov    0x29e4(%rip),%rax        # 3010 <sum>
-     62c:	b9 10 27 00 00       	mov    $0x2710,%ecx
+     62c:	b9 40 42 0f 00       	mov    $0xf4240,%ecx
      631:	31 d2                	xor    %edx,%edx
      633:	48 f7 f1             	div    %rcx
      636:	48 89 c7             	mov    %rax,%rdi
@@ -805,7 +805,7 @@ int main(ptr_t CPUID)
         sum=0;
      63e:	48 c7 05 c7 29 00 00 	movq   $0x0,0x29c7(%rip)        # 3010 <sum>
      645:	00 00 00 00 
-        for(Count=0;Count<10000;Count++)
+        for(Count=0;Count<1000000;Count++)
      649:	0f 1f 80 00 00 00 00 	nopl   0x0(%rax)
         {
             start=__UVM_X64_Read_TSC();
@@ -827,16 +827,16 @@ int main(ptr_t CPUID)
      690:	48 8b 15 91 29 00 00 	mov    0x2991(%rip),%rdx        # 3028 <start>
      697:	48 29 d0             	sub    %rdx,%rax
      69a:	48 01 05 6f 29 00 00 	add    %rax,0x296f(%rip)        # 3010 <sum>
-        for(Count=0;Count<10000;Count++)
+        for(Count=0;Count<1000000;Count++)
      6a1:	48 83 eb 01          	sub    $0x1,%rbx
      6a5:	75 a9                	jne    650 <main+0xc0>
         }
         UVM_LOG_S("\r\nEmpty system call takes clock cycles:");
      6a7:	bf 88 21 00 00       	mov    $0x2188,%edi
      6ac:	e8 5f 12 00 00       	call   1910 <UVM_Print_String>
-        UVM_LOG_I(sum/10000);
+        UVM_LOG_I(sum/1000000);
      6b1:	48 8b 05 58 29 00 00 	mov    0x2958(%rip),%rax        # 3010 <sum>
-     6b8:	b9 10 27 00 00       	mov    $0x2710,%ecx
+     6b8:	b9 40 42 0f 00       	mov    $0xf4240,%ecx
      6bd:	31 d2                	xor    %edx,%edx
      6bf:	48 f7 f1             	div    %rcx
      6c2:	48 89 c7             	mov    %rax,%rdi
@@ -997,16 +997,16 @@ int main(ptr_t CPUID)
         UVM_ASSERT(UVM_Thd_Sched_Prio(UVM_CAPID(TEST_THD_TBL,TEST_THD1),1)>=0);
      8b7:	be 01 00 00 00       	mov    $0x1,%esi
      8bc:	bf 00 80 09 00       	mov    $0x98000,%edi
-     8c1:	bd 10 27 00 00       	mov    $0x2710,%ebp
+     8c1:	bd 40 42 0f 00       	mov    $0xf4240,%ebp
      8c6:	e8 e5 14 00 00       	call   1db0 <UVM_Thd_Sched_Prio>
      8cb:	48 85 c0             	test   %rax,%rax
      8ce:	0f 88 4d 07 00 00    	js     1021 <main+0xa91>
-        for(Count=0;Count<10000;Count++)
+        for(Count=0;Count<1000000;Count++)
         {
             UVM_Sig_Snd(TEST_SIG1);
      8d4:	bf 0b 00 00 00       	mov    $0xb,%edi
      8d9:	e8 92 15 00 00       	call   1e70 <UVM_Sig_Snd>
-        for(Count=0;Count<10000;Count++)
+        for(Count=0;Count<1000000;Count++)
      8de:	48 83 ed 01          	sub    $0x1,%rbp
      8e2:	75 f0                	jne    8d4 <main+0x344>
         }
@@ -1172,16 +1172,16 @@ int main(ptr_t CPUID)
         UVM_ASSERT(UVM_Thd_Sched_Prio(UVM_CAPID(TEST_THD_TBL,TEST_THD3),1)>=0);
      ae4:	be 01 00 00 00       	mov    $0x1,%esi
      ae9:	bf 02 80 09 00       	mov    $0x98002,%edi
-     aee:	bd 10 27 00 00       	mov    $0x2710,%ebp
+     aee:	bd 40 42 0f 00       	mov    $0xf4240,%ebp
      af3:	e8 b8 12 00 00       	call   1db0 <UVM_Thd_Sched_Prio>
      af8:	48 85 c0             	test   %rax,%rax
      afb:	0f 88 cc 09 00 00    	js     14cd <main+0xf3d>
-        for(Count=0;Count<10000;Count++)
+        for(Count=0;Count<1000000;Count++)
         {
             UVM_Sig_Snd(TEST_SIG2);
      b01:	bf 0c 00 00 00       	mov    $0xc,%edi
      b06:	e8 65 13 00 00       	call   1e70 <UVM_Sig_Snd>
-        for(Count=0;Count<10000;Count++)
+        for(Count=0;Count<1000000;Count++)
      b0b:	48 83 ed 01          	sub    $0x1,%rbp
      b0f:	75 f0                	jne    b01 <main+0x571>
         }
@@ -1227,14 +1227,14 @@ int main(ptr_t CPUID)
      b85:	00 00 00 00 
         sumin=0;
         sumout=0;
-     b89:	bb 10 27 00 00       	mov    $0x2710,%ebx
+     b89:	bb 40 42 0f 00       	mov    $0xf4240,%ebx
         sumin=0;
      b8e:	48 c7 05 6f 24 00 00 	movq   $0x0,0x246f(%rip)        # 3008 <sumin>
      b95:	00 00 00 00 
         sumout=0;
      b99:	48 c7 05 5c 24 00 00 	movq   $0x0,0x245c(%rip)        # 3000 <sumout>
      ba0:	00 00 00 00 
-        for(Count=0;Count<10000;Count++)
+        for(Count=0;Count<1000000;Count++)
         {
             start=__UVM_X64_Read_TSC();
      ba4:	e8 72 f4 ff ff       	call   1b <__UVM_X64_Read_TSC>
@@ -1264,17 +1264,17 @@ int main(ptr_t CPUID)
      c01:	48 8b 15 18 24 00 00 	mov    0x2418(%rip),%rdx        # 3020 <middle>
      c08:	48 29 d0             	sub    %rdx,%rax
      c0b:	48 01 05 ee 23 00 00 	add    %rax,0x23ee(%rip)        # 3000 <sumout>
-        for(Count=0;Count<10000;Count++)
+        for(Count=0;Count<1000000;Count++)
      c12:	48 83 eb 01          	sub    $0x1,%rbx
      c16:	75 8c                	jne    ba4 <main+0x614>
         }
         UVM_LOG_S("\r\nInvocation total takes clock cycles:");
      c18:	bf d8 21 00 00       	mov    $0x21d8,%edi
-        UVM_LOG_I(sum/10000);
-     c1d:	bb 10 27 00 00       	mov    $0x2710,%ebx
+        UVM_LOG_I(sum/1000000);
+     c1d:	bb 40 42 0f 00       	mov    $0xf4240,%ebx
         UVM_LOG_S("\r\nInvocation total takes clock cycles:");
      c22:	e8 e9 0c 00 00       	call   1910 <UVM_Print_String>
-        UVM_LOG_I(sum/10000);
+        UVM_LOG_I(sum/1000000);
      c27:	48 8b 05 e2 23 00 00 	mov    0x23e2(%rip),%rax        # 3010 <sum>
      c2e:	31 d2                	xor    %edx,%edx
      c30:	48 f7 f3             	div    %rbx
@@ -1283,7 +1283,7 @@ int main(ptr_t CPUID)
         UVM_LOG_S("\r\nInvocation entry takes clock cycles:");
      c3b:	bf 00 22 00 00       	mov    $0x2200,%edi
      c40:	e8 cb 0c 00 00       	call   1910 <UVM_Print_String>
-        UVM_LOG_I(sumin/10000);
+        UVM_LOG_I(sumin/1000000);
      c45:	48 8b 05 bc 23 00 00 	mov    0x23bc(%rip),%rax        # 3008 <sumin>
      c4c:	31 d2                	xor    %edx,%edx
      c4e:	48 f7 f3             	div    %rbx
@@ -1292,7 +1292,7 @@ int main(ptr_t CPUID)
         UVM_LOG_S("\r\nInvocation return takes clock cycles:");
      c59:	bf 28 22 00 00       	mov    $0x2228,%edi
      c5e:	e8 ad 0c 00 00       	call   1910 <UVM_Print_String>
-        UVM_LOG_I(sumout/10000);
+        UVM_LOG_I(sumout/1000000);
      c63:	48 8b 05 96 23 00 00 	mov    0x2396(%rip),%rax        # 3000 <sumout>
      c6a:	31 d2                	xor    %edx,%edx
      c6c:	48 f7 f3             	div    %rbx
