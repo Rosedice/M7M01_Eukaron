@@ -71,9 +71,39 @@ Description : In this function,we output our UVM test data to the screen
 ******************************************************************************/
 rme_ret_t __RME_Kfn_Handler(struct RME_Cap_Cpt* Cpt, struct RME_Reg_Struct* Reg,rme_ptr_t FuncID, rme_ptr_t SubID,rme_ptr_t Param1, rme_ptr_t Param2)
 {
-    char message = (char)Param1;
-    vga_buffer[0] = (0x07 << 8) | message;
-    vga_buffer++;
+    char Char = (char)Param1;
+    if (Char=='\n')
+    {
+        if (vga_row+1>=RME_X64_VGA_ROW_MAX)
+        {
+            return -1;
+        }
+        vga_col=0;
+        vga_row++;
+        return 0;
+    }
+    else if(Char=='\r')
+    {
+        return 0;
+    }
+    else
+    {
+        vga_buffer[vga_row*80+vga_col] = (0x1F << 8) | Char;
+        if (vga_col+1>=RME_X64_VGA_COL_MAX)
+        {
+            if (vga_row+1>=RME_X64_VGA_ROW_MAX)
+            {
+                return -1;
+            }
+            else
+            {
+                vga_col=0;
+                vga_row++;
+                return 0;
+            }
+        }
+        vga_col++;
+    }
     return 0;
 }
 /* End Function: __RME_Kfn_Handler ********************************************/
@@ -1388,11 +1418,6 @@ Return      : rme_ptr_t - Always 0.
 ******************************************************************************/
 rme_ptr_t __RME_Boot(void)
 {
-    /*Set VGA buffer so we can use it to debug on screen*/
-    vga_buffer=RME_X64_VGA_BASE;
-    vga_buffer++;
-    vga_buffer[0] = (0x07 << 8) | 'a';
-    vga_buffer++;
     rme_ptr_t Cur_Addr;
     rme_cnt_t Count;
     rme_cnt_t Kom1_Cnt;
@@ -1575,6 +1600,10 @@ rme_ptr_t __RME_Boot(void)
 
     /* Now other non-booting processors may proceed and go into their threads */
     RME_X64_CPU_Cnt=0;
+    /*Set VGA buffer so we can output on screen*/
+    vga_row=0;
+    vga_col=0;
+    vga_buffer=RME_X64_VGA_BASE;
     /* Boot into the init thread */
     __RME_Enter_User_Mode(0x0ULL, RME_X64_USTACK(0), 0);
     return 0;

@@ -38,7 +38,6 @@ ptr_t UVM_Putchar(char Char)
 {
     /* Wait until we have transmitted */
     while((__UVM_X64_In(UVM_X64_COM1+5)&0x20)==0);
-
     __UVM_X64_Out(UVM_X64_COM1, Char);
     UVM_Kern_Act(UVM_BOOT_INIT_KERN,0,0,(ptr_t)Char,0);
     return 0;

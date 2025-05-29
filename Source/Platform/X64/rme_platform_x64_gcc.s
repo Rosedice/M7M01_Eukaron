@@ -174,9 +174,6 @@ __RME_X64_Mboot_Header:
     .code32
     .align              16
 __RME_X64_Mboot_Entry:
-     MOVW               $0x0744, %ax
-     MOV               $0xb8000, %edi
-     MOVW               %ax, (%edi)
      /* EBX contains Multiboot data structure, let's relocate it to some other places */
      MOV                %EBX,%ESI
      /* Zero 7 pages for our bootstrap page tables, PML4 @ 0x101000 */

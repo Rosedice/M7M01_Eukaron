@@ -86,7 +86,7 @@ cnt_t UVM_Print_Int(cnt_t Int)
     cnt_t Count;
     cnt_t Num;
     ptr_t Div;
-    
+
     /* how many digits are there? */
     if(Int==0)
     {
@@ -215,7 +215,7 @@ cnt_t UVM_Print_String(s8* String)
         
         UVM_Putchar(String[Count++]);
     }
-    
+
     return Count;
 }
 /* End Function:UVM_Print_String *********************************************/

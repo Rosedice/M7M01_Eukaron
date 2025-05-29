@@ -194,6 +194,7 @@ int main(ptr_t CPUID)
 {
     ptr_t Cur_Addr;
     cnt_t Count;
+    UVM_LOG_S("........Booting RME system........");
     UVM_LOG_S("\r\nEnter user mode success!Welcome to RME system!");
     UVM_LOG_S("\r\nNow we are running init thread on cpu:");
     UVM_LOG_I(CPUID);
