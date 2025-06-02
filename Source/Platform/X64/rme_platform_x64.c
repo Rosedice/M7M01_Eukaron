@@ -1594,9 +1594,9 @@ rme_ptr_t __RME_Boot(void)
     RME_DBG_H(RME_CAP_GETOBJ((RME_CPU_LOCAL()->Thd_Cur)->Sched.Prc->Pgt,rme_ptr_t));
     __RME_Pgt_Set((RME_CPU_LOCAL()->Thd_Cur)->Sched.Prc->Pgt);
 
-    /* Load the init process to address 0x0 - It should be smaller than 2MB */
+    /* Load the init process to address 0x2000000ULL*/
     extern const unsigned char UVM_Init[];
-    _RME_Memcpy((void*)0x0,(void*)UVM_Init,RME_POW2(RME_PGT_SIZE_2M));
+    _RME_Memcpy((void*)0x20000000ULL,(void*)UVM_Init,RME_POW2(RME_PGT_SIZE_2M));
 
     /* Now other non-booting processors may proceed and go into their threads */
     RME_X64_CPU_Cnt=0;
@@ -1605,7 +1605,7 @@ rme_ptr_t __RME_Boot(void)
     vga_col=0;
     vga_buffer=RME_X64_VGA_BASE;
     /* Boot into the init thread */
-    __RME_Enter_User_Mode(0x0ULL, RME_X64_USTACK(0), 0);
+    __RME_Enter_User_Mode(0x20000000ULL, RME_X64_USTACK(0)+0x20000000ULL, 0);
     return 0;
 }
 /* End Function:__RME_Boot ***************************************************/
